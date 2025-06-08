@@ -26,16 +26,16 @@ function SignUp() {
   })
   const onSubmit = async (data: SignupFormSchema) => {
     const { email, password, confirmPassword } = data
-    setSubmitting(true)
     if (password !== confirmPassword) {
       toast('Passwords do not match')
       return
     }
+    setSubmitting(true)
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: 'http://localhost:5173/complete-registration',
+        emailRedirectTo: 'https://localhost:5173/complete-registration',
       },
     })
     if (error) {
@@ -45,10 +45,10 @@ function SignUp() {
     }
     localStorage.setItem('email', email)
     toast(
-      "Account created successfully! We've sent a verification email to complete your registration."
+      "We've sent a verification email to complete your account registration."
     )
     setSubmitting(false)
-    return navigate('/verification')
+    return navigate('/verification/signUp')
   }
 
   return (

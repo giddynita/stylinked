@@ -4,9 +4,12 @@ export const signupFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
   password: z
     .string()
-    .min(6, { message: 'Password must be at least 6 characters.' })
+    .min(6, { message: 'Password must contain at least 6 character(s).' })
     .max(50),
-  confirmPassword: z.string().min(6).max(50),
+  confirmPassword: z
+    .string()
+    .min(6, { message: 'Password must contain at least 6 character(s).' })
+    .max(50),
 })
 
 export type SignupFormSchema = z.infer<typeof signupFormSchema>
@@ -54,3 +57,22 @@ export const emptySchema = z.object({
 })
 
 export type EmptySchema = z.infer<typeof emptySchema>
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+})
+
+export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>
+
+export const resetPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(6, { message: 'Password must contain at least 6 character(s).' })
+    .max(50),
+  confirmPassword: z
+    .string()
+    .min(6, { message: 'Password must contain at least 6 character(s).' })
+    .max(50),
+})
+
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>

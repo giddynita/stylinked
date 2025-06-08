@@ -1,4 +1,11 @@
-import { CompleteRegistration, Login, SignUp, Verification } from './pages'
+import {
+  CompleteRegistration,
+  ForgotPassword,
+  Login,
+  ResetPassword,
+  SignUp,
+  Verification,
+} from './pages'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 const router = createBrowserRouter([
   {
@@ -10,12 +17,20 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: 'verification',
+    path: 'verification/:type',
     element: <Verification />,
   },
   {
     path: 'complete-registration',
     element: <CompleteRegistration />,
+  },
+  {
+    path: 'forgot-password',
+    element: <ForgotPassword />,
+  },
+  {
+    path: 'reset-password',
+    element: <ResetPassword />,
   },
 ])
 

@@ -79,8 +79,8 @@ function Login() {
         <p className="text-center -mt-4  text-sm font-medium text-foreground ">
           Forgot password?
           <Button asChild={true} variant="link">
-            <Link to="/" className="text-primary -ml-2">
-              Reset
+            <Link to="/forgot-password" className="text-primary -ml-2">
+              Reset password
             </Link>
           </Button>
         </p>

@@ -97,7 +97,6 @@ function CompleteRegistration() {
       return toast('You need to select an account type.')
     }
     setSubmitting(true)
-    console.log(data)
   }
   const onError = (errors: any) => {
     console.log(errors)
