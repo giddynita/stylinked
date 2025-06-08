@@ -7,7 +7,7 @@ import {
   FormMessage,
 } from '../ui/form'
 import { Select, SelectContent, SelectItem, SelectValue } from '../ui/select'
-import type { Options } from '@/lib/types'
+import type { Options } from '@/utils/types'
 
 function FormSelect({
   form,

@@ -1,4 +1,4 @@
-import type { Options } from '@/lib/types'
+import type { Options } from '@/utils/types'
 import {
   FormControl,
   FormField,

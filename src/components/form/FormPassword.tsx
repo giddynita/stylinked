@@ -10,18 +10,9 @@ import { useState } from 'react'
 import { Button } from '../ui/button'
 import { FaEyeSlash } from 'react-icons/fa6'
 import { IoEyeSharp } from 'react-icons/io5'
+import type { InputProps } from '@/utils/types'
 
-function FormPassword({
-  form,
-  name,
-  label,
-  placeholder,
-}: {
-  form: any
-  name: string
-  label: string
-  placeholder: string
-}) {
+function FormPassword({ form, name, label, placeholder }: InputProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   return (
     <div className="relative">
@@ -47,7 +38,7 @@ function FormPassword({
         type="button"
         variant="ghost"
         size="icon"
-        className="absolute top-[37%] w-10 h-10 p-2.5  right-3"
+        className="absolute top-5 w-10 h-10 p-2.5  right-0"
       >
         {showPassword ? (
           <IoEyeSharp

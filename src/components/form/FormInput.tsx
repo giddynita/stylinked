@@ -1,4 +1,3 @@
-import React, { forwardRef } from 'react'
 import {
   FormControl,
   FormField,
@@ -7,40 +6,29 @@ import {
   FormMessage,
 } from '../ui/form'
 import { Input } from '@/components/ui/input'
+import type { InputProps } from '@/utils/types'
 
-interface Props extends React.ComponentProps<typeof Input> {
-  form: any
-  label?: string
-  placeholder: string
-  type: string
-  name: string
+const FormInput = ({ form, label, placeholder, type, name }: InputProps) => {
+  return (
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input
+              placeholder={placeholder}
+              {...field}
+              type={type}
+              required
+              value={field.value ?? ''}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
 }
-
-const FormInput = forwardRef<HTMLInputElement, Props>(
-  ({ form, label, placeholder, type, name, ...inputProps }, ref) => {
-    return (
-      <FormField
-        control={form.control}
-        name={name}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{label}</FormLabel>
-            <FormControl>
-              <Input
-                placeholder={placeholder}
-                {...field}
-                {...inputProps}
-                type={type}
-                required
-                value={field.value ?? ''}
-                ref={ref}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    )
-  }
-)
 export default FormInput

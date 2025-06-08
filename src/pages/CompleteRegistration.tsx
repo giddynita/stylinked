@@ -6,13 +6,13 @@ import {
   designerFormSchema,
   emptySchema,
   logisticsFormSchema,
-} from '@/lib/schema'
+} from '@/utils/schema'
 import type {
   ClientFormSchema,
   DesignerFormSchema,
   EmptySchema,
   LogisticsFormSchema,
-} from '@/lib/schema'
+} from '@/utils/schema'
 import { FormRadio, SubmitButton } from '@/components/form'
 import { Card, CardContent } from '@/components/ui/card'
 import { CardHead } from '@/components/headings'
@@ -22,27 +22,12 @@ import {
   LogisticsDetailsForm,
   VendorDetailsForm,
 } from '@/components/formTypes'
-import { type AccountType, type Options } from '@/lib/types'
-import { supabase } from '@/lib/supabaseClient'
-import { Button } from '@/components/ui/button'
+import { type AccountType } from '@/utils/types'
+import { supabase } from '@/utils/supabaseClient'
 import { toast } from 'sonner'
-import { Loader2Icon } from 'lucide-react'
-import { Link } from 'react-router-dom'
-
-const accountTypeOptions: Options[] = [
-  {
-    label: 'Client',
-    value: 'client',
-  },
-  {
-    label: 'Fashion Designer',
-    value: 'designer',
-  },
-  {
-    label: 'Logistics',
-    value: 'logistics',
-  },
-]
+import { AuthContainer, AuthLoading, InvalidToken } from '@/components/auth'
+import { accountTypeOptions } from '@/utils/data'
+import { completeRegistrationAction } from '@/utils/action'
 
 const schemaMap = {
   client: clientFormSchema,
@@ -96,7 +81,8 @@ function CompleteRegistration() {
     if (!accountType) {
       return toast('You need to select an account type.')
     }
-    setSubmitting(true)
+    const request = { ...data, setSubmitting }
+    completeRegistrationAction(request)
   }
   const onError = (errors: any) => {
     console.log(errors)
@@ -137,62 +123,45 @@ function CompleteRegistration() {
     fetchUser()
   }, [])
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Button variant="ghost" disabled className="w-full text-2xl font-bold">
-          Verifying
-          <Loader2Icon className="animate-spin " />
-        </Button>
-      </div>
-    )
-  if (!tokenIsValid) {
-    return (
-      <Card className=" w-[90%] mx-auto max-w-lg mt-18 mb-16 pt-10 pb-6 border-none shadow-lg ">
-        <CardHead
-          title="Verification failed!"
-          desc={`Couldn't complete registration.`}
-        />
-        <CardContent>
-          <Button asChild={true} className="w-full">
-            <Link to="/sign-up">Try again.</Link>
-          </Button>
-        </CardContent>
-      </Card>
-    )
-  }
+  if (loading) <AuthLoading />
+  if (!tokenIsValid)
+    <InvalidToken desc="Couldn't complete registration." url="/sign-up" />
 
   return (
-    <Card className=" w-[90%] mx-auto max-w-lg mt-18 mb-16 pt-10 pb-6 border-none shadow-lg ">
-      <CardHead
-        title="Complete Sign Up"
-        desc="Just a few more details to complete your registration"
-      />
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="space-y-8"
-          >
-            <FormRadio
-              form={form}
-              label="Account Type"
-              name="accountType"
-              options={accountTypeOptions}
-              setChange={setAccountType}
-            />
-            {accountType == 'client' && <CustomerDetailsForm form={form} />}
-            {accountType == 'designer' && <VendorDetailsForm form={form} />}
-            {accountType == 'logistics' && <LogisticsDetailsForm form={form} />}
-            <SubmitButton
-              submitting={submitting}
-              text="Done"
-              texting="Submitting"
-            />
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <AuthContainer>
+      <Card>
+        <CardHead
+          title="Complete Sign Up"
+          desc="Just a few more details to complete your registration"
+        />
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, onError)}
+              className="space-y-8"
+            >
+              <FormRadio
+                form={form}
+                label="Account Type"
+                name="accountType"
+                options={accountTypeOptions}
+                setChange={setAccountType}
+              />
+              {accountType == 'client' && <CustomerDetailsForm form={form} />}
+              {accountType == 'designer' && <VendorDetailsForm form={form} />}
+              {accountType == 'logistics' && (
+                <LogisticsDetailsForm form={form} />
+              )}
+              <SubmitButton
+                submitting={submitting}
+                text="Done"
+                texting="Submitting"
+              />
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </AuthContainer>
   )
 }
 

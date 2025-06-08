@@ -1,4 +1,4 @@
-import FormInput from '@/components/form/FormInput'
+import { FormInput } from '@/components/form'
 
 function CustomerDetailsForm({ form }: { form: any }) {
   return (

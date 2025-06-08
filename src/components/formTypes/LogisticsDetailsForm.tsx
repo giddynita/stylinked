@@ -1,21 +1,6 @@
-import type { Options } from '@/lib/types'
-import FormInput from '@/components/form/FormInput'
 import FormSelect from '../form/FormSelect'
-
-const vehicleTypeSelect: Options[] = [
-  {
-    label: 'Car',
-    value: 'car',
-  },
-  {
-    label: 'Motorcycle',
-    value: 'motorcycle',
-  },
-  {
-    label: 'Bus',
-    value: 'bus',
-  },
-]
+import FormInput from '../form/FormInput'
+import { vehicleTypeSelect } from '@/utils/data'
 
 function LogisticsDetailsForm({ form }: { form: any }) {
   return (
