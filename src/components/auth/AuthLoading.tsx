@@ -4,9 +4,13 @@ import { Button } from '../ui/button'
 function AuthLoading() {
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <Button variant="ghost" disabled className="w-full text-2xl font-bold">
+      <Button
+        variant="ghost"
+        disabled
+        className="w-full text-2xl font-bold items-center "
+      >
         Verifying
-        <Loader2Icon className="animate-spin " />
+        <Loader2Icon className="animate-spin mt-2" />
       </Button>
     </main>
   )

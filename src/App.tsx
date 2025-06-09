@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/components/theme/theme-provider'
 import {
   AuthLayout,
   CompleteRegistration,
@@ -48,14 +49,14 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <RouterProvider
         router={router}
         future={{
           v7_startTransition: true,
         }}
       />
-    </div>
+    </ThemeProvider>
   )
 }
 

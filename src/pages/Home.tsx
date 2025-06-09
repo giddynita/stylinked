@@ -1,4 +1,5 @@
 import { Logo } from '@/components/global'
+import ModeToggle from '@/components/theme/mode-toggle'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -8,14 +9,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { features, stats, testimonials } from '@/utils/data'
-import { Star, LinkIcon } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-accent/50">
       {/* Header */}
-      <header className="bg-accent/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+      <header className="bg-navbarbg/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Logo icon="w-8 h-8" text="text-2xl" />
@@ -37,11 +38,11 @@ const Home = () => {
                   Get Started
                 </Button>
               </Link>
+              <ModeToggle />
             </nav>
           </div>
         </div>
       </header>
-
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
@@ -105,7 +106,7 @@ const Home = () => {
             return (
               <Card
                 key={index}
-                className="group shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 bg-background/80 backdrop-blur-sm"
+                className="group shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 bg-background/20 backdrop-blur-sm"
               >
                 <CardHeader className="text-center pb-4">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary transition-colors">

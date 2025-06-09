@@ -11,7 +11,7 @@ function InvalidToken({ desc, url }: { desc: string; url: string }) {
         <CardHead title="Verification failed!" desc={desc} />
         <CardContent>
           <Button asChild={true} className="w-full">
-            <Link to={url}>Try again.</Link>
+            <Link to={url}>Try again</Link>
           </Button>
         </CardContent>
       </Card>
