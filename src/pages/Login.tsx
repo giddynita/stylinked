@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { loginFormSchema } from '@/utils/schema'
 import type { LoginFormSchema } from '@/utils/schema'
 import { FormInput, FormPassword, SubmitButton } from '@/components/form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { CardHead } from '@/components/headings'
 import { useState } from 'react'
@@ -13,6 +13,8 @@ import { loginAction } from '@/utils/action'
 import { AuthContainer } from '@/components/auth'
 function Login() {
   const [submitting, setSubmitting] = useState<boolean>(false)
+  const navigate = useNavigate()
+
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -21,7 +23,7 @@ function Login() {
     },
   })
   const onSubmit = (data: LoginFormSchema) => {
-    const request = { ...data, setSubmitting }
+    const request = { ...data, setSubmitting, navigate }
     loginAction(request)
   }
 

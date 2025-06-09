@@ -8,7 +8,7 @@ export const signUp: VerificationPageDetails = {
 export const reset: VerificationPageDetails = {
   title: 'Password reset link sent.',
   desc: "We've sent a password reset link to your email. Please check your inbox and follow the instructions.",
-  link: '/reset-password',
+  link: '/forgot-password',
 }
 
 export const accountTypeOptions: Options[] = [

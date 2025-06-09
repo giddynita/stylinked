@@ -5,10 +5,24 @@ function VendorDetailsForm({ form }: { form: any }) {
     <>
       <FormInput
         form={form}
-        label="Business Name"
-        placeholder="Business name"
+        label="First Name"
+        placeholder="First Name"
         type="text"
-        name="businessName"
+        name="firstname"
+      />
+      <FormInput
+        form={form}
+        label="Last Name"
+        placeholder="Last Name"
+        type="text"
+        name="lastname"
+      />
+      <FormInput
+        form={form}
+        label="Business Name"
+        placeholder="Business Name"
+        type="text"
+        name="businessname"
       />
       <FormInput
         form={form}
@@ -16,6 +30,13 @@ function VendorDetailsForm({ form }: { form: any }) {
         placeholder="Phone Number"
         type="tel"
         name="phone"
+      />
+      <FormInput
+        form={form}
+        label="Your Location"
+        placeholder="Enter City"
+        type="text"
+        name="location"
       />
     </>
   )

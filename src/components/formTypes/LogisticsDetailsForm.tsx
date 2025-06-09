@@ -7,6 +7,20 @@ function LogisticsDetailsForm({ form }: { form: any }) {
     <>
       <FormInput
         form={form}
+        label="First Name"
+        placeholder="First Name"
+        type="text"
+        name="firstname"
+      />
+      <FormInput
+        form={form}
+        label="Last Name"
+        placeholder="Last Name"
+        type="text"
+        name="lastname"
+      />
+      <FormInput
+        form={form}
         label="Business Name"
         placeholder="Business Name"
         type="text"
@@ -23,8 +37,15 @@ function LogisticsDetailsForm({ form }: { form: any }) {
         form={form}
         label="Vehicle Type"
         placeholder="Select your mode of transport"
-        name="vehicleType"
+        name="vehicletype"
         options={vehicleTypeSelect}
+      />
+      <FormInput
+        form={form}
+        label="Coverage Area"
+        placeholder="Enter City or Cities"
+        type="text"
+        name="coveragearea"
       />
     </>
   )

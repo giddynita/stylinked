@@ -22,19 +22,23 @@ export type SignUpAction = {
   password: string
   confirmPassword: string
   setSubmitting: (value: boolean) => void
+  navigate: (value: string) => void
 }
 
 export type ResetPasswordAction = {
   password: string
   confirmPassword: string
   setSubmitting: (value: boolean) => void
+  navigate: (value: string) => void
 }
 export type LoginAction = {
   email: string
   password: string
   setSubmitting: (value: boolean) => void
+  navigate: (value: string) => void
 }
 export type ForgotPasswordAction = {
   email: string
   setSubmitting: (value: boolean) => void
+  navigate: (value: string) => void
 }

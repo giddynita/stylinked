@@ -28,6 +28,7 @@ import { toast } from 'sonner'
 import { AuthContainer, AuthLoading, InvalidToken } from '@/components/auth'
 import { accountTypeOptions } from '@/utils/data'
 import { completeRegistrationAction } from '@/utils/action'
+import { useNavigate } from 'react-router-dom'
 
 const schemaMap = {
   client: clientFormSchema,
@@ -40,31 +41,38 @@ function CompleteRegistration() {
   const [accountType, setAccountType] = useState<AccountType | ''>('')
   const [loading, setLoading] = useState<boolean>(true)
   const [tokenIsValid, setTokenIsValid] = useState<boolean>(true)
+  const navigate = useNavigate()
 
   const schema = accountType ? schemaMap[accountType] : emptySchema
   const defaultValues = {
     client: {
-      accountType: '',
-      firstName: '',
-      lastName: '',
+      role: '',
+      firstname: '',
+      lastname: '',
       phone: '',
     },
     designer: {
-      accountType: '',
-      businessName: '',
+      role: '',
+      firstname: '',
+      lastname: '',
+      businessname: '',
       phone: '',
+      location: '',
     },
     logistics: {
-      accountType: '',
-      businessName: '',
+      role: '',
+      firstname: '',
+      lastname: '',
+      businessname: '',
       phone: '',
-      vehicleType: '',
+      vehicletype: '',
+      coveragearea: '',
     },
   }
   const setDefaultValues = accountType
     ? defaultValues[accountType]
     : {
-        accountType: '',
+        role: '',
       }
   type schemaTypes =
     | ClientFormSchema
@@ -77,11 +85,11 @@ function CompleteRegistration() {
     defaultValues: setDefaultValues,
   })
   const onSubmit = (data: schemaTypes) => {
-    const { accountType } = data
-    if (!accountType) {
+    const { role } = data
+    if (!role) {
       return toast('You need to select an account type.')
     }
-    const request = { ...data, setSubmitting }
+    const request = { ...data, setSubmitting, navigate }
     completeRegistrationAction(request)
   }
   const onError = (errors: any) => {
@@ -123,10 +131,14 @@ function CompleteRegistration() {
     fetchUser()
   }, [])
 
-  if (loading) <AuthLoading />
-  if (!tokenIsValid)
-    <InvalidToken desc="Couldn't complete registration." url="/sign-up" />
-
+  if (loading) {
+    return <AuthLoading />
+  }
+  if (!tokenIsValid) {
+    return (
+      <InvalidToken desc="Couldn't complete registration." url="/sign-up" />
+    )
+  }
   return (
     <AuthContainer>
       <Card>
@@ -143,7 +155,7 @@ function CompleteRegistration() {
               <FormRadio
                 form={form}
                 label="Account Type"
-                name="accountType"
+                name="role"
                 options={accountTypeOptions}
                 setChange={setAccountType}
               />

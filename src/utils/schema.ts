@@ -22,38 +22,46 @@ export const loginFormSchema = z.object({
 export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export const logisticsFormSchema = z.object({
-  accountType: z.enum(['client', 'designer', 'logistics']),
-  businessName: z.string().min(2).max(20),
+  role: z.enum(['client', 'designer', 'logistics'], {
+    required_error: 'You need to select an account type.',
+  }),
+  firstname: z.string().min(2).max(20),
+  lastname: z.string().min(2).max(20),
+  businessname: z.string().min(2).max(20),
   phone: z.string(),
-  vehicleType: z.string({
+  vehicletype: z.string({
     required_error: 'Please select an option',
   }),
+  coveragearea: z.string().min(1),
 })
 
 export type LogisticsFormSchema = z.infer<typeof logisticsFormSchema>
 
 export const designerFormSchema = z.object({
-  accountType: z.enum(['client', 'designer', 'logistics'], {
+  role: z.enum(['client', 'designer', 'logistics'], {
     required_error: 'You need to select an account type.',
   }),
-  businessName: z.string().min(2).max(20),
+  firstname: z.string().min(2).max(20),
+  lastname: z.string().min(2).max(20),
+  businessname: z.string().min(2).max(20),
   phone: z.string(),
+  location: z.string().max(10),
 })
 export type DesignerFormSchema = z.infer<typeof designerFormSchema>
 
 export const clientFormSchema = z.object({
-  accountType: z.enum(['client', 'designer', 'logistics'], {
+  role: z.enum(['client', 'designer', 'logistics'], {
     required_error: 'You need to select an account type.',
   }),
-  firstName: z.string().min(2).max(20),
-  lastName: z.string().min(2).max(20),
+  firstname: z.string().min(2).max(20),
+  lastname: z.string().min(2).max(20),
   phone: z.string(),
 })
 
 export type ClientFormSchema = z.infer<typeof clientFormSchema>
 
 export const emptySchema = z.object({
-  accountType: z.string(),
+  role: z.string(),
 })
 
 export type EmptySchema = z.infer<typeof emptySchema>

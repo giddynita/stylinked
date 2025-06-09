@@ -6,16 +6,16 @@ function CustomerDetailsForm({ form }: { form: any }) {
       <FormInput
         form={form}
         label="First Name"
-        placeholder="First name"
+        placeholder="First Name"
         type="text"
-        name="firstName"
+        name="firstname"
       />
       <FormInput
         form={form}
         label="Last Name"
-        placeholder="Last name"
+        placeholder="Last Name"
         type="text"
-        name="lastName"
+        name="lastname"
       />
       <FormInput
         form={form}

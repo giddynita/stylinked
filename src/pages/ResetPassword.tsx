@@ -9,11 +9,13 @@ import { supabase } from '@/utils/supabaseClient'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 function ResetPassword() {
   const [submitting, setSubmitting] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [tokenIsValid, setTokenIsValid] = useState<boolean>(true)
+  const navigate = useNavigate()
 
   const form = useForm<ResetPasswordSchema>({
     resolver: zodResolver(resetPasswordSchema),
@@ -23,7 +25,7 @@ function ResetPassword() {
     },
   })
   const onSubmit = (data: ResetPasswordSchema) => {
-    const request = { ...data, setSubmitting }
+    const request = { ...data, setSubmitting, navigate }
     resetPasswordAction(request)
   }
 
@@ -69,7 +71,7 @@ function ResetPassword() {
       <Card>
         <CardHead
           title="Reset Password"
-          desc="Enter a new password for your account."
+          desc="Create a new password for your account."
         />
         <CardContent>
           <Form {...form}>

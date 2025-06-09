@@ -8,9 +8,11 @@ import { forgotPasswordSchema, type ForgotPasswordSchema } from '@/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 function ForgotPassword() {
   const [submitting, setSubmitting] = useState<boolean>(false)
+  const navigate = useNavigate()
   const form = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
@@ -18,7 +20,7 @@ function ForgotPassword() {
     },
   })
   const onSubmit = async (data: ForgotPasswordSchema) => {
-    const request = { ...data, setSubmitting }
+    const request = { ...data, setSubmitting, navigate }
     forgotPasswordAction(request)
   }
 
