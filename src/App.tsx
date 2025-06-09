@@ -1,6 +1,8 @@
 import {
+  AuthLayout,
   CompleteRegistration,
   ForgotPassword,
+  Home,
   Login,
   ResetPassword,
   SignUp,
@@ -9,28 +11,38 @@ import {
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 const router = createBrowserRouter([
   {
-    path: 'login',
-    element: <Login />,
+    path: 'auth',
+    element: <AuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
+      },
+      {
+        path: 'verification/:type',
+        element: <Verification />,
+      },
+      {
+        path: 'complete-registration',
+        element: <CompleteRegistration />,
+      },
+      {
+        path: 'forgot-password',
+        element: <ForgotPassword />,
+      },
+      {
+        path: 'reset-password',
+        element: <ResetPassword />,
+      },
+    ],
   },
   {
-    path: 'sign-up',
-    element: <SignUp />,
-  },
-  {
-    path: 'verification/:type',
-    element: <Verification />,
-  },
-  {
-    path: 'complete-registration',
-    element: <CompleteRegistration />,
-  },
-  {
-    path: 'forgot-password',
-    element: <ForgotPassword />,
-  },
-  {
-    path: 'reset-password',
-    element: <ResetPassword />,
+    path: '/',
+    element: <Home />,
   },
 ])
 

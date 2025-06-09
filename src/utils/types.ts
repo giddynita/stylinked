@@ -42,3 +42,19 @@ export type ForgotPasswordAction = {
   setSubmitting: (value: boolean) => void
   navigate: (value: string) => void
 }
+export type Features = {
+  icon: any
+  title: string
+  description: string
+  link: string
+}
+export type Stat = {
+  number: string
+  label: string
+}
+export type Testimonials = {
+  name: string
+  role: string
+  text: string
+  rating: number
+}

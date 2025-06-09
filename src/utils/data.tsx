@@ -1,14 +1,22 @@
-import type { Options, VerificationPageDetails } from './types'
+import { ShoppingCart, Store, Truck, Shield } from 'lucide-react'
+
+import type {
+  Features,
+  Options,
+  Stat,
+  Testimonials,
+  VerificationPageDetails,
+} from './types'
 
 export const signUp: VerificationPageDetails = {
   title: 'Verify your email address',
   desc: "We've sent a verification email. Please check your inbox and follow the instructions to complete your registration.",
-  link: '/sign-up',
+  link: '/auth/sign-up',
 }
 export const reset: VerificationPageDetails = {
   title: 'Password reset link sent.',
   desc: "We've sent a password reset link to your email. Please check your inbox and follow the instructions.",
-  link: '/forgot-password',
+  link: '/auth/forgot-password',
 }
 
 export const accountTypeOptions: Options[] = [
@@ -21,7 +29,7 @@ export const accountTypeOptions: Options[] = [
     value: 'designer',
   },
   {
-    label: 'Logistics',
+    label: 'Logistics Partner',
     value: 'logistics',
   },
 ]
@@ -38,5 +46,60 @@ export const vehicleTypeSelect: Options[] = [
   {
     label: 'Bus',
     value: 'bus',
+  },
+]
+
+export const features: Features[] = [
+  {
+    icon: ShoppingCart,
+    title: 'Shop Fashion',
+    description:
+      'Discover unique, custom-tailored fashion items from skilled artisans',
+    link: '/marketplace',
+  },
+  {
+    icon: Store,
+    title: 'Sell Your Creations',
+    description: 'Join our vendor community and showcase your fashion designs',
+    link: '/signup',
+  },
+  {
+    icon: Truck,
+    title: 'Deliver Orders',
+    description: 'Partner with us for reliable fashion item delivery services',
+    link: '/signup',
+  },
+  {
+    icon: Shield,
+    title: 'Secure Platform',
+    description: 'Safe transactions and quality assurance for all users',
+    link: '/auth',
+  },
+]
+
+export const stats: Stat[] = [
+  { number: '10K+', label: 'Active Users' },
+  { number: '500+', label: 'Verified Vendors' },
+  { number: '50K+', label: 'Products Sold' },
+  { number: '4.9', label: 'Average Rating' },
+]
+export const testimonials: Testimonials[] = [
+  {
+    name: 'Sarah Johnson',
+    role: 'Fashion Enthusiast',
+    text: 'Found the perfect wedding dress through TailorHub. The quality and service exceeded all expectations!',
+    rating: 5,
+  },
+  {
+    name: 'Michael Chen',
+    role: 'Tailor & Vendor',
+    text: 'TailorHub helped me grow my business from local to nationwide. Amazing platform for artisans!',
+    rating: 5,
+  },
+  {
+    name: 'Emma Davis',
+    role: 'Delivery Partner',
+    text: 'Flexible schedule and great earnings. Love being part of the TailorHub logistics network.',
+    rating: 5,
   },
 ]

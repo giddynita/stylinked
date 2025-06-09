@@ -67,7 +67,7 @@ function SignUp() {
           <p className="text-center py-2 text-sm font-medium text-foreground">
             Already have an account?
             <Button asChild={true} variant="link">
-              <Link to="/login" className="text-primary -ml-2">
+              <Link to="/auth" className="text-primary -ml-2">
                 Login
               </Link>
             </Button>

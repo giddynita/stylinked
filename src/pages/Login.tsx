@@ -60,7 +60,7 @@ function Login() {
           <p className="text-center pt-2  text-sm font-medium text-foreground ">
             Don't have an account?
             <Button asChild={true} variant="link">
-              <Link to="/sign-up" className="text-primary -ml-2">
+              <Link to="/auth/sign-up" className="text-primary -ml-2">
                 Sign up
               </Link>
             </Button>
@@ -68,7 +68,7 @@ function Login() {
           <p className="text-center -mt-4  text-sm font-medium text-foreground ">
             Forgot password?
             <Button asChild={true} variant="link">
-              <Link to="/forgot-password" className="text-primary -ml-2">
+              <Link to="/auth/forgot-password" className="text-primary -ml-2">
                 Reset password
               </Link>
             </Button>

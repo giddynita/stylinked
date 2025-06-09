@@ -136,7 +136,10 @@ function CompleteRegistration() {
   }
   if (!tokenIsValid) {
     return (
-      <InvalidToken desc="Couldn't complete registration." url="/sign-up" />
+      <InvalidToken
+        desc="Couldn't complete registration."
+        url="/auth/sign-up"
+      />
     )
   }
   return (

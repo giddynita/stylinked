@@ -38,17 +38,17 @@ function FormPassword({ form, name, label, placeholder }: InputProps) {
         type="button"
         variant="ghost"
         size="icon"
-        className="absolute top-5 w-10 h-10 p-2.5  right-0"
+        className="absolute top-5 w-10 h-10 p-2.5  right-0 hover:bg-transparent"
       >
         {showPassword ? (
           <IoEyeSharp
             onClick={() => setShowPassword(!showPassword)}
-            className="w-4 h-4 text-foreground"
+            className="w-4 h-4 text-muted-foreground hover:text-foreground"
           />
         ) : (
           <FaEyeSlash
             onClick={() => setShowPassword(!showPassword)}
-            className="h-6 w-6 text-foreground"
+            className="h-6 w-6 text-muted-foreground hover:text-foreground"
           />
         )}
       </Button>

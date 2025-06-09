@@ -20,7 +20,7 @@ export const signUpAction = async (props: SignUpAction) => {
     email,
     password,
     options: {
-      emailRedirectTo: 'https://localhost:5173/complete-registration',
+      emailRedirectTo: 'https://localhost:5173/auth/complete-registration',
     },
   })
   if (error) {
@@ -32,7 +32,7 @@ export const signUpAction = async (props: SignUpAction) => {
     "We've sent a verification email to complete your account registration."
   )
   setSubmitting(false)
-  return navigate('/verification/signUp')
+  return navigate('/auth/verification/signUp')
 }
 
 export const resetPasswordAction = async (props: ResetPasswordAction) => {
@@ -47,11 +47,11 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
   })
   if (error) {
     toast('Password reset failed!')
-    navigate('/forgot-password')
+    navigate('/auth/forgot-password')
     console.log(error.message)
   }
   toast('Password reset successful! You can now log in with your new password')
-  return navigate('/login')
+  return navigate('/auth')
 }
 
 export const loginAction = async (props: LoginAction) => {
@@ -75,7 +75,7 @@ export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
   const { email, setSubmitting, navigate } = props
   setSubmitting(true)
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://localhost:5173/reset-password',
+    redirectTo: 'https://localhost:5173/auth/reset-password',
   })
   if (error) {
     toast(error.message)
@@ -86,7 +86,7 @@ export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
     'If an account with this email exists, a password reset link has been sent.'
   )
   setSubmitting(false)
-  return navigate('/verification/reset')
+  return navigate('/auth/verification/reset')
 }
 
 export const completeRegistrationAction = async (props: any) => {

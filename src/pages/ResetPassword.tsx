@@ -62,7 +62,7 @@ function ResetPassword() {
     return (
       <InvalidToken
         desc="Couldn't reset your password."
-        url="/forgot-password"
+        url="/auth/forgot-password"
       />
     )
   }
