@@ -20,7 +20,8 @@ export const signUpAction = async (props: SignUpAction) => {
     email,
     password,
     options: {
-      emailRedirectTo: 'https://localhost:5173/auth/complete-registration',
+      emailRedirectTo:
+        'https://stylinked.netlify.app/auth/complete-registration',
     },
   })
   if (error) {
@@ -75,7 +76,7 @@ export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
   const { email, setSubmitting, navigate } = props
   setSubmitting(true)
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://localhost:5173/auth/reset-password',
+    redirectTo: 'https://stylinked.netlify.app/auth/reset-password',
   })
   if (error) {
     toast(error.message)
