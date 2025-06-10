@@ -8,7 +8,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import ModeToggle from '../theme/mode-toggle'
 import { Button } from '../ui/button'
 import { Link, useLocation } from 'react-router-dom'
 import { LogIn, X } from 'lucide-react'
@@ -24,17 +23,17 @@ export function AppSidebar() {
 
   return (
     <Sidebar side="right" variant="sidebar">
-      <SidebarHeader className="pr-3 pl-1">
+      <SidebarHeader className="pr-3 pl-1 mb-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-start justify-between gap-x-4 ">
-            <button
-              type="button"
+          <SidebarMenuItem>
+            <Button
+              variant="ghost"
+              size="sm"
               className="text-muted-foreground hover:text-foreground"
               onClick={toggleSidebar}
             >
               <X />
-            </button>
-            <ModeToggle />
+            </Button>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

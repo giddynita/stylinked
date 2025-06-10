@@ -182,8 +182,8 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <Logo icon="w-6 h-6" text="text-xl" />
-              <p className="text-muted-foreground text-sm font-medium mt-2">
+              <Logo icon="w-5 h-5" text="text-sm" />
+              <p className="text-muted-foreground text-xs font-medium mt-2">
                 Connecting fashion enthusiasts with skilled artisans worldwide.
               </p>
             </div>
