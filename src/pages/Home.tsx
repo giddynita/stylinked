@@ -1,5 +1,4 @@
 import { Logo } from '@/components/global'
-import ModeToggle from '@/components/theme/mode-toggle'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -15,34 +14,6 @@ import { Link } from 'react-router-dom'
 const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-accent/50">
-      {/* Header */}
-      <header className="bg-navbarbg/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Logo icon="w-8 h-8" text="text-2xl" />
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                to="/marketplace"
-                className="text-muted-foreground hover:text-primary font-medium transition-colors"
-              >
-                Marketplace
-              </Link>
-              <Link
-                to="/auth"
-                className="text-muted-foreground hover:text-primary transition-colors font-medium"
-              >
-                Sign In
-              </Link>
-              <Link to="/auth/sign-up">
-                <Button size="lg" className="cursor-pointer">
-                  Get Started
-                </Button>
-              </Link>
-              <ModeToggle />
-            </nav>
-          </div>
-        </div>
-      </header>
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">

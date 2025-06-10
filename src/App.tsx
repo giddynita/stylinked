@@ -4,6 +4,7 @@ import {
   CompleteRegistration,
   ForgotPassword,
   Home,
+  Layout,
   Login,
   ResetPassword,
   SignUp,
@@ -43,7 +44,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Home />,
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+    ],
   },
 ])
 

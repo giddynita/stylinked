@@ -1,4 +1,11 @@
-import { ShoppingCart, Store, Truck, Shield } from 'lucide-react'
+import {
+  ShoppingCart,
+  Store,
+  Truck,
+  Shield,
+  Home,
+  StoreIcon,
+} from 'lucide-react'
 
 import type {
   Features,
@@ -101,5 +108,28 @@ export const testimonials: Testimonials[] = [
     role: 'Delivery Partner',
     text: 'Flexible schedule and great earnings. Love being part of the TailorHub logistics network.',
     rating: 5,
+  },
+]
+
+export const nonUserNavLinks = [
+  {
+    title: 'Home',
+    url: '/',
+  },
+  {
+    title: 'Marketplace',
+    url: '/marketplace',
+  },
+]
+export const nonUserSidebarNavLinks = [
+  {
+    title: 'Home',
+    url: '/',
+    icon: Home,
+  },
+  {
+    title: 'Marketplace',
+    url: '/marketplace',
+    icon: StoreIcon,
   },
 ]

@@ -27,7 +27,7 @@ export const logisticsFormSchema = z.object({
   }),
   firstname: z.string().min(2).max(20),
   lastname: z.string().min(2).max(20),
-  businessname: z.string().min(2).max(20),
+  businessname: z.string().min(2).max(30),
   phone: z.string(),
   vehicletype: z.string({
     required_error: 'Please select an option',
@@ -43,7 +43,7 @@ export const designerFormSchema = z.object({
   }),
   firstname: z.string().min(2).max(20),
   lastname: z.string().min(2).max(20),
-  businessname: z.string().min(2).max(20),
+  businessname: z.string().min(2).max(30),
   phone: z.string(),
   location: z.string().max(10),
 })
