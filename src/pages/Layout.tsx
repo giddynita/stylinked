@@ -1,3 +1,4 @@
+import { AppFooter } from '@/components/global'
 import AppHeader from '@/components/headers/AppHeader'
 import { AppSidebar } from '@/components/sidebars.tsx/AppSidebar'
 import { SidebarProvider } from '@/components/ui/sidebar'
@@ -7,9 +8,10 @@ function Layout() {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <main className="scrollable">
+      <main className="bg-gradient-to-b from-primary/10 to-accent/50 w-screen">
         <AppHeader />
         <Outlet />
+        <AppFooter />
       </main>
     </SidebarProvider>
   )
