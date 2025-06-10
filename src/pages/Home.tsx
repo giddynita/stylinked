@@ -104,8 +104,8 @@ const Home = () => {
 
       {/* Testimonials Section */}
 
-      <section className=" bg-background/50 py-20">
-        <div className="container text-center mb-16">
+      <section className=" bg-background/50 py-16">
+        <div className="container text-center">
           <h3 className="text-3xl font-bold text-foreground mb-4">
             What Our Community Says
           </h3>
