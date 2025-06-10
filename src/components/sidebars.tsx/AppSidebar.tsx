@@ -12,7 +12,7 @@ import ModeToggle from '../theme/mode-toggle'
 import { Button } from '../ui/button'
 import { Link, useLocation } from 'react-router-dom'
 import { LogIn, X } from 'lucide-react'
-import { nonUserNavLinks, nonUserSidebarNavLinks } from '@/utils/data'
+import { nonUserSidebarNavLinks } from '@/utils/data'
 
 export function AppSidebar() {
   const { isMobile, open, setOpen, toggleSidebar } = useSidebar()

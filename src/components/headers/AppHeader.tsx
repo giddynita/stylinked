@@ -1,15 +1,8 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { Logo } from '../global'
 import { Button } from '../ui/button'
 import ModeToggle from '../theme/mode-toggle'
 import { SidebarTrigger } from '../ui/sidebar'
-
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from '@/components/ui/navigation-menu'
 import { nonUserNavLinks } from '@/utils/data'
 function AppHeader() {
   return (
@@ -17,7 +10,7 @@ function AppHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
         <div className="flex items-center justify-between">
           <Logo icon="w-6 h-6" text="text-xl" />
-          <div className="flex items-center gap-x-8">
+          <div className="hidden md:flex items-center gap-x-8">
             <nav className="hidden md:flex items-center space-x-4 font-medium text-sm px-2">
               {nonUserNavLinks.map((item) => (
                 <Button variant="ghost" size="sm">
