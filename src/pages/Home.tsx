@@ -103,7 +103,6 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-
       <section className=" bg-background/50 py-16">
         <div className="container text-center">
           <h3 className="text-3xl font-bold text-foreground mb-4">
@@ -113,7 +112,6 @@ const Home = () => {
             Real stories from real users
           </p>
         </div>
-
         <div className="container ">
           <TestimonialCarousel carouselItems={testimonials} />
         </div>

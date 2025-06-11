@@ -49,7 +49,7 @@ function AppHeader() {
             ))}
           </nav>
           <div className="flex flex-row gap-x-2 items-center">
-            <ModeToggle />
+            <ModeToggle align="end" />
 
             <Button variant="outline" size="sm" asChild>
               <Link
@@ -66,7 +66,7 @@ function AppHeader() {
           </div>
         </div>
         <div className="md:hidden flex flex-row gap-x-6 items-center">
-          <ModeToggle />
+          <ModeToggle align="end" />
           <SidebarTrigger />
         </div>
       </div>

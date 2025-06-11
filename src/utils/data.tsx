@@ -5,7 +5,6 @@ import {
   Shield,
   Home,
   StoreIcon,
-  Circle,
 } from 'lucide-react'
 
 export const signUp = {
@@ -89,24 +88,18 @@ export const testimonials = [
     role: 'Fashion Enthusiast',
     text: 'Found the perfect wedding dress through TailorHub. The quality and service exceeded all expectations!',
     rating: 5,
-    id: 'testimonial1',
-    indicator: Circle,
   },
   {
     name: 'Michael Chen',
     role: 'Tailor & Vendor',
     text: 'TailorHub helped me grow my business from local to nationwide. Amazing platform for artisans!',
     rating: 5,
-    id: 'testimonial2',
-    indicator: Circle,
   },
   {
     name: 'Emma Davis',
     role: 'Delivery Partner',
     text: 'Flexible schedule and great earnings. Love being part of the TailorHub logistics network.',
     rating: 5,
-    id: 'testimonial3',
-    indicator: Circle,
   },
 ]
 
@@ -163,7 +156,7 @@ export const nonUserFooterLinks = [
       },
       {
         label: 'Dashboard',
-        url: '/',
+        url: '/dashboard',
       },
     ],
   },

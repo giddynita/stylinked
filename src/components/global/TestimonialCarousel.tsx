@@ -1,18 +1,6 @@
-import { Star, type LucideProps } from 'lucide-react'
-function TestimonialCarousel({
-  carouselItems,
-}: {
-  carouselItems: {
-    id: string
-    rating: number
-    text: string
-    name: string
-    role: string
-    indicator: React.ForwardRefExoticComponent<
-      Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-    >
-  }[]
-}) {
+import type { Testimonials } from '@/utils/types'
+import { Star } from 'lucide-react'
+function TestimonialCarousel({ carouselItems }: Testimonials[]) {
   return (
     <>
       <div className="carousel w-full carousel-center rounded-box md:grid md:grid-cols-3 gap-8  ">

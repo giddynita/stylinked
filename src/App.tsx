@@ -2,10 +2,12 @@ import { ThemeProvider } from '@/components/theme/theme-provider'
 import {
   AuthLayout,
   CompleteRegistration,
+  DashboardLayout,
   ForgotPassword,
   Home,
   Layout,
   Login,
+  Overview,
   ResetPassword,
   SignUp,
   Verification,
@@ -49,6 +51,28 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+    ],
+  },
+  {
+    path: 'dashboard',
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <Overview />,
+      },
+      {
+        path: 'products',
+        element: <SignUp />,
+      },
+      {
+        path: 'orders',
+        element: <Verification />,
+      },
+      {
+        path: 'settings',
+        element: <CompleteRegistration />,
       },
     ],
   },

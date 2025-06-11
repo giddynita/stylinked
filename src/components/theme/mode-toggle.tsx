@@ -9,7 +9,7 @@ import {
 import { useTheme } from '@/components/theme/theme-provider'
 import { Button } from '../ui/button'
 
-function ModeToggle() {
+function ModeToggle({ align = 'end' }: { align: 'end' | 'center' | 'start' }) {
   const { setTheme } = useTheme()
 
   return (
@@ -21,7 +21,7 @@ function ModeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="mt-2">
+      <DropdownMenuContent align={align} className="mt-2">
         <DropdownMenuItem onClick={() => setTheme('light')}>
           Light
         </DropdownMenuItem>
