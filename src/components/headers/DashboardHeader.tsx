@@ -16,10 +16,10 @@ function DashboardHeader() {
       <div className="flex items-center gap-3 sm:gap-4 ">
         <ModeToggle align="start" />
         <Suspense fallback={<UserSkeleton />}>
-          <span className="text-xs sm:text-sm text-muted-foreground hidde sm:contents max-w-16 sm:max-w-full">
+          <p className="text-xs sm:text-sm text-muted-foreground  max-w-16 sm:max-w-full ">
             Welcome back,{' '}
-            <span className="font-bold text-foreground sm:-ml-2">John </span>
-          </span>
+            <span className="font-bold text-foreground ">John </span>
+          </p>
         </Suspense>
         <Avatar>
           <AvatarFallback>
