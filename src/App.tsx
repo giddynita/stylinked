@@ -7,7 +7,7 @@ import {
   Home,
   Layout,
   Login,
-  Overview,
+  Dashboard,
   ResetPassword,
   SignUp,
   Verification,
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Overview />,
+        element: <Dashboard />,
       },
       {
         path: 'products',

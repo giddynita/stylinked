@@ -7,7 +7,7 @@ import type { LoginFormSchema } from '@/utils/schema'
 import { FormInput, FormPassword, SubmitButton } from '@/components/form'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
-import { CardHead } from '@/components/headings'
+import { AuthFormsHeading } from '@/components/headings'
 import { useState } from 'react'
 import { loginAction } from '@/utils/action'
 import { AuthContainer } from '@/components/auth'
@@ -30,7 +30,7 @@ function Login() {
   return (
     <AuthContainer>
       <Card>
-        <CardHead
+        <AuthFormsHeading
           title="Login"
           desc="Enter your credentials to access your account"
         />

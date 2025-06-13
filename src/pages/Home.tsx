@@ -113,7 +113,7 @@ const Home = () => {
           </p>
         </div>
         <div className="container ">
-          <TestimonialCarousel carouselItems={testimonials} />
+          <TestimonialCarousel testimonials={testimonials} />
         </div>
       </section>
 

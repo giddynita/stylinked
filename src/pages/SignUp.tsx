@@ -7,7 +7,7 @@ import type { SignupFormSchema } from '@/utils/schema'
 import { FormInput, FormPassword, SubmitButton } from '@/components/form'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
-import { CardHead } from '@/components/headings'
+import { AuthFormsHeading } from '@/components/headings'
 import { useState } from 'react'
 import { signUpAction } from '@/utils/action'
 import { AuthContainer } from '@/components/auth'
@@ -31,7 +31,7 @@ function SignUp() {
   return (
     <AuthContainer>
       <Card>
-        <CardHead
+        <AuthFormsHeading
           title="Create Account"
           desc="Sign up to start your fashion journey"
         />

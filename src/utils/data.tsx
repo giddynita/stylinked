@@ -6,6 +6,7 @@ import {
   Home,
   StoreIcon,
 } from 'lucide-react'
+import type { Testimonials } from './types'
 
 export const signUp = {
   title: 'Verify your email address',
@@ -82,7 +83,7 @@ export const stats = [
   { number: '50K+', label: 'Products Sold' },
   { number: '4.9', label: 'Average Rating' },
 ]
-export const testimonials = [
+export const testimonials: Testimonials[] = [
   {
     name: 'Sarah Johnson',
     role: 'Fashion Enthusiast',

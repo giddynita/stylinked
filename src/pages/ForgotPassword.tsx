@@ -1,6 +1,6 @@
 import { AuthContainer } from '@/components/auth'
 import { FormInput, SubmitButton } from '@/components/form'
-import { CardHead } from '@/components/headings'
+import { AuthFormsHeading } from '@/components/headings'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form } from '@/components/ui/form'
 import { forgotPasswordAction } from '@/utils/action'
@@ -27,7 +27,7 @@ function ForgotPassword() {
   return (
     <AuthContainer>
       <Card>
-        <CardHead
+        <AuthFormsHeading
           title="Forgot Password"
           desc="Enter your email address to receive a password reset link."
         />

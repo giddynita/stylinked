@@ -1,6 +1,6 @@
 import { AuthContainer, AuthLoading, InvalidToken } from '@/components/auth'
 import { FormPassword, SubmitButton } from '@/components/form'
-import { CardHead } from '@/components/headings'
+import { AuthFormsHeading } from '@/components/headings'
 import { Card, CardContent } from '@/components/ui/card'
 import { Form } from '@/components/ui/form'
 import { resetPasswordAction } from '@/utils/action'
@@ -69,7 +69,7 @@ function ResetPassword() {
   return (
     <AuthContainer>
       <Card>
-        <CardHead
+        <AuthFormsHeading
           title="Reset Password"
           desc="Create a new password for your account."
         />

@@ -15,7 +15,7 @@ import type {
 } from '@/utils/schema'
 import { FormRadio, SubmitButton } from '@/components/form'
 import { Card, CardContent } from '@/components/ui/card'
-import { CardHead } from '@/components/headings'
+import { AuthFormsHeading } from '@/components/headings'
 import { useEffect, useState } from 'react'
 import {
   CustomerDetailsForm,
@@ -145,7 +145,7 @@ function CompleteRegistration() {
   return (
     <AuthContainer>
       <Card>
-        <CardHead
+        <AuthFormsHeading
           title="Complete Sign Up"
           desc="Just a few more details to complete your registration"
         />

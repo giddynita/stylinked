@@ -1,6 +1,6 @@
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-function CardHead({ title, desc }: { title: string; desc: string }) {
+function AuthFormsHeading({ title, desc }: { title: string; desc: string }) {
   return (
     <CardHeader className="my-1">
       <CardTitle className="text-2xl text-center mb-0.5 font-bold">
@@ -10,4 +10,4 @@ function CardHead({ title, desc }: { title: string; desc: string }) {
     </CardHeader>
   )
 }
-export default CardHead
+export default AuthFormsHeading

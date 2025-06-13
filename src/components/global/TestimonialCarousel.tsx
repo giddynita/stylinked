@@ -1,10 +1,14 @@
 import type { Testimonials } from '@/utils/types'
 import { Star } from 'lucide-react'
-function TestimonialCarousel({ carouselItems }: Testimonials[]) {
+function TestimonialCarousel({
+  testimonials,
+}: {
+  testimonials: Testimonials[]
+}) {
   return (
     <>
       <div className="carousel w-full carousel-center rounded-box md:grid md:grid-cols-3 gap-8  ">
-        {carouselItems.map(({ rating, text, name, role }, index) => {
+        {testimonials.map(({ rating, text, name, role }, index) => {
           return (
             <div
               key={index}
