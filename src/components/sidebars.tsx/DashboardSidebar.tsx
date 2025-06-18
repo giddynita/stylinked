@@ -22,16 +22,18 @@ import {
 } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 const navigation = [
-  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboardIcon },
-  { title: 'Products', url: '/dashboard/products', icon: PackageIcon },
-  { title: 'Orders', url: '/orders', icon: List },
-  { title: 'Settings', url: '/settings', icon: User },
+  { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
+  { title: 'Products', url: 'products', icon: PackageIcon },
+  { title: 'Orders', url: 'orders', icon: List },
+  { title: 'Settings', url: 'settings', icon: User },
 ]
 
 function DashboardSidebar() {
   const { state, isMobile } = useSidebar()
   const location = useLocation()
-  const currentPath = location.pathname
+  const currentPath = location.pathname.split('/').pop()
+  console.log(currentPath)
+
   const tooltip = state == 'collapsed' && !isMobile
   return (
     <Sidebar

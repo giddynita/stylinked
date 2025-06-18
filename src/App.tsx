@@ -13,7 +13,7 @@ import {
   Verification,
   Products,
 } from './pages'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 const router = createBrowserRouter([
   {
     path: 'auth',
@@ -56,11 +56,15 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: 'dashboard',
+    path: 'account',
     element: <DashboardLayout />,
     children: [
       {
         index: true,
+        element: <Navigate to="dashboard" />,
+      },
+      {
+        path: 'dashboard',
         element: <Dashboard />,
       },
       {
