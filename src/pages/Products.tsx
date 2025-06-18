@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import {
   Card,
   CardContent,
@@ -43,6 +43,7 @@ import { AccountPagesHeading } from '@/components/headings'
 import type { Variant, ColorQuantity, Product } from '@/utils/types'
 import { toast } from 'sonner'
 import { currencyFormatter } from '@/utils/format'
+import { ProductListSkeleton } from '@/components/skeletons'
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -194,118 +195,120 @@ const Products = () => {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className="text-xs">
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell className="font-medium  max-w-40">
-                        <div>
-                          <div className="font-semibold ">{product.name}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-semibold max-w-24">
-                        {currencyFormatter(product.price)}
-                      </TableCell>
-                      <TableCell className="max-w-24">
-                        <span
-                          className={
-                            product.stock == 0
-                              ? 'text-orange-600 font-medium'
-                              : ''
-                          }
-                        >
-                          {product.stock}
-                        </span>
-                      </TableCell>
-                      <TableCell className=" hidden lg:table-cell ">
-                        {getStatusBadge(product.stock)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground hidden lg:table-cell">
-                        {product.category}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24   ">
-                        {product.brand}
-                      </TableCell>
-                      <TableCell className="text-right  ">
-                        <div className="flex justify-end gap-1">
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className=" w-6 h-6"
-                            onClick={() => handleViewProduct(product)}
+              <Suspense fallback={<ProductListSkeleton />}>
+                <TableBody className="text-xs">
+                  {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell className="font-medium  max-w-40">
+                          <div>
+                            <div className="font-semibold ">{product.name}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-semibold max-w-24">
+                          {currencyFormatter(product.price)}
+                        </TableCell>
+                        <TableCell className="max-w-24">
+                          <span
+                            className={
+                              product.stock == 0
+                                ? 'text-orange-600 font-medium'
+                                : ''
+                            }
                           >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className=" w-6 h-6"
-                            onClick={() => handleEditClick(product)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className=" w-6 h-6"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Delete Product
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete "
-                                  {product.name}
-                                  "? This action cannot be undone.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() =>
-                                    handleDeleteProduct(product.id)
-                                  }
+                            {product.stock}
+                          </span>
+                        </TableCell>
+                        <TableCell className=" hidden lg:table-cell ">
+                          {getStatusBadge(product.stock)}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground hidden lg:table-cell">
+                          {product.category}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24   ">
+                          {product.brand}
+                        </TableCell>
+                        <TableCell className="text-right  ">
+                          <div className="flex justify-end gap-1">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className=" w-6 h-6"
+                              onClick={() => handleViewProduct(product)}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className=" w-6 h-6"
+                              onClick={() => handleEditClick(product)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className=" w-6 h-6"
                                 >
-                                  Delete
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Delete Product
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete "
+                                    {product.name}
+                                    "? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() =>
+                                      handleDeleteProduct(product.id)
+                                    }
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={7}
+                        className="font-bold text-2xl text-center py-8"
+                      >
+                        {searchTerm ? (
+                          'No results'
+                        ) : (
+                          <>
+                            <div className="space-y-6">
+                              <p>You have not added any product.</p>
+                              <Button
+                                onClick={() => setIsAddDialogOpen(true)}
+                                size="lg"
+                              >
+                                <Plus /> Add Product
+                              </Button>
+                            </div>
+                          </>
+                        )}
                       </TableCell>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="font-bold text-2xl text-center py-8"
-                    >
-                      {searchTerm ? (
-                        'No results'
-                      ) : (
-                        <>
-                          <div className="space-y-6">
-                            <p>You have not added any product.</p>
-                            <Button
-                              onClick={() => setIsAddDialogOpen(true)}
-                              size="lg"
-                            >
-                              <Plus /> Add Product
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
+                  )}
+                </TableBody>
+              </Suspense>
             </Table>
           </div>
         </CardContent>

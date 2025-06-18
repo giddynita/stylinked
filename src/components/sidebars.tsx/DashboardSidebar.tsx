@@ -32,7 +32,6 @@ function DashboardSidebar() {
   const { state, isMobile } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
-  console.log(currentPath)
 
   const tooltip = state == 'collapsed' && !isMobile
   return (
