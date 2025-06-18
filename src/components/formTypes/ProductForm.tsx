@@ -1,0 +1,348 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Trash2 } from 'lucide-react'
+import { Separator } from '../ui/separator'
+import { toast } from 'sonner'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
+import { productSchema, validateWithZodSchema } from '@/utils/schema'
+
+const sizesList = ['S', 'M', 'L', 'XL']
+const colorsList = ['Red', 'Blue', 'Black', 'White']
+
+const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
+  const [formData, setFormData] = useState({
+    name: product?.name || '',
+    description: product?.description || '',
+    price: product?.price || '',
+    category: product?.category || '',
+    material: product?.material || '',
+    brand: product?.brand || '',
+  })
+  //others
+  const [selectedSize, setSelectedSize] = useState<string>('')
+  const [selectedColors, setSelectedColors] = useState<string[]>([])
+  const [colorQuantities, setColorQuantities] = useState<
+    Record<string, number>
+  >({})
+  const [variants, setVariants] = useState<Variant[]>(product?.variants || [])
+
+  const handleAddVariant = () => {
+    if (!selectedSize || selectedColors.length === 0) {
+      toast('Please select a size and at least one color.')
+      return
+    }
+    const newColors: ColorQuantity[] = selectedColors.map((color) => ({
+      color,
+      quantity: colorQuantities[color] || 1,
+    }))
+
+    const updatedVariants = [...variants]
+    const existingVariantIndex = updatedVariants.findIndex(
+      (v) => v.size === selectedSize
+    )
+
+    if (existingVariantIndex !== -1) {
+      // Merge into existing variant
+      const existingVariant = updatedVariants[existingVariantIndex]
+      const colorMap: Record<string, number> = {}
+
+      // Map existing colors
+      existingVariant.colors.forEach(({ color, quantity }) => {
+        colorMap[color] = quantity
+      })
+
+      // Add or merge incoming colors
+      newColors.forEach(({ color, quantity }) => {
+        if (colorMap[color]) {
+          colorMap[color] += quantity
+        } else {
+          colorMap[color] = quantity
+        }
+      })
+
+      // Update variant
+      updatedVariants[existingVariantIndex] = {
+        size: selectedSize,
+        colors: Object.entries(colorMap).map(([color, quantity]) => ({
+          color,
+          quantity,
+        })),
+      }
+    } else {
+      // Add new variant
+      updatedVariants.push({ size: selectedSize, colors: newColors })
+    }
+
+    setVariants(updatedVariants)
+    setSelectedSize('')
+    setSelectedColors([])
+    setColorQuantities({})
+  }
+
+  const handleDelete = (size: string, color: string) => {
+    const updated = variants
+      .map((variant) => {
+        if (variant.size !== size) return variant
+        return {
+          ...variant,
+          colors: variant.colors.filter((c) => c.color !== color),
+        }
+      })
+      .filter((variant) => variant.colors.length > 0) // remove size if no colors left
+    setVariants(updated)
+  }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const validatedData = validateWithZodSchema(productSchema, formData)
+    if (!validatedData) {
+      return
+    }
+    const allData = {
+      ...validatedData,
+      variants,
+    }
+    setFormData({
+      name: '',
+      description: '',
+      price: '',
+      category: '',
+      material: '',
+      brand: '',
+    })
+    setVariants([])
+
+    onSubmit(allData)
+  }
+
+  const handleInputChange = (field: string, value: string) => {
+    if (field == 'price') {
+      const price = parseInt(value)
+      setFormData((prev) => ({ ...prev, [field]: price }))
+    }
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Product Name</Label>
+        <Input
+          id="name"
+          value={formData.name}
+          onChange={(e) => handleInputChange('name', e.target.value)}
+          placeholder="e.g., Cotton T-Shirt"
+          required
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="description">Description</Label>
+        <Textarea
+          id="description"
+          value={formData.description}
+          onChange={(e) => handleInputChange('description', e.target.value)}
+          placeholder="Describe the product..."
+          rows={3}
+          required
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="price">
+            Price <span>(&#8358;) </span>
+          </Label>
+          <Input
+            id="price"
+            type="text"
+            value={formData.price}
+            onChange={(e) => handleInputChange('price', e.target.value)}
+            placeholder="e.g. 2000"
+            required
+            min={1}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="category">Category</Label>
+          <Select
+            value={formData.category}
+            onValueChange={(value) => handleInputChange('category', value)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select category" className="" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="shirts">Shirts</SelectItem>
+              <SelectItem value="pants">Pants</SelectItem>
+              <SelectItem value="dresses">Dresses</SelectItem>
+              <SelectItem value="shoes">Shoes</SelectItem>
+              <SelectItem value="accessories">Accessories</SelectItem>
+              <SelectItem value="outerwear">Outerwear</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="material">Material</Label>
+          <Input
+            id="material"
+            value={formData.material}
+            onChange={(e) => handleInputChange('material', e.target.value)}
+            placeholder="e.g., Cotton, Polyester"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="brand">Brand</Label>
+          <Input
+            id="brand"
+            value={formData.brand}
+            onChange={(e) => handleInputChange('brand', e.target.value)}
+            placeholder="e.g., Nike, Zara"
+          />
+        </div>
+      </div>
+      <Separator className="mt-8" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Size</Label>
+          <Select
+            value={selectedSize}
+            onValueChange={(value) => setSelectedSize(value)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Size" />
+            </SelectTrigger>
+            <SelectContent>
+              {sizesList.map((size, index) => {
+                return (
+                  <SelectItem key={index} value={size}>
+                    {size}
+                  </SelectItem>
+                )
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label>Color</Label>
+          <Select
+            value={selectedColors[0] || ''}
+            onValueChange={(value) => setSelectedColors(Array.of(value))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Color" />
+            </SelectTrigger>
+            <SelectContent>
+              {colorsList.map((color, index) => {
+                return (
+                  <SelectItem key={index} value={color}>
+                    {color}
+                  </SelectItem>
+                )
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      {selectedColors.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {selectedColors.map((color) => (
+            <div key={color} className="space-y-2">
+              <Label>Quantity for {color} </Label>
+              <Input
+                type="number"
+                min={1}
+                value={colorQuantities[color] || 1}
+                onChange={(e) =>
+                  setColorQuantities({
+                    ...colorQuantities,
+                    [color]: Number(e.target.value),
+                  })
+                }
+                className="px-4"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+      <Button
+        type="button"
+        onClick={handleAddVariant}
+        className="bg-green-500 hover:bg-green-600 text-white"
+      >
+        Add Variant
+      </Button>
+      <Separator className="mt-2" />
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-bold text-lg">
+            {variants.length < 1
+              ? 'No variant added!'
+              : variants.length > 1
+              ? 'Variants Added'
+              : 'Variant Added'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {variants.map((variant) => (
+            <div
+              key={variant.size}
+              className="font-medium border py-4 px-2 rounded-lg mb-4  "
+            >
+              <strong>Size:</strong> {variant.size}
+              <ul className="space-y-4">
+                {variant.colors.map((c, index) => (
+                  <li key={c.color}>
+                    <span className="flex flex-row items-start justify-between gap-4 pl-2">
+                      <span className="flex flex-col md:flex-row gap-1 md:gap-4">
+                        <span>
+                          <strong>Color:</strong> {c.color}
+                        </span>
+                        <span>
+                          <strong>Quantity:</strong> {c.quantity}
+                        </span>
+                      </span>
+
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => handleDelete(variant.size, c.color)}
+                        className="text-red-600 hover:text-red-600"
+                      >
+                        <Trash2 className="w-6 h-6" />
+                      </Button>
+                    </span>
+                    {index < variant.colors.length - 1 && (
+                      <Separator className="mt-4" />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+      <div className="flex gap-2 pt-4">
+        <Button type="submit">
+          {product ? 'Update Product' : 'Add Product'}
+        </Button>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
+    </form>
+  )
+}
+
+export default ProductForm

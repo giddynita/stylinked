@@ -11,6 +11,7 @@ import {
   ResetPassword,
   SignUp,
   Verification,
+  Products,
 } from './pages'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 const router = createBrowserRouter([
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'products',
-        element: <SignUp />,
+        element: <Products />,
       },
       {
         path: 'orders',

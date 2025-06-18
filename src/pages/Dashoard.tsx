@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import {
   Card,
   CardContent,
@@ -7,28 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import {
-  TrendingUp,
-  TrendingDown,
-  Package,
-  List,
-  MessageSquare,
-  LucidePackagePlus,
-  LucidePackageCheck,
-} from 'lucide-react'
 import { AccountPagesHeading } from '@/components/headings'
 import { GiMoneyStack } from 'react-icons/gi'
 import { LuPackageCheck } from 'react-icons/lu'
@@ -41,8 +20,6 @@ import {
 import { currencyFormatter, padNumber } from '@/utils/format'
 
 const Dashboard = () => {
-  /*  const [isDialogOpen, setIsDialogOpen] = useState(false) */
-
   const stats = [
     {
       title: 'Total Revenue',
@@ -100,70 +77,12 @@ const Dashboard = () => {
     { name: 'Phone Case', stock: 7, threshold: 15 },
   ]
 
-  /* const handleCreateProduct = () => {
-    // Simple form submission - in a real app this would connect to your backend
-    console.log('Product creation form submitted')
-    setIsDialogOpen(false)
-    // You could add a toast notification here
-  } */
-
   return (
     <div className="space-y-6">
       <AccountPagesHeading
         pageTitle="Dashboard"
         pageDesc="Your business metrics at a glance"
       />
-      {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Product
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add New Product</DialogTitle>
-              <DialogDescription>
-                Create a new product to add to your inventory.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  placeholder="Product name"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="price" className="text-right">
-                  Price
-                </Label>
-                <Input id="price" placeholder="$0.00" className="col-span-3" />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="stock" className="text-right">
-                  Stock
-                </Label>
-                <Input
-                  id="stock"
-                  placeholder="0"
-                  type="number"
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="submit" onClick={handleCreateProduct}>
-                Create Product
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog> */}
-
       {/* Stats Grid */}
       <Suspense fallback={<StatSkeleton />}>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -227,7 +146,7 @@ const Dashboard = () => {
                             {order.customer}
                           </p>
                         </div>
-                        <div className="text-right space-y-1">
+                        <div className="text-right space-y-0">
                           <p className="text-xs font-medium">
                             {currencyFormatter(order.amount)}
                           </p>

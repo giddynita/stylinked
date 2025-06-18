@@ -58,3 +58,23 @@ export type Testimonials = {
   text: string
   rating: number
 }
+
+export type ProductFormProps = {
+  product?: any
+  onSubmit: (data: any) => void
+  onCancel: () => void
+}
+
+export type ColorQuantity = { color: string; quantity: number }
+export type Variant = { size: string; colors: ColorQuantity[] }
+export type Product = {
+  id: string
+  name: string
+  description: string
+  price: number
+  category: string
+  material?: string
+  brand?: string
+  stock: number
+  variants?: Variant
+}

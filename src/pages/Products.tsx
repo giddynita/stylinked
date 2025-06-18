@@ -1,0 +1,456 @@
+import { useState } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Edit, Trash2, Package, Eye, Plus } from 'lucide-react'
+import { ProductForm } from '@/components/formTypes'
+import { AccountPagesHeading } from '@/components/headings'
+import type { Variant, ColorQuantity, Product } from '@/utils/types'
+import { toast } from 'sonner'
+import { currencyFormatter } from '@/utils/format'
+
+const Products = () => {
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<any>(null)
+
+  const [products, setProducts] = useState<Product[]>([])
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const getStatusBadge = (stock: number) => {
+    if (stock === 0) {
+      return <Badge variant="destructive">Out of Stock</Badge>
+    }
+    if (stock < 5) {
+      return <Badge variant="outline">Low Stock</Badge>
+    }
+    return (
+      <Badge variant="default" className="bg-green-500">
+        Active
+      </Badge>
+    )
+  }
+
+  const handleAddProduct = (data: any) => {
+    const stockArray = data.variants.map((variant: Variant) =>
+      variant.colors.map((color: ColorQuantity) => {
+        return color.quantity
+      })
+    )
+    const stockSummation = stockArray
+      .flat()
+      .reduce((a: number, b: number) => a + b, 0)
+    const newProduct: Product = {
+      id: (products.length + 1).toString(),
+      ...data,
+      stock: stockSummation,
+    }
+
+    setProducts([...products, newProduct])
+    setIsAddDialogOpen(false)
+    toast('Product added successfully!')
+  }
+
+  const handleEditProduct = (data: any) => {
+    const stockArray = data.variants.map((variant: Variant) =>
+      variant.colors.map((color: ColorQuantity) => {
+        return color.quantity
+      })
+    )
+    const stockSummation = stockArray
+      .flat()
+      .reduce((a: number, b: number) => a + b, 0)
+    const updatedProducts = products.map((product) =>
+      product.id === selectedProduct?.id
+        ? {
+            ...product,
+            ...data,
+            stock: stockSummation,
+          }
+        : product
+    )
+
+    setProducts(updatedProducts)
+    setIsEditDialogOpen(false)
+    setSelectedProduct(null)
+    toast('Product edited successfully!')
+  }
+
+  const handleDeleteProduct = (productId: string) => {
+    setProducts(products.filter((product) => product.id !== productId))
+    toast('Product deleted successfully!')
+  }
+
+  const handleViewProduct = (product: any) => {
+    setSelectedProduct(product)
+    setIsViewDialogOpen(true)
+  }
+
+  const handleEditClick = (product: any) => {
+    setSelectedProduct(product)
+    setIsEditDialogOpen(true)
+  }
+
+  return (
+    <div className="space-y-6 bg-background ">
+      <div className="flex items-start gap-6 justify-between ">
+        <AccountPagesHeading
+          pageTitle="Products"
+          pageDesc="Manage your clothing inventory and listings"
+        />
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button size="lg">
+              <Plus className=" h-6 w-6" />
+              Add Product
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Add New Product</DialogTitle>
+              <DialogDescription>
+                Add a new clothing item to your inventory
+              </DialogDescription>
+            </DialogHeader>
+            <ProductForm
+              onSubmit={handleAddProduct}
+              onCancel={() => setIsAddDialogOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <Card className="py-4">
+        <CardHeader className="px-4">
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5" />
+            Clothing Inventory
+          </CardTitle>
+          <CardDescription>
+            A comprehensive view of all your clothing products
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <Input
+              placeholder="Search for products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-sm"
+              type="search"
+            />
+          </div>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader className="text-xs">
+                <TableRow>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Stock</TableHead>
+                  <TableHead className="hidden lg:table-cell">Status</TableHead>
+                  <TableHead className="hidden lg:table-cell">
+                    Category
+                  </TableHead>
+                  <TableHead className="hidden lg:table-cell">Brand</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-xs">
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell className="font-medium  max-w-40">
+                        <div>
+                          <div className="font-semibold ">{product.name}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-semibold max-w-24">
+                        {currencyFormatter(product.price)}
+                      </TableCell>
+                      <TableCell className="max-w-24">
+                        <span
+                          className={
+                            product.stock == 0
+                              ? 'text-orange-600 font-medium'
+                              : ''
+                          }
+                        >
+                          {product.stock}
+                        </span>
+                      </TableCell>
+                      <TableCell className=" hidden lg:table-cell ">
+                        {getStatusBadge(product.stock)}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground hidden lg:table-cell">
+                        {product.category}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24   ">
+                        {product.brand}
+                      </TableCell>
+                      <TableCell className="text-right  ">
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className=" w-6 h-6"
+                            onClick={() => handleViewProduct(product)}
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className=" w-6 h-6"
+                            onClick={() => handleEditClick(product)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className=" w-6 h-6"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Delete Product
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete "
+                                  {product.name}
+                                  "? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() =>
+                                    handleDeleteProduct(product.id)
+                                  }
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={7}
+                      className="font-bold text-2xl text-center py-8"
+                    >
+                      {searchTerm ? (
+                        'No results'
+                      ) : (
+                        <>
+                          <div className="space-y-6">
+                            <p>You have not added any product.</p>
+                            <Button
+                              onClick={() => setIsAddDialogOpen(true)}
+                              size="lg"
+                            >
+                              <Plus /> Add Product
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Edit Product Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Product</DialogTitle>
+            <DialogDescription>
+              Update the product information.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedProduct && (
+            <ProductForm
+              product={selectedProduct}
+              onSubmit={handleEditProduct}
+              onCancel={() => {
+                setIsEditDialogOpen(false)
+                setSelectedProduct(null)
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* View Product Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Product Details</DialogTitle>
+          </DialogHeader>
+          {selectedProduct && (
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-sm text-muted-foreground">
+                  Product Name
+                </h4>
+                <p>{selectedProduct.name}</p>
+              </div>
+
+              {selectedProduct.description && (
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">
+                    Description
+                  </h4>
+                  <p>{selectedProduct.description}</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">
+                    Price
+                  </h4>
+                  <p className="text-base">
+                    {currencyFormatter(selectedProduct.price)}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">
+                    Category
+                  </h4>
+                  <p>{selectedProduct.category}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">
+                    Brand
+                  </h4>
+                  <p>{selectedProduct.brand}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">
+                    Material
+                  </h4>
+                  <p>{selectedProduct.material}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-muted-foreground">
+                    Stock
+                  </h4>
+                  <p>
+                    {selectedProduct.stock} unit
+                    {selectedProduct.stock > 1 && 's'}
+                  </p>
+                </div>
+              </div>
+              {selectedProduct.variants && (
+                <div className="space-y-4 grid sm:grid-cols-2">
+                  {selectedProduct.variants.map((variant: Variant) => (
+                    <div key={variant.size}>
+                      <div className="flex gap-1 text-sm items-center">
+                        <h4 className="font-semibold  text-muted-foreground">
+                          Size:
+                        </h4>
+                        <p>{variant.size} </p>
+                      </div>
+
+                      <ul className="space-y-2">
+                        {variant.colors.map((c) => (
+                          <li key={c.color} className="space-x-4 pl-2 flex">
+                            <span className="flex gap-1 text-sm items-center">
+                              <h4 className="font-semibold text-muted-foreground">
+                                Color:
+                              </h4>
+                              {c.color}
+                            </span>
+                            <span className="flex gap-1 text-sm items-center">
+                              <h4 className="font-semibold  text-muted-foreground">
+                                Quantity:
+                              </h4>{' '}
+                              {c.quantity}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="space-y-1">
+                <h4 className="font-semibold text-sm text-muted-foreground">
+                  Status
+                </h4>
+                {getStatusBadge(selectedProduct.stock)}
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsViewDialogOpen(false)}
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
+export default Products

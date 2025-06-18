@@ -23,7 +23,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 const navigation = [
   { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboardIcon },
-  { title: 'Products', url: '/products', icon: PackageIcon },
+  { title: 'Products', url: '/dashboard/products', icon: PackageIcon },
   { title: 'Orders', url: '/orders', icon: List },
   { title: 'Settings', url: '/settings', icon: User },
 ]
@@ -115,7 +115,7 @@ function DashboardSidebar() {
               <TooltipTrigger>
                 <SidebarMenuButton
                   asChild
-                  className="bg-destructive/80 hover:bg-destructive w-max  text-white"
+                  className="bg-destructive/80 hover:bg-destructive w-max  text-white pl-2 pr-4"
                 >
                   <Link to="/auth">
                     <LogOutIcon />

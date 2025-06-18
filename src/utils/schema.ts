@@ -1,4 +1,5 @@
-import { z } from 'zod'
+import { toast } from 'sonner'
+import { z, ZodSchema } from 'zod'
 
 export const signupFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -84,3 +85,44 @@ export const resetPasswordSchema = z.object({
 })
 
 export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>
+
+export function validateWithZodSchema<T>(schema: ZodSchema<T>, data: unknown) {
+  const result = schema.safeParse(data)
+  if (!result.success) {
+    const errors = result.error.errors.map((error) => error.message)
+    toast(errors.join(', '))
+    return
+  }
+  return result.data
+}
+
+export const productSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters.',
+    })
+    .max(100, {
+      message: 'name must be less than 100 characters.',
+    }),
+  description: z.string().refine(
+    (description) => {
+      const wordCount = description.split(' ').length
+      return wordCount >= 10 && wordCount <= 1000
+    },
+    {
+      message: 'Description must be between 10 and 1000 words',
+    }
+  ),
+  price: z.coerce
+    .number({
+      message: 'Price must be only numbers',
+    })
+    .int()
+    .min(1, {
+      message: 'Price must be greater than 0',
+    }),
+  brand: z.string(),
+  category: z.string(),
+  material: z.string(),
+})
