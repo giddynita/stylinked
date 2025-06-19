@@ -23,7 +23,7 @@ export const loginFormSchema = z.object({
 export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export const logisticsFormSchema = z.object({
-  role: z.enum(['client', 'designer', 'logistics'], {
+  role: z.enum(['buyer', 'vendor', 'logistics'], {
     required_error: 'You need to select an account type.',
   }),
   firstname: z.string().min(2).max(20),
@@ -38,8 +38,8 @@ export const logisticsFormSchema = z.object({
 
 export type LogisticsFormSchema = z.infer<typeof logisticsFormSchema>
 
-export const designerFormSchema = z.object({
-  role: z.enum(['client', 'designer', 'logistics'], {
+export const vendorFormSchema = z.object({
+  role: z.enum(['buyer', 'vendor', 'logistics'], {
     required_error: 'You need to select an account type.',
   }),
   firstname: z.string().min(2).max(20),
@@ -48,10 +48,10 @@ export const designerFormSchema = z.object({
   phone: z.string(),
   location: z.string().max(10),
 })
-export type DesignerFormSchema = z.infer<typeof designerFormSchema>
+export type VendorFormSchema = z.infer<typeof vendorFormSchema>
 
-export const clientFormSchema = z.object({
-  role: z.enum(['client', 'designer', 'logistics'], {
+export const buyerFormSchema = z.object({
+  role: z.enum(['buyer', 'vendor', 'logistics'], {
     required_error: 'You need to select an account type.',
   }),
   firstname: z.string().min(2).max(20),
@@ -59,7 +59,7 @@ export const clientFormSchema = z.object({
   phone: z.string(),
 })
 
-export type ClientFormSchema = z.infer<typeof clientFormSchema>
+export type BuyerFormSchema = z.infer<typeof buyerFormSchema>
 
 export const emptySchema = z.object({
   role: z.string(),

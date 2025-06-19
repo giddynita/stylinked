@@ -21,12 +21,12 @@ export const reset = {
 
 export const accountTypeOptions = [
   {
-    label: 'Client',
-    value: 'client',
+    label: 'Buyer',
+    value: 'buyer',
   },
   {
-    label: 'Fashion Designer',
-    value: 'designer',
+    label: 'Vendor',
+    value: 'vendor',
   },
   {
     label: 'Logistics Partner',

@@ -111,16 +111,16 @@ export const completeRegistrationAction = async (props: any) => {
     id: user && user.id,
     role,
   })
-  if (role === 'client') {
-    await supabase.from('clients').insert({
+  if (role === 'buyer') {
+    await supabase.from('buyers').insert({
       id: user && user.id,
       firstname,
       lastname,
       phone,
     })
   }
-  if (role === 'designer') {
-    await supabase.from('designers').insert({
+  if (role === 'vendor') {
+    await supabase.from('vendors').insert({
       id: user && user.id,
       firstname,
       lastname,

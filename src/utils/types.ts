@@ -3,7 +3,7 @@ export type Options = {
   label: string
 }
 
-export type AccountType = 'client' | 'designer' | 'logistics'
+export type AccountType = 'buyer' | 'vendor' | 'logistics'
 
 export type InputProps = {
   form: any

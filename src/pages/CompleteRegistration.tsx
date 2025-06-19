@@ -2,16 +2,16 @@ import { Form } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import {
-  clientFormSchema,
-  designerFormSchema,
+  buyerFormSchema,
   emptySchema,
   logisticsFormSchema,
+  vendorFormSchema,
 } from '@/utils/schema'
 import type {
-  ClientFormSchema,
-  DesignerFormSchema,
+  BuyerFormSchema,
   EmptySchema,
   LogisticsFormSchema,
+  VendorFormSchema,
 } from '@/utils/schema'
 import { FormRadio, SubmitButton } from '@/components/form'
 import { Card, CardContent } from '@/components/ui/card'
@@ -31,8 +31,8 @@ import { completeRegistrationAction } from '@/utils/action'
 import { useNavigate } from 'react-router-dom'
 
 const schemaMap = {
-  client: clientFormSchema,
-  designer: designerFormSchema,
+  buyer: buyerFormSchema,
+  vendor: vendorFormSchema,
   logistics: logisticsFormSchema,
 }
 
@@ -45,13 +45,13 @@ function CompleteRegistration() {
 
   const schema = accountType ? schemaMap[accountType] : emptySchema
   const defaultValues = {
-    client: {
+    buyer: {
       role: '',
       firstname: '',
       lastname: '',
       phone: '',
     },
-    designer: {
+    vendor: {
       role: '',
       firstname: '',
       lastname: '',
@@ -75,8 +75,8 @@ function CompleteRegistration() {
         role: '',
       }
   type schemaTypes =
-    | ClientFormSchema
-    | DesignerFormSchema
+    | BuyerFormSchema
+    | VendorFormSchema
     | LogisticsFormSchema
     | EmptySchema
 
@@ -162,8 +162,8 @@ function CompleteRegistration() {
                 options={accountTypeOptions}
                 setChange={setAccountType}
               />
-              {accountType == 'client' && <CustomerDetailsForm form={form} />}
-              {accountType == 'designer' && <VendorDetailsForm form={form} />}
+              {accountType == 'buyer' && <CustomerDetailsForm form={form} />}
+              {accountType == 'vendor' && <VendorDetailsForm form={form} />}
               {accountType == 'logistics' && (
                 <LogisticsDetailsForm form={form} />
               )}
