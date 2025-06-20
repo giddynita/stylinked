@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,12 +10,13 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Trash2 } from 'lucide-react'
+import { Image, Trash2 } from 'lucide-react'
 import { Separator } from '../ui/separator'
 import { toast } from 'sonner'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
+import ImageInput from '../form/ImageInput'
 
 const sizesList = ['S', 'M', 'L', 'XL']
 const colorsList = ['Red', 'Blue', 'Black', 'White']
@@ -24,7 +25,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
-    price: product?.price || '',
+    price: product?.price || 1,
     category: product?.category || '',
     material: product?.material || '',
     brand: product?.brand || '',
@@ -36,6 +37,10 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     Record<string, number>
   >({})
   const [variants, setVariants] = useState<Variant[]>(product?.variants || [])
+  //images
+  const [validImages, setValidImages] = useState<File[]>([])
+  const [displayedProductImage, setDisplayedProductImage] = useState(0)
+  const selectedImage: File = validImages[displayedProductImage]
 
   const handleAddVariant = () => {
     if (!selectedSize || selectedColors.length === 0) {
@@ -102,8 +107,9 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       .filter((variant) => variant.colors.length > 0) // remove size if no colors left
     setVariants(updated)
   }
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const validatedData = validateWithZodSchema(productSchema, formData)
     if (!validatedData) {
       return
@@ -283,12 +289,11 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       >
         Add Variant
       </Button>
-      <Separator className="mt-2" />
       <Card>
         <CardHeader>
           <CardTitle className="font-bold text-lg">
             {variants.length < 1
-              ? 'No variant added!'
+              ? 'No variant added'
               : variants.length > 1
               ? 'Variants Added'
               : 'Variant Added'}
@@ -331,6 +336,57 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
               </ul>
             </div>
           ))}
+        </CardContent>
+      </Card>
+      <Separator className="mt-8" />
+      <ImageInput
+        label="Product Image(s)"
+        setValidImages={setValidImages}
+        name="images"
+        validImages={validImages}
+      />
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-bold text-lg">
+            {validImages.length < 1
+              ? 'No product image added'
+              : validImages.length > 1
+              ? 'Preview Product Images'
+              : 'Preview Product Image'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {selectedImage && (
+            <figure className=" max-w-48 grid place-items-center shadow rounded-md p-4 mx-auto mb-8 ">
+              <img
+                src={URL.createObjectURL(selectedImage)}
+                alt="preview"
+                className="w-full object-fit"
+                loading="lazy"
+              />
+            </figure>
+          )}
+          <div className=" flex flex-row items-center flex-wrap justify-center gap-2 ">
+            {validImages.map((item, index) => {
+              return (
+                item && (
+                  <figure
+                    key={index}
+                    className={`w-18 h-18  grid place-items-center  shadow-md rounded-full ${
+                      index == displayedProductImage && 'border border-primary'
+                    }`}
+                    onClick={() => setDisplayedProductImage(index)}
+                  >
+                    <img
+                      src={URL.createObjectURL(item)}
+                      alt={`preview-${item}`}
+                      className="w-12 h-12 object-contain rounded-full"
+                    />
+                  </figure>
+                )
+              )
+            })}
+          </div>
         </CardContent>
       </Card>
       <div className="flex gap-2 pt-4">

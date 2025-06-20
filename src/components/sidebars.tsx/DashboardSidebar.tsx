@@ -36,10 +36,10 @@ function DashboardSidebar() {
   const tooltip = state == 'collapsed' && !isMobile
   return (
     <Sidebar
-      className="bg-gradient-to-b from-primary/10 to-accent/50 contents"
+      className="bg-gradient-to-b from-primary/10 to-accent/50"
       collapsible="icon"
     >
-      <SidebarHeader className="h-16 bg-accent flex items-center justify-center">
+      <SidebarHeader className="h-16  flex items-center justify-center">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
@@ -53,7 +53,7 @@ function DashboardSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-accent">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2">
@@ -67,7 +67,7 @@ function DashboardSidebar() {
                       >
                         <NavLink
                           to={item.url}
-                          className="text-muted-foreground w-max"
+                          className="text-muted-foreground"
                         >
                           <item.icon className="h-4 w-4" />
                           <span>{item.title}</span>
@@ -89,7 +89,7 @@ function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="py-4 bg-accent">
+      <SidebarFooter className="py-4 ">
         <SidebarMenu className="space-y-2">
           <SidebarMenuItem>
             <Tooltip>
