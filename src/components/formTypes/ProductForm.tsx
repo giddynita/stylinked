@@ -10,10 +10,16 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Image, Trash2 } from 'lucide-react'
+import { Trash2, X } from 'lucide-react'
 import { Separator } from '../ui/separator'
 import { toast } from 'sonner'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card'
 import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
 import ImageInput from '../form/ImageInput'
@@ -25,7 +31,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
-    price: product?.price || 1,
+    price: product?.price || '',
     category: product?.category || '',
     material: product?.material || '',
     brand: product?.brand || '',
@@ -138,7 +144,14 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     }
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-
+  const handleImageDelete = (
+    /*  e: ChangeEvent<HTMLInputElement>, */
+    name: string
+  ) => {
+    const removedImage = validImages.filter((file) => file.name !== name)
+    setValidImages(removedImage)
+    /*  e.target.value = '' */
+  }
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
@@ -354,10 +367,14 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
               ? 'Preview Product Images'
               : 'Preview Product Image'}
           </CardTitle>
+          <CardDescription>
+            {validImages.length > 0 &&
+              'Default product picture is the first image uploaded. To change order, delete, and add images in desired sequence.'}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          {selectedImage && (
-            <figure className=" max-w-48 grid place-items-center shadow rounded-md p-4 mx-auto mb-8 ">
+          {validImages.length > 0 && selectedImage && (
+            <figure className=" max-w-48 grid place-items-center shadow rounded-md p-4 mx-auto mb-8 mt-4 ">
               <img
                 src={URL.createObjectURL(selectedImage)}
                 alt="preview"
@@ -366,23 +383,33 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
               />
             </figure>
           )}
-          <div className=" flex flex-row items-center flex-wrap justify-center gap-2 ">
+          <div className=" flex flex-row items-center flex-wrap justify-center gap-6">
             {validImages.map((item, index) => {
               return (
                 item && (
-                  <figure
-                    key={index}
-                    className={`w-18 h-18  grid place-items-center  shadow-md rounded-full ${
-                      index == displayedProductImage && 'border border-primary'
-                    }`}
-                    onClick={() => setDisplayedProductImage(index)}
-                  >
-                    <img
-                      src={URL.createObjectURL(item)}
-                      alt={`preview-${item}`}
-                      className="w-12 h-12 object-contain rounded-full"
-                    />
-                  </figure>
+                  <div key={index} className="relative">
+                    <figure
+                      className={`w-18 h-18  grid place-items-center  shadow-md rounded-lg relative ${
+                        index == displayedProductImage &&
+                        'border border-primary'
+                      }`}
+                      onClick={() => setDisplayedProductImage(index)}
+                    >
+                      <img
+                        src={URL.createObjectURL(item)}
+                        alt={`preview-${item}`}
+                        className="w-12 h-12 object-contain rounded-lg"
+                      />
+                    </figure>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      className="absolute -top-3 -right-3 rounded-full w-6 h-6 "
+                      onClick={() => handleImageDelete(item.name)}
+                    >
+                      <X className="text-white font-bold w-6 h-6" />
+                    </Button>
+                  </div>
                 )
               )
             })}
