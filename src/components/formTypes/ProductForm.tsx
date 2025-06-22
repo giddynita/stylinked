@@ -23,6 +23,7 @@ import {
 import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
 import ImageInput from '../form/ImageInput'
+import { getAuthUser, uploadImage } from '@/utils/action'
 
 const sizesList = ['S', 'M', 'L', 'XL']
 const colorsList = ['Red', 'Blue', 'Black', 'White']
@@ -113,16 +114,41 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       .filter((variant) => variant.colors.length > 0) // remove size if no colors left
     setVariants(updated)
   }
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleInputChange = (field: string, value: string) => {
+    if (field == 'price') {
+      const price = parseInt(value)
+      setFormData((prev) => ({ ...prev, [field]: price }))
+    }
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+  const handleImageDelete = (name: string) => {
+    const removedImage = validImages.filter((file) => file.name !== name)
+    setValidImages(removedImage)
+  }
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const validatedData = validateWithZodSchema(productSchema, formData)
     if (!validatedData) {
       return
     }
+    const stockArray = variants.map((variant: Variant) =>
+      variant.colors.map((color: ColorQuantity) => {
+        return color.quantity
+      })
+    )
+    const stockSummation = stockArray
+      .flat()
+      .reduce((a: number, b: number) => a + b, 0)
+    const user = await getAuthUser()
+    const imageURLs = await uploadImage(validImages)
     const allData = {
       ...validatedData,
+      stock: stockSummation,
       variants,
+      images: imageURLs,
+      vendorid: user?.id,
     }
     setFormData({
       name: '',
@@ -133,25 +159,11 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       brand: '',
     })
     setVariants([])
+    setValidImages([])
 
     onSubmit(allData)
   }
 
-  const handleInputChange = (field: string, value: string) => {
-    if (field == 'price') {
-      const price = parseInt(value)
-      setFormData((prev) => ({ ...prev, [field]: price }))
-    }
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-  const handleImageDelete = (
-    /*  e: ChangeEvent<HTMLInputElement>, */
-    name: string
-  ) => {
-    const removedImage = validImages.filter((file) => file.name !== name)
-    setValidImages(removedImage)
-    /*  e.target.value = '' */
-  }
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">

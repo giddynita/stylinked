@@ -1,4 +1,4 @@
-import { Suspense, useContext, useState } from 'react'
+import { Suspense, useState } from 'react'
 import {
   Card,
   CardContent,
@@ -44,6 +44,7 @@ import type { Variant, ColorQuantity, Product } from '@/utils/types'
 import { toast } from 'sonner'
 import { currencyFormatter } from '@/utils/format'
 import { ProductListSkeleton } from '@/components/skeletons'
+import { supabase } from '@/utils/supabaseClient'
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -71,22 +72,15 @@ const Products = () => {
     )
   }
 
-  const handleAddProduct = (data: any) => {
-    const stockArray = data.variants.map((variant: Variant) =>
-      variant.colors.map((color: ColorQuantity) => {
-        return color.quantity
-      })
-    )
-    const stockSummation = stockArray
-      .flat()
-      .reduce((a: number, b: number) => a + b, 0)
-    const newProduct: Product = {
-      id: (products.length + 1).toString(),
-      ...data,
-      stock: stockSummation,
+  const handleAddProduct = async (product: Product[]) => {
+    const { data } = await supabase.from('products').insert([
+      {
+        ...product,
+      },
+    ])
+    if (!data) {
+      toast('Error adding product')
     }
-
-    setProducts([...products, newProduct])
     setIsAddDialogOpen(false)
     toast('Product added successfully!')
   }
@@ -101,7 +95,7 @@ const Products = () => {
       .flat()
       .reduce((a: number, b: number) => a + b, 0)
     const updatedProducts = products.map((product) =>
-      product.id === selectedProduct?.id
+      product.name === selectedProduct?.name
         ? {
             ...product,
             ...data,
@@ -116,8 +110,8 @@ const Products = () => {
     toast('Product edited successfully!')
   }
 
-  const handleDeleteProduct = (productId: string) => {
-    setProducts(products.filter((product) => product.id !== productId))
+  const handleDeleteProduct = (productName: string) => {
+    setProducts(products.filter((product) => product.name !== productName))
     toast('Product deleted successfully!')
   }
 
@@ -198,8 +192,8 @@ const Products = () => {
               <Suspense fallback={<ProductListSkeleton />}>
                 <TableBody className="text-xs">
                   {filteredProducts.length > 0 ? (
-                    filteredProducts.map((product) => (
-                      <TableRow key={product.id}>
+                    filteredProducts.map((product, index) => (
+                      <TableRow key={index}>
                         <TableCell className="font-medium  max-w-40">
                           <div>
                             <div className="font-semibold ">{product.name}</div>
@@ -271,7 +265,7 @@ const Products = () => {
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                                   <AlertDialogAction
                                     onClick={() =>
-                                      handleDeleteProduct(product.id)
+                                      handleDeleteProduct(product.name)
                                     }
                                   >
                                     Delete

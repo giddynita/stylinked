@@ -100,13 +100,6 @@ const ImageInput = ({
           JPG, PNG only · Up to 4 Images, max 2MB each.
         </p>
       </Label>
-      {/* {errors.length > 0 && (
-        <ul className="text-red-500 text-xs mb-2">
-          {errors.map((err, i) => (
-            <li key={i}>{err}</li>
-          ))}
-        </ul>
-      )} */}
     </div>
   )
 }

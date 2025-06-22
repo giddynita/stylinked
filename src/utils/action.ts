@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { supabase } from './supabaseClient'
+import { bucket, supabase } from './supabaseClient'
 
 import type {
   ForgotPasswordAction,
@@ -143,4 +143,45 @@ export const completeRegistrationAction = async (props: any) => {
   }
   toast('Account created successfully!')
   navigate('/')
+}
+
+export const uploadImage = async (images: File[]) => {
+  const timestamp = Date.now()
+  const uploadedImageUrls = []
+
+  for (let i = 0; i < images.length; i++) {
+    const file = images[i]
+    const newFileName = `${timestamp}-${file.name}`
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(newFileName, file)
+
+    if (error) {
+      console.log(`Upload error: ${error.message}`)
+      return
+    }
+    if (!data) {
+      toast('Images upload failed!')
+      return
+    }
+    const { data: publicUrlData } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(newFileName)
+
+    uploadedImageUrls.push(publicUrlData.publicUrl)
+  }
+
+  return uploadedImageUrls
+}
+
+export const getAuthUser = async () => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
+  if (error) {
+    console.error('No user found or error:', error?.message)
+  }
+  return user
 }
