@@ -69,6 +69,7 @@ export type ColorQuantity = { color: string; quantity: number }
 export type Variant = { size: string; colors: ColorQuantity[] }
 
 export type Product = {
+  id: string
   name: string
   description: string
   price: number
@@ -76,7 +77,8 @@ export type Product = {
   material?: string
   brand?: string
   stock: number
-  variants?: Variant
+  variants?: Variant[]
   images: string[]
   vendorid: string
+  createdat?: string
 }

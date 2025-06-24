@@ -157,11 +157,8 @@ export const uploadImage = async (images: File[]) => {
       .from(bucket)
       .upload(newFileName, file)
 
-    if (error) {
+    if (!data || error) {
       console.log(`Upload error: ${error.message}`)
-      return
-    }
-    if (!data) {
       toast('Images upload failed!')
       return
     }
@@ -180,7 +177,7 @@ export const getAuthUser = async () => {
     data: { user },
     error,
   } = await supabase.auth.getUser()
-  if (error) {
+  if (error || !user) {
     console.error('No user found or error:', error?.message)
   }
   return user

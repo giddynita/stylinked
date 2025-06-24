@@ -45,15 +45,20 @@ import { toast } from 'sonner'
 import { currencyFormatter } from '@/utils/format'
 import { ProductListSkeleton } from '@/components/skeletons'
 import { supabase } from '@/utils/supabaseClient'
+import { useDeleteProduct, useVendorProducts } from '@/utils/hooks'
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState<any>(null)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
-  const [products, setProducts] = useState<Product[]>([])
+  //hooks
+  const { data: vendorProducts } = useVendorProducts()
+  const { mutate: deleteProduct /* , isPending  */ } = useDeleteProduct()
+
+  const [products, setProducts] = useState<Product[]>(vendorProducts ?? [])
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -110,12 +115,12 @@ const Products = () => {
     toast('Product edited successfully!')
   }
 
-  const handleDeleteProduct = (productName: string) => {
-    setProducts(products.filter((product) => product.name !== productName))
+  const handleDeleteProduct = (productId: string) => {
+    deleteProduct(productId)
     toast('Product deleted successfully!')
   }
 
-  const handleViewProduct = (product: any) => {
+  const handleViewProduct = (product: Product) => {
     setSelectedProduct(product)
     setIsViewDialogOpen(true)
   }
@@ -433,6 +438,19 @@ const Products = () => {
                   Status
                 </h4>
                 {getStatusBadge(selectedProduct.stock)}
+              </div>
+              <div className="grid grid-cols-1">
+                {selectedProduct.images.map((image, index) => {
+                  return (
+                    <figure key={index} className="w-[200px] h-[200px]">
+                      <img
+                        src={image}
+                        alt={selectedProduct.name}
+                        className="w-full"
+                      />
+                    </figure>
+                  )
+                })}
               </div>
             </div>
           )}
