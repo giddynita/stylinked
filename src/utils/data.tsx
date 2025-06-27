@@ -157,7 +157,7 @@ export const nonUserFooterLinks = [
       },
       {
         label: 'Dashboard',
-        url: '/dashboard',
+        url: '/account/dashboard',
       },
     ],
   },

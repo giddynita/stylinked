@@ -2,12 +2,13 @@ import { type ChangeEvent } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { toast } from 'sonner'
+import { uploadImage } from '@/utils/action'
 
 interface ImageInputType {
   label: string
   name: string
-  setValidImages: (files: File[]) => void
-  validImages: File[]
+  setValidImages: (files: string[]) => void
+  validImages: string[]
 }
 
 const MAX_SIZE_MB = 2
@@ -19,10 +20,11 @@ const ImageInput = ({
   validImages,
 }: ImageInputType) => {
   const maxFiles = 4
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? [])
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files || []
+    const files = Array.from(selectedFiles)
 
-    const accepted: File[] = [...validImages]
+    const accepted: File[] = []
 
     if (files.length === 0) return
     if (
@@ -44,9 +46,11 @@ const ImageInput = ({
           toast(`${newFile.name} exceeds ${MAX_SIZE_MB}MB.`)
           return
         }
-        if (
+
+        accepted.push(newFile)
+        /*  if (
           !accepted.some(
-            (file) => file.name === newFile.name && file.size === newFile.size
+            (file) => file.name  === newFile.name && file.size === newFile.size
           )
         ) {
           accepted.push(newFile)
@@ -57,10 +61,13 @@ const ImageInput = ({
           )
           const fileNames = fileExist.map((file) => file.name).join(', ')
           toast(`${fileNames} already added!`)
-        }
+        } */
       })
     }
-    setValidImages(accepted)
+    const uploadedFiles = await uploadImage(accepted)
+    if (uploadedFiles) {
+      setValidImages(uploadedFiles)
+    }
   }
 
   return (
@@ -80,11 +87,11 @@ const ImageInput = ({
           required
           disabled={validImages.length == maxFiles}
         />
-        <p className="px-4">
+        {/* <p className="px-4">
           {validImages &&
             validImages.length > 0 &&
             validImages.map((file) => `${file.name}`).join(', ')}
-        </p>
+        </p> */}
         <p
           className={`text-base text-center font-medium text-white bg-green-600 rounded-lg py-2 px-4 cursor-pointer hover:bg-green-700 mt-2 ${
             validImages && validImages.length == maxFiles && 'hidden'

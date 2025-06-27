@@ -46,6 +46,7 @@ import { currencyFormatter } from '@/utils/format'
 import { ProductListSkeleton } from '@/components/skeletons'
 import { supabase } from '@/utils/supabaseClient'
 import { useDeleteProduct, useVendorProducts } from '@/utils/hooks'
+import { deleteImage } from '@/utils/action'
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -77,7 +78,7 @@ const Products = () => {
     )
   }
 
-  const handleAddProduct = async (product: Product[]) => {
+  const handleAddProduct = async (product: Product) => {
     const { data } = await supabase.from('products').insert([
       {
         ...product,
@@ -100,7 +101,7 @@ const Products = () => {
       .flat()
       .reduce((a: number, b: number) => a + b, 0)
     const updatedProducts = products.map((product) =>
-      product.name === selectedProduct?.name
+      product.id === selectedProduct?.id
         ? {
             ...product,
             ...data,
@@ -115,8 +116,13 @@ const Products = () => {
     toast('Product edited successfully!')
   }
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string, images: string[]) => {
     deleteProduct(productId)
+    for (let i = 0; i < images?.length; i++) {
+      const file = images[i]
+      await deleteImage(file)
+    }
+
     toast('Product deleted successfully!')
   }
 
@@ -270,7 +276,10 @@ const Products = () => {
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                                   <AlertDialogAction
                                     onClick={() =>
-                                      handleDeleteProduct(product.name)
+                                      handleDeleteProduct(
+                                        product.name,
+                                        product.images
+                                      )
                                     }
                                   >
                                     Delete

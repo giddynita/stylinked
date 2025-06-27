@@ -22,7 +22,6 @@ export const useVendorProducts = () =>
 
 const deleteProduct = async (productId: string) => {
   const { error } = await supabase.from('products').delete().eq('id', productId)
-
   if (error) throw new Error(error.message)
 }
 

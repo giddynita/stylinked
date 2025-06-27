@@ -23,7 +23,7 @@ import {
 import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
 import ImageInput from '../form/ImageInput'
-import { getAuthUser, uploadImage } from '@/utils/action'
+import { deleteImage, getAuthUser } from '@/utils/action'
 
 const sizesList = ['S', 'M', 'L', 'XL']
 const colorsList = ['Red', 'Blue', 'Black', 'White']
@@ -45,9 +45,11 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
   >({})
   const [variants, setVariants] = useState<Variant[]>(product?.variants || [])
   //images
-  const [validImages, setValidImages] = useState<File[]>([])
+  const [validImages, setValidImages] = useState<string[]>(
+    product?.images || []
+  )
   const [displayedProductImage, setDisplayedProductImage] = useState(0)
-  const selectedImage: File = validImages[displayedProductImage]
+  const selectedImage: string = validImages[displayedProductImage]
 
   const handleAddVariant = () => {
     if (!selectedSize || selectedColors.length === 0) {
@@ -102,7 +104,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     setColorQuantities({})
   }
 
-  const handleDelete = (size: string, color: string) => {
+  const handleDeleteVariant = (size: string, color: string) => {
     const updated = variants
       .map((variant) => {
         if (variant.size !== size) return variant
@@ -121,8 +123,9 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     }
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-  const handleImageDelete = (name: string) => {
-    const removedImage = validImages.filter((file) => file.name !== name)
+  const handleImageDelete = async (url: string) => {
+    const removedImage = validImages.filter((fileUrl) => fileUrl !== url)
+    await deleteImage(url)
     setValidImages(removedImage)
   }
 
@@ -142,12 +145,11 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       .flat()
       .reduce((a: number, b: number) => a + b, 0)
     const user = await getAuthUser()
-    const imageURLs = await uploadImage(validImages)
     const allData = {
       ...validatedData,
       stock: stockSummation,
       variants,
-      images: imageURLs,
+      images: validImages,
       vendorid: user?.id,
     }
     setFormData({
@@ -347,7 +349,9 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={() => handleDelete(variant.size, c.color)}
+                        onClick={() =>
+                          handleDeleteVariant(variant.size, c.color)
+                        }
                         className="text-red-600 hover:text-red-600"
                       >
                         <Trash2 className="w-6 h-6" />
@@ -388,7 +392,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
           {validImages.length > 0 && selectedImage && (
             <figure className=" max-w-48 grid place-items-center shadow rounded-md p-4 mx-auto mb-8 mt-4 ">
               <img
-                src={URL.createObjectURL(selectedImage)}
+                src={selectedImage}
                 alt="preview"
                 className="w-full object-fit"
                 loading="lazy"
@@ -408,7 +412,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
                       onClick={() => setDisplayedProductImage(index)}
                     >
                       <img
-                        src={URL.createObjectURL(item)}
+                        src={item}
                         alt={`preview-${item}`}
                         className="w-12 h-12 object-contain rounded-lg"
                       />
@@ -417,7 +421,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
                       type="button"
                       variant="destructive"
                       className="absolute -top-3 -right-3 rounded-full w-6 h-6 "
-                      onClick={() => handleImageDelete(item.name)}
+                      onClick={() => handleImageDelete(item)}
                     >
                       <X className="text-white font-bold w-6 h-6" />
                     </Button>
