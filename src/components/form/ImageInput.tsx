@@ -65,8 +65,10 @@ const ImageInput = ({
       })
     }
     const uploadedFiles = await uploadImage(accepted)
+
     if (uploadedFiles) {
-      setValidImages(uploadedFiles)
+      const allImages = [...validImages, ...uploadedFiles]
+      setValidImages(allImages)
     }
   }
 

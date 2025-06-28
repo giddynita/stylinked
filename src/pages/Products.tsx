@@ -46,7 +46,7 @@ import { currencyFormatter } from '@/utils/format'
 import { ProductListSkeleton } from '@/components/skeletons'
 import { supabase } from '@/utils/supabaseClient'
 import { useDeleteProduct, useVendorProducts } from '@/utils/hooks'
-import { deleteImage } from '@/utils/action'
+import { deleteImage, getAuthUser } from '@/utils/action'
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -79,13 +79,16 @@ const Products = () => {
   }
 
   const handleAddProduct = async (product: Product) => {
+    const user = await getAuthUser()
     const { data } = await supabase.from('products').insert([
       {
         ...product,
+        vendorid: user?.id,
       },
     ])
     if (!data) {
       toast('Error adding product')
+      return
     }
     setIsAddDialogOpen(false)
     toast('Product added successfully!')

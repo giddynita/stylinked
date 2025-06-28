@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 
 function AuthLoading() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <main className="min-h-screen pt-24">
       <Button
         variant="ghost"
         disabled
