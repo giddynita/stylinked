@@ -48,27 +48,16 @@ const ImageInput = ({
         }
 
         accepted.push(newFile)
-        /*  if (
-          !accepted.some(
-            (file) => file.name  === newFile.name && file.size === newFile.size
-          )
-        ) {
-          accepted.push(newFile)
-          e.target.value = ''
-        } else {
-          const fileExist: File[] = accepted.filter(
-            (file) => file.name === newFile.name && file.size === newFile.size
-          )
-          const fileNames = fileExist.map((file) => file.name).join(', ')
-          toast(`${fileNames} already added!`)
-        } */
       })
     }
+
     const uploadedFiles = await uploadImage(accepted)
 
     if (uploadedFiles) {
       const allImages = [...validImages, ...uploadedFiles]
       setValidImages(allImages)
+    } else {
+      toast('Image Upload failed! Check your internet connection.')
     }
   }
 
@@ -77,7 +66,9 @@ const ImageInput = ({
       {label && <Label>{label}</Label>}
       <Label
         htmlFor={name}
-        className={`border rounded-md mt-3 mb-2 flex flex-col gap-2 items-center justify-center py-4`}
+        className={`border rounded-md mt-3 mb-2 flex flex-col gap-2 items-center justify-center py-4 ${
+          validImages.length == maxFiles && 'hidden'
+        }`}
       >
         <Input
           id={name}
@@ -87,7 +78,6 @@ const ImageInput = ({
           onChange={handleChange}
           className="hidden"
           required
-          disabled={validImages.length == maxFiles}
         />
         {/* <p className="px-4">
           {validImages &&

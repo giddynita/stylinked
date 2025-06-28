@@ -56,13 +56,13 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   //hooks
-  const { data: vendorProducts } = useVendorProducts()
+  const { data: products } = useVendorProducts()
   const { mutate: deleteProduct /* , isPending  */ } = useDeleteProduct()
 
-  const [products, setProducts] = useState<Product[]>(vendorProducts ?? [])
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredProducts =
+    products?.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || []
 
   const getStatusBadge = (stock: number) => {
     if (stock === 0) {
@@ -80,13 +80,13 @@ const Products = () => {
 
   const handleAddProduct = async (product: Product) => {
     const user = await getAuthUser()
-    const { data } = await supabase.from('products').insert([
+    const { error } = await supabase.from('products').insert([
       {
         ...product,
         vendorid: user?.id,
       },
     ])
-    if (!data) {
+    if (error) {
       toast('Error adding product')
       return
     }
@@ -103,7 +103,7 @@ const Products = () => {
     const stockSummation = stockArray
       .flat()
       .reduce((a: number, b: number) => a + b, 0)
-    const updatedProducts = products.map((product) =>
+    const updatedProducts = products?.map((product) =>
       product.id === selectedProduct?.id
         ? {
             ...product,
@@ -112,11 +112,9 @@ const Products = () => {
           }
         : product
     )
-
-    setProducts(updatedProducts)
     setIsEditDialogOpen(false)
     setSelectedProduct(null)
-    toast('Product edited successfully!')
+    toast('Product updated successfully!')
   }
 
   const handleDeleteProduct = async (productId: string, images: string[]) => {
@@ -206,7 +204,7 @@ const Products = () => {
               <Suspense fallback={<ProductListSkeleton />}>
                 <TableBody className="text-xs">
                   {filteredProducts.length > 0 ? (
-                    filteredProducts.map((product, index) => (
+                    filteredProducts?.map((product, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium  max-w-40">
                           <div>
@@ -280,7 +278,7 @@ const Products = () => {
                                   <AlertDialogAction
                                     onClick={() =>
                                       handleDeleteProduct(
-                                        product.name,
+                                        product.id,
                                         product.images
                                       )
                                     }
@@ -352,6 +350,7 @@ const Products = () => {
         <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Product Details</DialogTitle>
+            <DialogDescription>View product information.</DialogDescription>
           </DialogHeader>
           {selectedProduct && (
             <div className="space-y-4">
@@ -445,24 +444,32 @@ const Products = () => {
                 </div>
               )}
 
+              <div className="mb-6">
+                <h4 className="font-semibold text-sm text-muted-foreground mb-2">
+                  Product Image{selectedProduct.images.length > 1 && 's'}
+                </h4>
+                <div className=" flex items-center flex-wrap justify-center sm:justify-start place-items-center sm:place-items-start gap-8">
+                  {selectedProduct.images.map((image, index) => {
+                    return (
+                      <figure
+                        key={index}
+                        className="w-[200px] h-[200px] shadow-lg p-4 "
+                      >
+                        <img
+                          src={image}
+                          alt={selectedProduct.name}
+                          className="w-full object-contain h-full"
+                        />
+                      </figure>
+                    )
+                  })}
+                </div>
+              </div>
               <div className="space-y-1">
                 <h4 className="font-semibold text-sm text-muted-foreground">
                   Status
                 </h4>
                 {getStatusBadge(selectedProduct.stock)}
-              </div>
-              <div className="grid grid-cols-1">
-                {selectedProduct.images.map((image, index) => {
-                  return (
-                    <figure key={index} className="w-[200px] h-[200px]">
-                      <img
-                        src={image}
-                        alt={selectedProduct.name}
-                        className="w-full"
-                      />
-                    </figure>
-                  )
-                })}
               </div>
             </div>
           )}

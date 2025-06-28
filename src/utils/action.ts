@@ -148,28 +148,31 @@ export const completeRegistrationAction = async (props: any) => {
 export const uploadImage = async (images: File[]) => {
   const timestamp = Date.now()
   const uploadedImageUrls = []
+  try {
+    for (let i = 0; i < images.length; i++) {
+      const file = images[i]
+      const newFileName = `${timestamp}-${file.name}`
 
-  for (let i = 0; i < images.length; i++) {
-    const file = images[i]
-    const newFileName = `${timestamp}-${file.name}`
+      const { error } = await supabase.storage
+        .from(bucket)
+        .upload(newFileName, file)
 
-    const { data, error } = await supabase.storage
-      .from(bucket)
-      .upload(newFileName, file)
+      if (error) {
+        console.log(`Upload error: ${error.message}`)
+        toast('Images upload failed!')
+        return
+      }
+      const { data: publicUrlData } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(newFileName)
 
-    if (!data || error) {
-      console.log(`Upload error: ${error.message}`)
-      toast('Images upload failed!')
-      return
+      uploadedImageUrls.push(publicUrlData.publicUrl)
     }
-    const { data: publicUrlData } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(newFileName)
 
-    uploadedImageUrls.push(publicUrlData.publicUrl)
+    return uploadedImageUrls
+  } catch (error) {
+    console.log(error)
   }
-
-  return uploadedImageUrls
 }
 
 export const getAuthUser = async () => {

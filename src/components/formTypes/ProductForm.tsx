@@ -123,9 +123,13 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     }
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-  const handleImageDelete = async (url: string) => {
-    const removedImage = validImages.filter((fileUrl) => fileUrl !== url)
+  const handleImageDelete = async (url: string, index: number) => {
     await deleteImage(url)
+    const removedImage = validImages.filter((fileUrl) => fileUrl !== url)
+    if (index > 0 && index == displayedProductImage) {
+      setDisplayedProductImage(displayedProductImage - 1)
+    }
+
     setValidImages(removedImage)
   }
 
@@ -152,17 +156,6 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       images: validImages,
       vendorid: user?.id,
     }
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      category: '',
-      material: '',
-      brand: '',
-    })
-    setVariants([])
-    setValidImages([])
-
     onSubmit(allData)
   }
 
@@ -421,7 +414,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
                       type="button"
                       variant="destructive"
                       className="absolute -top-3 -right-3 rounded-full w-6 h-6 "
-                      onClick={() => handleImageDelete(item)}
+                      onClick={() => handleImageDelete(item, index)}
                     >
                       <X className="text-white font-bold w-6 h-6" />
                     </Button>
