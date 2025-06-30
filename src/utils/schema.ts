@@ -123,6 +123,8 @@ export const productSchema = z.object({
       message: 'Price must be greater than 0',
     }),
   brand: z.string(),
-  category: z.string(),
+  category: z.string().min(2, {
+    message: 'Please select a category',
+  }),
   material: z.string(),
 })

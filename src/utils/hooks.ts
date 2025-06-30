@@ -1,6 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type MutationFunction,
+} from '@tanstack/react-query'
 import { getAuthUser } from './action'
 import { supabase } from './supabaseClient'
+import type { Product, UpdateProduct } from './types'
 
 const getVendorProducts = async () => {
   const user = await getAuthUser()
@@ -30,6 +36,53 @@ export const useDeleteProduct = () => {
 
   return useMutation({
     mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+    },
+  })
+}
+
+const addProduct = async (product: Product) => {
+  const user = await getAuthUser()
+  const { error } = await supabase.from('products').insert([
+    {
+      ...product,
+      vendorid: user?.id,
+    },
+  ])
+  if (error) throw new Error(error.message)
+}
+
+export const useAddProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+    },
+  })
+}
+
+const updateProduct: MutationFunction<{ data: any }, UpdateProduct> = async ({
+  id,
+  payload,
+}) => {
+  const { data, error } = await supabase
+    .from('products')
+    .update(payload)
+    .eq('id', id)
+  if (error) {
+    throw new Error(error.message)
+  }
+  return { data }
+}
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: updateProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
     },

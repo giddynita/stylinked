@@ -52,7 +52,7 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
     console.log(error.message)
   }
   toast('Password reset successful! You can now log in with your new password')
-  return navigate('/auth')
+  return navigate('/auth/login')
 }
 
 export const loginAction = async (props: LoginAction) => {

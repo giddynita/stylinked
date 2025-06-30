@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Trash2, X } from 'lucide-react'
+import { Loader2Icon, Trash2, X } from 'lucide-react'
 import { Separator } from '../ui/separator'
 import { toast } from 'sonner'
 import {
@@ -48,6 +48,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
   const [validImages, setValidImages] = useState<string[]>(
     product?.images || []
   )
+  const [loadingImagesStatus, setLoadingImagesStatus] = useState<boolean>(false)
   const [displayedProductImage, setDisplayedProductImage] = useState(0)
   const selectedImage: string = validImages[displayedProductImage]
 
@@ -135,7 +136,9 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
+    if (!validImages || !variants) {
+      return toast('At least one variant and one image must be added.')
+    }
     const validatedData = validateWithZodSchema(productSchema, formData)
     if (!validatedData) {
       return
@@ -148,7 +151,9 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     const stockSummation = stockArray
       .flat()
       .reduce((a: number, b: number) => a + b, 0)
+
     const user = await getAuthUser()
+
     const allData = {
       ...validatedData,
       stock: stockSummation,
@@ -205,7 +210,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
             onValueChange={(value) => handleInputChange('category', value)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select category" className="" />
+              <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="shirts">Shirts</SelectItem>
@@ -366,6 +371,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
         setValidImages={setValidImages}
         name="images"
         validImages={validImages}
+        setLoadingImagesStatus={setLoadingImagesStatus}
       />
       <Card>
         <CardHeader>
@@ -382,46 +388,53 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {validImages.length > 0 && selectedImage && (
-            <figure className=" max-w-48 grid place-items-center shadow rounded-md p-4 mx-auto mb-8 mt-4 ">
-              <img
-                src={selectedImage}
-                alt="preview"
-                className="w-full object-fit"
-                loading="lazy"
-              />
-            </figure>
+          {loadingImagesStatus ? (
+            <Loader2Icon className="animate-spin my-6 mx-auto" />
+          ) : (
+            validImages.length > 0 &&
+            selectedImage && (
+              <figure className=" max-w-48 grid place-items-center shadow rounded-md p-4 mx-auto mb-8 mt-4 ">
+                <img
+                  src={selectedImage}
+                  alt="preview"
+                  className="w-full object-fit"
+                  loading="lazy"
+                />
+              </figure>
+            )
           )}
           <div className=" flex flex-row items-center flex-wrap justify-center gap-6">
-            {validImages.map((item, index) => {
-              return (
-                item && (
-                  <div key={index} className="relative">
-                    <figure
-                      className={`w-18 h-18  grid place-items-center  shadow-md rounded-lg relative ${
-                        index == displayedProductImage &&
-                        'border border-primary'
-                      }`}
-                      onClick={() => setDisplayedProductImage(index)}
-                    >
-                      <img
-                        src={item}
-                        alt={`preview-${item}`}
-                        className="w-12 h-12 object-contain rounded-lg"
-                      />
-                    </figure>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      className="absolute -top-3 -right-3 rounded-full w-6 h-6 "
-                      onClick={() => handleImageDelete(item, index)}
-                    >
-                      <X className="text-white font-bold w-6 h-6" />
-                    </Button>
-                  </div>
+            {loadingImagesStatus ||
+              validImages.map((item, index) => {
+                return (
+                  item && (
+                    <div key={index} className="relative">
+                      <figure
+                        className={`w-18 h-18  grid place-items-center  shadow-md rounded-lg relative ${
+                          index == displayedProductImage &&
+                          'border border-primary'
+                        }`}
+                        onClick={() => setDisplayedProductImage(index)}
+                      >
+                        <img
+                          src={item}
+                          alt={`preview-${item}`}
+                          className="w-12 h-12 object-contain rounded-lg"
+                          loading="lazy"
+                        />
+                      </figure>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        className="absolute -top-3 -right-3 rounded-full w-6 h-6 "
+                        onClick={() => handleImageDelete(item, index)}
+                      >
+                        <X className="text-white font-bold w-6 h-6" />
+                      </Button>
+                    </div>
+                  )
                 )
-              )
-            })}
+              })}
           </div>
         </CardContent>
       </Card>

@@ -73,7 +73,7 @@ export const features = [
     icon: Shield,
     title: 'Secure Platform',
     description: 'Safe transactions and quality assurance for all users',
-    link: '/auth',
+    link: '/auth/login',
   },
 ]
 
@@ -149,7 +149,7 @@ export const nonUserFooterLinks = [
     links: [
       {
         label: 'Login',
-        url: '/auth',
+        url: '/auth/login',
       },
       {
         label: 'Create Account',

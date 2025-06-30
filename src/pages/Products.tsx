@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -40,15 +40,20 @@ import {
 import { Edit, Trash2, Package, Eye, Plus } from 'lucide-react'
 import { ProductForm } from '@/components/formTypes'
 import { AccountPagesHeading } from '@/components/headings'
-import type { Variant, ColorQuantity, Product } from '@/utils/types'
+import type { Variant, Product } from '@/utils/types'
 import { toast } from 'sonner'
 import { currencyFormatter } from '@/utils/format'
 import { ProductListSkeleton } from '@/components/skeletons'
-import { supabase } from '@/utils/supabaseClient'
-import { useDeleteProduct, useVendorProducts } from '@/utils/hooks'
-import { deleteImage, getAuthUser } from '@/utils/action'
+import {
+  useAddProduct,
+  useDeleteProduct,
+  useUpdateProduct,
+  useVendorProducts,
+} from '@/utils/hooks'
+import { deleteImage } from '@/utils/action'
 
 const Products = () => {
+  //states
   const [searchTerm, setSearchTerm] = useState('')
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -56,8 +61,22 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   //hooks
-  const { data: products } = useVendorProducts()
-  const { mutate: deleteProduct /* , isPending  */ } = useDeleteProduct()
+  const { data: products, isLoading } = useVendorProducts()
+  const {
+    mutate: deleteProduct,
+    isError: deleteError,
+    isPending: deleting,
+  } = useDeleteProduct()
+  const {
+    mutate: addProduct,
+    isError: addError,
+    isPending: adding,
+  } = useAddProduct()
+  const {
+    mutate: updateProduct,
+    isError: updateError,
+    isPending: updating,
+  } = useUpdateProduct()
 
   const filteredProducts =
     products?.filter((product) =>
@@ -79,51 +98,57 @@ const Products = () => {
   }
 
   const handleAddProduct = async (product: Product) => {
-    const user = await getAuthUser()
-    const { error } = await supabase.from('products').insert([
-      {
-        ...product,
-        vendorid: user?.id,
-      },
-    ])
-    if (error) {
-      toast('Error adding product')
+    if (!navigator.onLine) {
+      toast('Failed to add product: No network connection')
       return
+    }
+    addProduct(product)
+    if (adding) {
+      toast('Adding product...')
+    }
+    if (addError) {
+      return toast('Error adding product')
     }
     setIsAddDialogOpen(false)
     toast('Product added successfully!')
   }
 
-  const handleEditProduct = (data: any) => {
-    const stockArray = data.variants.map((variant: Variant) =>
-      variant.colors.map((color: ColorQuantity) => {
-        return color.quantity
-      })
-    )
-    const stockSummation = stockArray
-      .flat()
-      .reduce((a: number, b: number) => a + b, 0)
-    const updatedProducts = products?.map((product) =>
-      product.id === selectedProduct?.id
-        ? {
-            ...product,
-            ...data,
-            stock: stockSummation,
-          }
-        : product
-    )
+  const handleEditProduct = (product: Product) => {
+    if (!navigator.onLine) {
+      toast('Failed to update product: No network connection')
+      return
+    }
+    updateProduct({
+      id: selectedProduct?.id,
+      payload: product,
+    })
+    if (updating) {
+      toast('Updating product...')
+    }
+    if (updateError) {
+      return toast('Error updating product')
+    }
     setIsEditDialogOpen(false)
     setSelectedProduct(null)
     toast('Product updated successfully!')
   }
 
   const handleDeleteProduct = async (productId: string, images: string[]) => {
+    if (!navigator.onLine) {
+      toast('Failed to delete product: No network connection')
+      return
+    }
     deleteProduct(productId)
+    if (deleting) {
+      toast('Deleting Product...')
+    }
+    if (deleteError) {
+      return toast('Error deleting product')
+    }
     for (let i = 0; i < images?.length; i++) {
       const file = images[i]
       await deleteImage(file)
     }
-
     toast('Product deleted successfully!')
   }
 
@@ -132,7 +157,7 @@ const Products = () => {
     setIsViewDialogOpen(true)
   }
 
-  const handleEditClick = (product: any) => {
+  const handleEditClick = (product: Product) => {
     setSelectedProduct(product)
     setIsEditDialogOpen(true)
   }
@@ -165,163 +190,178 @@ const Products = () => {
           </DialogContent>
         </Dialog>
       </div>
-
-      <Card className="py-4">
-        <CardHeader className="px-4">
-          <CardTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5" />
-            Clothing Inventory
-          </CardTitle>
-          <CardDescription>
-            A comprehensive view of all your clothing products
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="px-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <Input
-              placeholder="Search for products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm"
-              type="search"
-            />
-          </div>
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader className="text-xs">
-                <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead className="hidden lg:table-cell">Status</TableHead>
-                  <TableHead className="hidden lg:table-cell">
-                    Category
-                  </TableHead>
-                  <TableHead className="hidden lg:table-cell">Brand</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <Suspense fallback={<ProductListSkeleton />}>
-                <TableBody className="text-xs">
-                  {filteredProducts.length > 0 ? (
-                    filteredProducts?.map((product, index) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium  max-w-40">
-                          <div>
-                            <div className="font-semibold ">{product.name}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-semibold max-w-24">
-                          {currencyFormatter(product.price)}
-                        </TableCell>
-                        <TableCell className="max-w-24">
-                          <span
-                            className={
-                              product.stock == 0
-                                ? 'text-orange-600 font-medium'
-                                : ''
-                            }
-                          >
-                            {product.stock}
-                          </span>
-                        </TableCell>
-                        <TableCell className=" hidden lg:table-cell ">
-                          {getStatusBadge(product.stock)}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground hidden lg:table-cell">
-                          {product.category}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24   ">
-                          {product.brand}
-                        </TableCell>
-                        <TableCell className="text-right  ">
-                          <div className="flex justify-end gap-1">
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className=" w-6 h-6"
-                              onClick={() => handleViewProduct(product)}
+      {navigator.onLine ? (
+        <Card className="py-4">
+          <CardHeader className="px-4">
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-5 w-5" />
+              Clothing Inventory
+            </CardTitle>
+            <CardDescription>
+              A comprehensive view of all your clothing products
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-4">
+            <div className="flex items-center space-x-2 mb-4">
+              <Input
+                placeholder="Search for products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="max-w-sm"
+                type="search"
+              />
+            </div>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader className="text-xs">
+                  <TableRow>
+                    <TableHead>Product</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Stock</TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                      Status
+                    </TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                      Category
+                    </TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                      Brand
+                    </TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                {isLoading ? (
+                  <ProductListSkeleton />
+                ) : (
+                  <TableBody className="text-xs">
+                    {filteredProducts.length > 0 ? (
+                      filteredProducts?.map((product, index) => (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium  max-w-40">
+                            <div>
+                              <div className="font-semibold ">
+                                {product.name}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-semibold max-w-24">
+                            {currencyFormatter(product.price)}
+                          </TableCell>
+                          <TableCell className="max-w-24">
+                            <span
+                              className={
+                                product.stock == 0
+                                  ? 'text-orange-600 font-medium'
+                                  : ''
+                              }
                             >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className=" w-6 h-6"
-                              onClick={() => handleEditClick(product)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className=" w-6 h-6"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Delete Product
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete "
-                                    {product.name}
-                                    "? This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() =>
-                                      handleDeleteProduct(
-                                        product.id,
-                                        product.images
-                                      )
-                                    }
+                              {product.stock}
+                            </span>
+                          </TableCell>
+                          <TableCell className=" hidden lg:table-cell ">
+                            {getStatusBadge(product.stock)}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground hidden lg:table-cell">
+                            {product.category}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24   ">
+                            {product.brand}
+                          </TableCell>
+                          <TableCell className="text-right  ">
+                            <div className="flex justify-end gap-1">
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className=" w-6 h-6"
+                                onClick={() => handleViewProduct(product)}
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className=" w-6 h-6"
+                                onClick={() => handleEditClick(product)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className=" w-6 h-6"
                                   >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Delete Product
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Are you sure you want to delete "
+                                      {product.name}
+                                      "? This action cannot be undone.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() =>
+                                        handleDeleteProduct(
+                                          product.id,
+                                          product.images
+                                        )
+                                      }
+                                    >
+                                      Delete
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={7}
+                          className="font-bold text-2xl text-center py-8"
+                        >
+                          {searchTerm ? (
+                            'No results'
+                          ) : (
+                            <>
+                              <div className="space-y-6">
+                                <p>You have not added any product.</p>
+                                <Button
+                                  onClick={() => setIsAddDialogOpen(true)}
+                                  size="lg"
+                                >
+                                  <Plus /> Add Product
+                                </Button>
+                              </div>
+                            </>
+                          )}
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={7}
-                        className="font-bold text-2xl text-center py-8"
-                      >
-                        {searchTerm ? (
-                          'No results'
-                        ) : (
-                          <>
-                            <div className="space-y-6">
-                              <p>You have not added any product.</p>
-                              <Button
-                                onClick={() => setIsAddDialogOpen(true)}
-                                size="lg"
-                              >
-                                <Plus /> Add Product
-                              </Button>
-                            </div>
-                          </>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Suspense>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+                    )}
+                  </TableBody>
+                )}
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <h4 className="text-center font-bold text-2xl my-20">
+          Check your internet connection and reload.
+        </h4>
+      )}
 
       {/* Edit Product Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -459,6 +499,7 @@ const Products = () => {
                           src={image}
                           alt={selectedProduct.name}
                           className="w-full object-contain h-full"
+                          loading="lazy"
                         />
                       </figure>
                     )

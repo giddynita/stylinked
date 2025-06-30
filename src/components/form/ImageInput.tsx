@@ -9,6 +9,7 @@ interface ImageInputType {
   name: string
   setValidImages: (files: string[]) => void
   validImages: string[]
+  setLoadingImagesStatus: (status: boolean) => void
 }
 
 const MAX_SIZE_MB = 2
@@ -18,6 +19,7 @@ const ImageInput = ({
   setValidImages,
   name,
   validImages,
+  setLoadingImagesStatus,
 }: ImageInputType) => {
   const maxFiles = 4
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,14 +52,16 @@ const ImageInput = ({
         accepted.push(newFile)
       })
     }
-
+    if (!navigator.onLine) {
+      toast('Image Upload failed! Check your internet connection.')
+      return
+    }
+    setLoadingImagesStatus(true)
     const uploadedFiles = await uploadImage(accepted)
-
     if (uploadedFiles) {
       const allImages = [...validImages, ...uploadedFiles]
       setValidImages(allImages)
-    } else {
-      toast('Image Upload failed! Check your internet connection.')
+      setLoadingImagesStatus(false)
     }
   }
 
@@ -77,13 +81,7 @@ const ImageInput = ({
           multiple
           onChange={handleChange}
           className="hidden"
-          required
         />
-        {/* <p className="px-4">
-          {validImages &&
-            validImages.length > 0 &&
-            validImages.map((file) => `${file.name}`).join(', ')}
-        </p> */}
         <p
           className={`text-base text-center font-medium text-white bg-green-600 rounded-lg py-2 px-4 cursor-pointer hover:bg-green-700 mt-2 ${
             validImages && validImages.length == maxFiles && 'hidden'

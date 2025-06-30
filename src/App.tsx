@@ -15,6 +15,7 @@ import {
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ProtectedRoute } from './components/global'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Navigate to="login" />,
+      },
+      {
+        path: 'login',
         element: <Login />,
       },
       {
@@ -75,11 +80,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'products',
-        element: <Products />,
+        element: (
+          <ProtectedRoute>
+            <Products />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'orders',

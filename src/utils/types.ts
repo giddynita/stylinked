@@ -82,3 +82,8 @@ export type Product = {
   vendorid: string
   createdat?: string
 }
+
+export type UpdateProduct = {
+  id: string | undefined
+  payload: Product
+}
