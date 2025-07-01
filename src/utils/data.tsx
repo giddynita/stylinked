@@ -5,6 +5,7 @@ import {
   Shield,
   Home,
   StoreIcon,
+  Users,
 } from 'lucide-react'
 import type { Testimonials } from './types'
 
@@ -113,7 +114,29 @@ export const nonUserNavLinks = [
     title: 'Marketplace',
     url: '/marketplace',
   },
+  {
+    title: 'Find Vendors',
+    url: '/vendors',
+  },
 ]
+/* export const userNavLinks = [
+  {
+    title: 'Home',
+    url: '/',
+  },
+  {
+    title: 'Marketplace',
+    url: '/marketplace',
+  },
+  {
+    title: 'Find Vendors',
+    url: '/vendors',
+  },
+  {
+    title: 'Orders',
+    url: '/orders',
+  },
+] */
 export const nonUserSidebarNavLinks = [
   {
     title: 'Home',
@@ -124,6 +147,11 @@ export const nonUserSidebarNavLinks = [
     title: 'Marketplace',
     url: '/marketplace',
     icon: StoreIcon,
+  },
+  {
+    title: 'Find Vendors',
+    url: '/vendors',
+    icon: Users,
   },
 ]
 export const nonUserFooterLinks = [

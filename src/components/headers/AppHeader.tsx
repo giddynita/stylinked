@@ -1,13 +1,16 @@
 import { Link, NavLink } from 'react-router-dom'
-import { Logo } from '../global'
+import { Logo, ProfileImage } from '../global'
 import { Button } from '../ui/button'
 import ModeToggle from '../theme/mode-toggle'
 import { SidebarTrigger } from '../ui/sidebar'
 import { nonUserNavLinks } from '@/utils/data'
 import { useEffect, useState } from 'react'
+import Cart from './Cart'
+import { getAuthUser } from '@/utils/action'
 function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const user = getAuthUser()
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
@@ -50,23 +53,30 @@ function AppHeader() {
           </nav>
           <div className="flex flex-row gap-x-2 items-center">
             <ModeToggle align="end" />
+            <Cart />
+            {user !== null ? (
+              <ProfileImage />
+            ) : (
+              <>
+                <Button variant="outline" size="sm" asChild>
+                  <Link
+                    to="/auth"
+                    className="text-muted-foreground hover:text-primary transition-colors font-medium"
+                  >
+                    Login
+                  </Link>
+                </Button>
 
-            <Button variant="outline" size="sm" asChild>
-              <Link
-                to="/auth"
-                className="text-muted-foreground hover:text-primary transition-colors font-medium"
-              >
-                Login
-              </Link>
-            </Button>
-
-            <Button size="sm">
-              <Link to="/auth/sign-up">Get Started</Link>
-            </Button>
+                <Button size="sm">
+                  <Link to="/auth/sign-up">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
-        <div className="md:hidden flex flex-row gap-x-6 items-center">
+        <div className="md:hidden flex flex-row gap-x-2 items-center">
           <ModeToggle align="end" />
+          <Cart />
           <SidebarTrigger />
         </div>
       </div>

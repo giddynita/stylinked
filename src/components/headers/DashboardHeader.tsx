@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { UserSkeleton } from '../skeletons'
 import ModeToggle from '../theme/mode-toggle'
 import { Avatar, AvatarFallback } from '../ui/avatar'
+import { ProfileImage } from '../global'
 
 function DashboardHeader() {
   return (
@@ -21,11 +22,7 @@ function DashboardHeader() {
             <span className="font-bold text-foreground ">John </span>
           </p>
         </Suspense>
-        <Avatar>
-          <AvatarFallback>
-            <User className="h-4 w-4" />
-          </AvatarFallback>
-        </Avatar>
+        <ProfileImage />
       </div>
     </header>
   )

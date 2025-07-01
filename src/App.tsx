@@ -12,6 +12,7 @@ import {
   SignUp,
   Verification,
   Products,
+  Marketplace,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: 'marketplace',
+        element: <Marketplace />,
       },
     ],
   },

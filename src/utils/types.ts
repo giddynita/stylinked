@@ -87,3 +87,37 @@ export type UpdateProduct = {
   id: string | undefined
   payload: Product
 }
+
+export type UserRole = {
+  role: string
+  /* id: string
+  createdat: string */
+}
+
+export type VendorData = {
+  id: string
+  firstname: string
+  lastname: string
+  phone: string
+  location: string
+  businessname: string
+}
+
+export type BuyerData = {
+  id: string
+  firstname: string
+  lastname: string
+  phone: string
+}
+
+export type LogisticsData = {
+  id: string
+  firstname: string
+  lastname: string
+  phone: string
+  vehicletype: string
+  coveragearea: string[]
+  businessname: string
+}
+
+export type UserDataType = LogisticsData | VendorData | BuyerData

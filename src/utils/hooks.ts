@@ -6,7 +6,38 @@ import {
 } from '@tanstack/react-query'
 import { getAuthUser } from './action'
 import { supabase } from './supabaseClient'
-import type { Product, UpdateProduct } from './types'
+import type { Product, UpdateProduct, UserDataType, UserRole } from './types'
+
+const getAuthUserDetails = async () => {
+  const user = await getAuthUser()
+  const { data: userRole, error: userError } = await supabase
+    .from('users')
+    .select<'role', UserRole>('role')
+    .eq('id', user?.id)
+    .single()
+  if (userError) throw new Error(userError.message)
+
+  const userRoleTable =
+    userRole?.role == 'buyer'
+      ? 'buyers'
+      : userRole?.role == 'vendor'
+      ? 'vendors'
+      : 'logistics'
+  const { data: userData, error: dataError } = await supabase
+    .from(userRoleTable)
+    .select<'*', UserDataType>('*')
+    .eq('id', user?.id)
+    .single()
+  if (dataError) throw new Error(dataError.message)
+
+  return userData
+}
+
+export const useUserData = () =>
+  useQuery({
+    queryKey: ['userData'],
+    queryFn: getAuthUserDetails,
+  })
 
 const getVendorProducts = async () => {
   const user = await getAuthUser()

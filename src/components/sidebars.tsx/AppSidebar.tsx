@@ -12,6 +12,8 @@ import { Button } from '../ui/button'
 import { Link, useLocation } from 'react-router-dom'
 import { LogIn, X } from 'lucide-react'
 import { nonUserSidebarNavLinks } from '@/utils/data'
+import { ProfileImage } from '../global'
+import { getAuthUser } from '@/utils/action'
 
 export function AppSidebar() {
   const { isMobile, open, setOpen, toggleSidebar } = useSidebar()
@@ -20,11 +22,12 @@ export function AppSidebar() {
   }
   const location = useLocation()
   const pathname = location.pathname
+  const user = getAuthUser()
 
   return (
     <Sidebar side="right" variant="sidebar">
-      <SidebarHeader className="pr-3 pl-1 mb-2">
-        <SidebarMenu>
+      <SidebarHeader className="pr-4 pl-1 mb-2">
+        <SidebarMenu className="flex flex-row justify-between">
           <SidebarMenuItem>
             <Button
               variant="ghost"
@@ -35,6 +38,7 @@ export function AppSidebar() {
               <X />
             </Button>
           </SidebarMenuItem>
+          <SidebarMenuItem>{user !== null && <ProfileImage />}</SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="px-3">
@@ -51,23 +55,25 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="px-3">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Button asChild size="lg" variant="outline" className="w-full">
-              <Link to="/auth">
-                <LogIn />
-                <span>Login</span>
-              </Link>
-            </Button>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <Button asChild size="lg" variant="default" className="w-full">
-              <Link to="/auth/sign-up">Get Started</Link>
-            </Button>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      {user === null && (
+        <SidebarFooter className="px-3">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <Button asChild size="lg" variant="outline" className="w-full">
+                <Link to="/auth">
+                  <LogIn />
+                  <span>Login</span>
+                </Link>
+              </Button>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Button asChild size="lg" variant="default" className="w-full">
+                <Link to="/auth/sign-up">Get Started</Link>
+              </Button>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      )}
     </Sidebar>
   )
 }
