@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -14,7 +13,7 @@ interface AdvancedFiltersProps {
 const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
   const [priceRange, setPriceRange] = useState([0, 1000])
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [inStockOnly, setInStockOnly] = useState(false)
   const [minRating, setMinRating] = useState(0)
 
@@ -27,7 +26,20 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
     'Linen',
     'Cashmere',
   ]
-  const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+  const brands = [
+    'Nike',
+    'Adidas',
+    'Zara',
+    'H&M',
+    'Uniqlo',
+    "Levi's",
+    'Gucci',
+    'Under Armour',
+    'Puma',
+    'Tommy Hilfiger',
+    'The North Face',
+    'Calvin Klein',
+  ]
 
   const handleMaterialChange = (material: string, checked: boolean) => {
     if (checked) {
@@ -37,24 +49,24 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
     }
   }
 
-  const handleSizeChange = (size: string, checked: boolean) => {
+  const handleBrandChange = (brand: string, checked: boolean) => {
     if (checked) {
-      setSelectedSizes([...selectedSizes, size])
+      setSelectedBrands([...selectedBrands, brand])
     } else {
-      setSelectedSizes(selectedSizes.filter((s) => s !== size))
+      setSelectedBrands(selectedBrands.filter((s) => s !== brand))
     }
   }
 
   const clearFilters = () => {
     setPriceRange([0, 1000])
     setSelectedMaterials([])
-    setSelectedSizes([])
+    setSelectedBrands([])
     setInStockOnly(false)
     setMinRating(0)
   }
 
   return (
-    <Card className="mb-6 border-purple-200">
+    <Card className="mb-6 shadow-md bg-background/50">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg">Advanced Filters</CardTitle>
         <Button variant="ghost" size="sm" onClick={onClose}>
@@ -62,23 +74,7 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
         </Button>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Price Range */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium">Price Range</Label>
-            <Slider
-              value={priceRange}
-              onValueChange={setPriceRange}
-              max={1000}
-              step={10}
-              className="w-full"
-            />
-            <div className="flex justify-between text-sm text-gray-600">
-              <span>${priceRange[0]}</span>
-              <span>${priceRange[1]}</span>
-            </div>
-          </div>
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
           {/* Materials */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">Materials</Label>
@@ -99,56 +95,64 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
               ))}
             </div>
           </div>
-
-          {/* Sizes */}
+          {/* Brands */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium">Sizes</Label>
-            <div className="grid grid-cols-3 gap-2">
-              {sizes.map((size) => (
-                <div key={size} className="flex items-center space-x-2">
+            <Label className="text-sm font-medium">Brands</Label>
+            <div className="space-y-2 max-h-32 overflow-y-auto">
+              {brands.map((brand) => (
+                <div key={brand} className="flex items-center space-x-2">
                   <Checkbox
-                    id={size}
-                    checked={selectedSizes.includes(size)}
+                    id={brand}
+                    checked={selectedBrands.includes(brand)}
                     onCheckedChange={(checked) =>
-                      handleSizeChange(size, checked as boolean)
+                      handleBrandChange(brand, checked as boolean)
                     }
                   />
-                  <Label htmlFor={size} className="text-sm">
-                    {size}
+                  <Label htmlFor={brand} className="text-sm">
+                    {brand}
                   </Label>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Additional Filters */}
-          <div className="space-y-4">
-            <div className="space-y-3">
-              <Label className="text-sm font-medium">Minimum Rating</Label>
-              <Slider
-                value={[minRating]}
-                onValueChange={(value) => setMinRating(value[0])}
-                max={5}
-                step={0.5}
-                className="w-full"
-              />
-              <div className="text-sm text-gray-600">
-                {minRating} stars & up
-              </div>
+          {/* Price Range */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Price Range</Label>
+            <Slider
+              value={priceRange}
+              onValueChange={setPriceRange}
+              max={1000}
+              step={10}
+              className="w-full"
+            />
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>${priceRange[0]}</span>
+              <span>${priceRange[1]}</span>
             </div>
+          </div>
+          {/* Rating */}
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">Minimum Rating</Label>
+            <Slider
+              value={[minRating]}
+              onValueChange={(value) => setMinRating(value[0])}
+              max={5}
+              step={0.5}
+              className="w-full"
+            />
+            <div className="text-sm text-gray-600">{minRating} stars & up</div>
+          </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="inStock"
-                checked={inStockOnly}
-                onCheckedChange={(checked) =>
-                  setInStockOnly(checked as boolean)
-                }
-              />
-              <Label htmlFor="inStock" className="text-sm">
-                In stock only
-              </Label>
-            </div>
+          {/* stock status */}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="inStock"
+              checked={inStockOnly}
+              onCheckedChange={(checked) => setInStockOnly(checked as boolean)}
+            />
+            <Label htmlFor="inStock" className="text-sm">
+              In stock only
+            </Label>
           </div>
         </div>
 

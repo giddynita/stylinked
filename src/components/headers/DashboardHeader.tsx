@@ -1,9 +1,7 @@
-import { User } from 'lucide-react'
 import { SidebarTrigger } from '../ui/sidebar'
 import { Suspense } from 'react'
 import { UserSkeleton } from '../skeletons'
 import ModeToggle from '../theme/mode-toggle'
-import { Avatar, AvatarFallback } from '../ui/avatar'
 import { ProfileImage } from '../global'
 
 function DashboardHeader() {

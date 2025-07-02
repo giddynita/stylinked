@@ -19,18 +19,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import {
-  Search,
-  Filter,
-  SlidersHorizontal,
-  ShoppingCart,
-  User,
-  Grid3X3,
-  List,
-} from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Search, SlidersHorizontal, Grid3X3, List } from 'lucide-react'
 import { ProductCard, AdvancedFilters } from '@/components/marketplace'
-import { useUserData } from '@/utils/hooks'
+import { currencyFormatter } from '@/utils/format'
+import { Label } from '@/components/ui/label'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 
 const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -40,9 +39,6 @@ const Marketplace = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [searchType, setSearchType] = useState<'products' | 'vendors'>(
-    'products'
-  )
   //hooks
 
   const itemsPerPage = 12
@@ -60,10 +56,22 @@ const Marketplace = () => {
 
   const priceRanges = [
     { label: 'All Prices', value: 'all' },
-    { label: '$0 - $50', value: '0-50' },
-    { label: '$51 - $100', value: '51-100' },
-    { label: '$101 - $200', value: '101-200' },
-    { label: '$200+', value: '200+' },
+    {
+      label: `${currencyFormatter(0)} - ${currencyFormatter(5000)}`,
+      value: '0-5000',
+    },
+    {
+      label: `${currencyFormatter(5001)} - ${currencyFormatter(10000)}`,
+      value: '5001-10000',
+    },
+    {
+      label: `${currencyFormatter(10001)} - ${currencyFormatter(50000)}`,
+      value: '10001-50000',
+    },
+    {
+      label: `${currencyFormatter(50000)}+`,
+      value: '50000+',
+    },
   ]
 
   // Mock product data
@@ -144,10 +152,9 @@ const Marketplace = () => {
 
   // Filter and sort products
   const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      searchType === 'products'
-        ? product.name.toLowerCase().includes(searchQuery.toLowerCase())
-        : product.vendor.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
 
     const matchesCategory =
       selectedCategory === 'all' || product.category === selectedCategory
@@ -177,8 +184,6 @@ const Marketplace = () => {
         return b.price - a.price
       case 'rating':
         return b.rating - a.rating
-      case 'newest':
-        return 0 // Would use actual date if available
       default:
         return 0
     }
@@ -198,36 +203,20 @@ const Marketplace = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Enhanced Search and Filters */}
         <div className="mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                placeholder={`Search for ${searchType}...`}
+                placeholder={`Search for products...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
-
-            <Select
-              value={searchType}
-              onValueChange={(value: 'products' | 'vendors') =>
-                setSearchType(value)
-              }
-            >
-              <SelectTrigger className="w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="products">Products</SelectItem>
-                <SelectItem value="vendors">Vendors</SelectItem>
-              </SelectContent>
-            </Select>
-
             <Button
               variant="outline"
               className="lg:w-auto"
@@ -244,33 +233,56 @@ const Marketplace = () => {
           )}
 
           {/* Category Filters */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            {categories.map((category) => (
-              <Badge
-                key={category}
-                variant={selectedCategory === category ? 'default' : 'outline'}
-                className={`cursor-pointer capitalize ${
-                  selectedCategory === category
-                    ? 'bg-purple-600 hover:bg-purple-700'
-                    : 'hover:bg-purple-50'
-                }`}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category.replace('-', ' ')}
-              </Badge>
-            ))}
-          </div>
 
+          <Carousel
+            opts={{
+              align: 'end',
+            }}
+            className="w-full px-6 mb-6"
+          >
+            <CarouselContent>
+              {categories.map((category, index) => (
+                <CarouselItem
+                  key={index}
+                  className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/7"
+                >
+                  <Badge
+                    variant={
+                      selectedCategory === category ? 'default' : 'outline'
+                    }
+                    className={`cursor-pointer capitalize w-full py-2 ${
+                      selectedCategory === category
+                        ? 'bg-primary/90 hover:bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted'
+                    }`}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category.replace('-', ' ')}
+                  </Badge>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious
+              variant="ghost"
+              size="lg"
+              className="-left-2 size-4"
+            />
+            <CarouselNext
+              variant="ghost"
+              size="lg"
+              className="-right-2 size-4"
+            />
+          </Carousel>
           {/* Price Filters */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 px-6">
             {priceRanges.map((range) => (
               <Badge
                 key={range.value}
                 variant={priceRange === range.value ? 'default' : 'outline'}
-                className={`cursor-pointer ${
+                className={`cursor-pointer py-2 px-4 ${
                   priceRange === range.value
-                    ? 'bg-purple-600 hover:bg-purple-700'
-                    : 'hover:bg-purple-50'
+                    ? 'bg-primary/90 hover:bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-muted'
                 }`}
                 onClick={() => setPriceRange(range.value)}
               >
@@ -281,49 +293,48 @@ const Marketplace = () => {
         </div>
 
         {/* Results Header with View Toggle */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {searchType === 'products' ? 'Fashion Products' : 'Vendors'} (
+        {searchQuery && (
+          <h2 className="text-2xl text mb-8">
+            Result{sortedProducts.length > 1 && 's'} for{' '}
+            <span className="font-bold">{searchQuery}</span> (
             {sortedProducts.length})
           </h2>
+        )}
+        <div className="flex items-center justify-between mb-6">
+          {/* Sort Dropdown */}
+          <div className="flex items-center space-x-2">
+            <Label className="text-muted-foreground">Sort by:</Label>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-48 font-semibold text-base">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="relevance">Relevance</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
+                <SelectItem value="rating">Average Rating</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-          <div className="flex items-center space-x-4">
-            {/* View Mode Toggle */}
-            <div className="flex border rounded-md">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-                className="rounded-r-none"
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="rounded-l-none"
-              >
-                <List className="w-4 h-4" />
-              </Button>
-            </div>
-
-            {/* Sort Dropdown */}
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">Sort by:</span>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="relevance">Relevance</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
-                  <SelectItem value="newest">Newest</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          {/* View Mode Toggle */}
+          <div className="flex border rounded-md">
+            <Button
+              variant={viewMode === 'grid' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('grid')}
+              className="rounded-r-none"
+            >
+              <Grid3X3 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className="rounded-l-none"
+            >
+              <List className="w-4 h-4" />
+            </Button>
           </div>
         </div>
 
@@ -429,9 +440,7 @@ const Marketplace = () => {
 
         {paginatedProducts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">
-              No {searchType} found matching your criteria.
-            </p>
+            <p className=" text-lg">No product found matching your criteria.</p>
             <Button
               className="mt-4"
               onClick={() => {
