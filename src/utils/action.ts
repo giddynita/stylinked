@@ -4,6 +4,7 @@ import { bucket, supabase } from './supabaseClient'
 import type {
   ForgotPasswordAction,
   LoginAction,
+  LogoutAction,
   ResetPasswordAction,
   SignUpAction,
 } from './types'
@@ -143,6 +144,20 @@ export const completeRegistrationAction = async (props: any) => {
   }
   toast('Account created successfully!')
   navigate('/')
+}
+
+export const logoutAction = async (props: LogoutAction) => {
+  const { setLogout, navigate } = props
+  setLogout(true)
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    toast(error.message)
+    setLogout(false)
+    return
+  }
+  toast("You're logged out successfully.")
+  setLogout(false)
+  return navigate('/')
 }
 
 export const uploadImage = async (images: File[]) => {

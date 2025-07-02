@@ -1,9 +1,9 @@
-import { getAuthUser } from '@/utils/action'
+import { useUser } from '@supabase/auth-helpers-react'
 import { Navigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const ProtectedRoute = ({ children }: { children: any }) => {
-  const user = getAuthUser()
+  const user = useUser()
 
   if (!user) {
     toast('You must be logged in to access this page.')

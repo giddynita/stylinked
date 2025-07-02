@@ -37,6 +37,10 @@ export type LoginAction = {
   setSubmitting: (value: boolean) => void
   navigate: (value: string) => void
 }
+export type LogoutAction = {
+  setLogout: (value: boolean) => void
+  navigate: (value: string) => void
+}
 export type ForgotPasswordAction = {
   email: string
   setSubmitting: (value: boolean) => void

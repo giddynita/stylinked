@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   Sidebar,
   SidebarContent,
@@ -19,8 +19,10 @@ import {
   LayoutDashboardIcon,
   LogOutIcon,
   Home,
+  Loader2Icon,
 } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import { useState } from 'react'
 const navigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Products', url: 'products', icon: PackageIcon },
@@ -32,6 +34,9 @@ function DashboardSidebar() {
   const { state, isMobile } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
+
+  const [logout, setLogout] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   const tooltip = state == 'collapsed' && !isMobile
   return (
@@ -114,14 +119,18 @@ function DashboardSidebar() {
           <SidebarMenuItem>
             <Tooltip>
               <TooltipTrigger>
-                <SidebarMenuButton
-                  asChild
-                  className="bg-destructive/80 hover:bg-destructive w-max  text-white pl-2 pr-4"
-                >
-                  <Link to="/auth">
-                    <LogOutIcon />
-                    <span>Log out</span>
-                  </Link>
+                <SidebarMenuButton className="bg-destructive/80 hover:bg-destructive w-max  text-white pl-2 pr-4">
+                  {logout ? (
+                    <>
+                      <span>Logging out</span>
+                      <Loader2Icon className="animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      <LogOutIcon className="rotate-180" />
+                      <span>Log out</span>
+                    </>
+                  )}
                 </SidebarMenuButton>
               </TooltipTrigger>
               <TooltipContent className={`  ${!tooltip && 'hidden'}`}>

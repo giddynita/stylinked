@@ -9,11 +9,13 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Button } from '../ui/button'
-import { Link, useLocation } from 'react-router-dom'
-import { LogIn, X } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Loader2Icon, LogIn, LogOutIcon, X } from 'lucide-react'
 import { nonUserSidebarNavLinks } from '@/utils/data'
 import { ProfileImage } from '../global'
-import { getAuthUser } from '@/utils/action'
+import { logoutAction } from '@/utils/action'
+import { useState } from 'react'
+import { useUser } from '@supabase/auth-helpers-react'
 
 export function AppSidebar() {
   const { isMobile, open, setOpen, toggleSidebar } = useSidebar()
@@ -22,7 +24,10 @@ export function AppSidebar() {
   }
   const location = useLocation()
   const pathname = location.pathname
-  const user = getAuthUser()
+  const user = useUser()
+
+  const [logout, setLogout] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   return (
     <Sidebar side="right" variant="sidebar">
@@ -38,7 +43,7 @@ export function AppSidebar() {
               <X />
             </Button>
           </SidebarMenuItem>
-          <SidebarMenuItem>{user !== null && <ProfileImage />}</SidebarMenuItem>
+          <SidebarMenuItem>{user && <ProfileImage />}</SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="px-3">
@@ -55,25 +60,60 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      {user === null && (
+      {
         <SidebarFooter className="px-3">
           <SidebarMenu>
-            <SidebarMenuItem>
-              <Button asChild size="lg" variant="outline" className="w-full">
-                <Link to="/auth">
-                  <LogIn />
-                  <span>Login</span>
-                </Link>
-              </Button>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <Button asChild size="lg" variant="default" className="w-full">
-                <Link to="/auth/sign-up">Get Started</Link>
-              </Button>
-            </SidebarMenuItem>
+            {user ? (
+              <SidebarMenuItem>
+                <Button
+                  size="lg"
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => logoutAction({ navigate, setLogout })}
+                >
+                  {logout ? (
+                    <>
+                      <span>Logging out</span>
+                      <Loader2Icon className="animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      <LogOutIcon className="rotate-180" />
+                      <span>Log out</span>
+                    </>
+                  )}
+                </Button>
+              </SidebarMenuItem>
+            ) : (
+              <>
+                <SidebarMenuItem>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Link to="/auth">
+                      <LogIn />
+                      <span>Login</span>
+                    </Link>
+                  </Button>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="default"
+                    className="w-full"
+                  >
+                    <Link to="/auth/sign-up">Get Started</Link>
+                  </Button>
+                </SidebarMenuItem>
+              </>
+            )}
           </SidebarMenu>
         </SidebarFooter>
-      )}
+      }
     </Sidebar>
   )
 }

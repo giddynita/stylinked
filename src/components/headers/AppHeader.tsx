@@ -6,11 +6,11 @@ import { SidebarTrigger } from '../ui/sidebar'
 import { nonUserNavLinks } from '@/utils/data'
 import { useEffect, useState } from 'react'
 import Cart from './Cart'
-import { getAuthUser } from '@/utils/action'
+import { useUser } from '@supabase/auth-helpers-react'
 function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
-  const user = getAuthUser()
+  const user = useUser()
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
@@ -54,7 +54,7 @@ function AppHeader() {
           <div className="flex flex-row gap-x-2 items-center">
             <ModeToggle align="end" />
             <Cart />
-            {user !== null ? (
+            {user ? (
               <ProfileImage />
             ) : (
               <>
