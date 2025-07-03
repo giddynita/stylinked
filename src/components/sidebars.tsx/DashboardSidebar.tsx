@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useState } from 'react'
+import { logoutAction } from '@/utils/action'
 const navigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Products', url: 'products', icon: PackageIcon },
@@ -119,7 +120,10 @@ function DashboardSidebar() {
           <SidebarMenuItem>
             <Tooltip>
               <TooltipTrigger>
-                <SidebarMenuButton className="bg-destructive/80 hover:bg-destructive w-max  text-white pl-2 pr-4">
+                <SidebarMenuButton
+                  className="bg-destructive/80 hover:bg-destructive w-max  text-white pl-2 pr-4"
+                  onClick={() => logoutAction({ navigate, setLogout })}
+                >
                   {logout ? (
                     <>
                       <span>Logging out</span>
