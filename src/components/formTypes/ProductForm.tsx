@@ -24,6 +24,7 @@ import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
 import ImageInput from '../form/ImageInput'
 import { deleteImage, getAuthUser } from '@/utils/action'
+import { useUserData } from '@/utils/hooks'
 
 const sizesList = ['S', 'M', 'L', 'XL']
 const colorsList = ['Red', 'Blue', 'Black', 'White']
@@ -36,6 +37,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
     category: product?.category || '',
     material: product?.material || '',
     brand: product?.brand || '',
+    rating: product?.rating || 0,
   })
   //others
   const [selectedSize, setSelectedSize] = useState<string>('')
@@ -153,6 +155,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       .reduce((a: number, b: number) => a + b, 0)
 
     const user = await getAuthUser()
+    const { data: userData } = useUserData()
 
     const allData = {
       ...validatedData,
@@ -160,6 +163,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       variants,
       images: validImages,
       vendorid: user?.id,
+      vendor: userData?.businessname,
     }
     onSubmit(allData)
   }

@@ -1,22 +1,53 @@
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Slider } from '@/components/ui/slider'
 import { X } from 'lucide-react'
+import { currencyFormatter } from '@/utils/format'
 
+type Filters = {
+  priceRange: number[]
+  selectedMaterials: string[]
+  selectedBrands: string[]
+  inStockOnly: boolean
+  minRating: number
+}
 interface AdvancedFiltersProps {
-  onClose: () => void
+  onClose?: () => void
+  priceRange: number[]
+  selectedMaterials: string[]
+  selectedBrands: string[]
+  inStockOnly: boolean
+  minRating: number
+  setPriceRange: (prices: number[]) => void
+  setSelectedMaterials: (materials: string[]) => void
+  setSelectedBrands: (brands: string[]) => void
+  setInStockOnly: (stock: boolean) => void
+  setMinRating: (price: number) => void
+  setFilters: ({
+    priceRange,
+    selectedMaterials,
+    selectedBrands,
+    inStockOnly,
+    minRating,
+  }: Filters) => void
 }
 
-const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
-  const [priceRange, setPriceRange] = useState([0, 1000])
-  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [inStockOnly, setInStockOnly] = useState(false)
-  const [minRating, setMinRating] = useState(0)
-
+const AdvancedFilters = ({
+  onClose,
+  priceRange,
+  selectedMaterials,
+  selectedBrands,
+  inStockOnly,
+  minRating,
+  setPriceRange,
+  setSelectedMaterials,
+  setSelectedBrands,
+  setInStockOnly,
+  setMinRating,
+  setFilters,
+}: AdvancedFiltersProps) => {
   const materials = [
     'Cotton',
     'Silk',
@@ -58,6 +89,13 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
   }
 
   const clearFilters = () => {
+    setFilters({
+      priceRange: [0, 1000],
+      selectedMaterials: [],
+      selectedBrands: [],
+      inStockOnly: false,
+      minRating: 0,
+    })
     setPriceRange([0, 1000])
     setSelectedMaterials([])
     setSelectedBrands([])
@@ -69,7 +107,12 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
     <Card className="mb-6 shadow-md bg-background/50">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg">Advanced Filters</CardTitle>
-        <Button variant="ghost" size="sm" onClick={onClose}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className="lg:hidden"
+        >
           <X className="w-4 h-4" />
         </Button>
       </CardHeader>
@@ -126,8 +169,8 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
               className="w-full"
             />
             <div className="flex justify-between text-sm text-gray-600">
-              <span>${priceRange[0]}</span>
-              <span>${priceRange[1]}</span>
+              <span>{currencyFormatter(priceRange[0])}</span>
+              <span>{currencyFormatter(priceRange[1])}</span>
             </div>
           </div>
           {/* Rating */}
@@ -161,7 +204,17 @@ const AdvancedFilters = ({ onClose }: AdvancedFiltersProps) => {
           <Button variant="outline" onClick={clearFilters}>
             Clear All
           </Button>
-          <Button className="bg-purple-600 hover:bg-purple-700">
+          <Button
+            onClick={() => {
+              setFilters({
+                priceRange,
+                selectedMaterials,
+                selectedBrands,
+                inStockOnly,
+                minRating,
+              })
+            }}
+          >
             Apply Filters
           </Button>
         </div>

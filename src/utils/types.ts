@@ -78,13 +78,15 @@ export type Product = {
   description: string
   price: number
   category: string
-  material?: string
-  brand?: string
+  material: string
+  brand: string
   stock: number
-  variants?: Variant[]
+  variants: Variant[]
   images: string[]
   vendorid: string
-  createdat?: string
+  createdat: string
+  rating: number
+  vendor: string
 }
 
 export type UpdateProduct = {
@@ -94,34 +96,15 @@ export type UpdateProduct = {
 
 export type UserRole = {
   role: string
-  /* id: string
-  createdat: string */
 }
 
-export type VendorData = {
+export type UserDataType = {
   id: string
   firstname: string
   lastname: string
   phone: string
-  location: string
-  businessname: string
+  vehicletype?: string
+  coveragearea?: string[]
+  businessname?: string
+  location?: string
 }
-
-export type BuyerData = {
-  id: string
-  firstname: string
-  lastname: string
-  phone: string
-}
-
-export type LogisticsData = {
-  id: string
-  firstname: string
-  lastname: string
-  phone: string
-  vehicletype: string
-  coveragearea: string[]
-  businessname: string
-}
-
-export type UserDataType = LogisticsData | VendorData | BuyerData

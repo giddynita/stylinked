@@ -20,160 +20,250 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Search, SlidersHorizontal, Grid3X3, List } from 'lucide-react'
-import { ProductCard, AdvancedFilters } from '@/components/marketplace'
-import { currencyFormatter } from '@/utils/format'
-import { Label } from '@/components/ui/label'
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel'
+  ProductCard,
+  AdvancedFilters,
+  CategoriesCarousel,
+} from '@/components/marketplace'
+import { Label } from '@/components/ui/label'
+import type { Product } from '@/utils/types'
 
 const Marketplace = () => {
+  //filters
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [priceRange, setPriceRange] = useState('all')
-  const [sortBy, setSortBy] = useState('relevance')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [priceRange, setPriceRange] = useState([0, 1000])
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
+  const [inStockOnly, setInStockOnly] = useState(false)
+  const [minRating, setMinRating] = useState(0)
+  const [filters, setFilters] = useState({
+    priceRange,
+    selectedMaterials,
+    selectedBrands,
+    inStockOnly,
+    minRating,
+  })
+  const brandsToFilter = new Set(filters.selectedBrands)
+
+  const materialsToFilter = new Set(filters.selectedBrands)
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
+
+  //sorting
+  const [sortBy, setSortBy] = useState('relevance')
+
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1)
+
+  //product view mode
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
   //hooks
 
+  //constants
   const itemsPerPage = 12
 
-  const categories = [
-    'all',
-    'dresses',
-    'suits',
-    'shirts',
-    'pants',
-    'accessories',
-    'formal wear',
-    'casual wear',
-  ]
-
-  const priceRanges = [
-    { label: 'All Prices', value: 'all' },
-    {
-      label: `${currencyFormatter(0)} - ${currencyFormatter(5000)}`,
-      value: '0-5000',
-    },
-    {
-      label: `${currencyFormatter(5001)} - ${currencyFormatter(10000)}`,
-      value: '5001-10000',
-    },
-    {
-      label: `${currencyFormatter(10001)} - ${currencyFormatter(50000)}`,
-      value: '10001-50000',
-    },
-    {
-      label: `${currencyFormatter(50000)}+`,
-      value: '50000+',
-    },
-  ]
-
+  const maxPrice = 1000
   // Mock product data
-  const products = [
+  const products: Product[] = [
     {
       id: '1',
       name: 'Custom Tailored Wedding Dress',
       price: 450,
-      image: '/placeholder.svg?height=300&width=300',
+      images: ['/placeholder.svg?height=300&width=300'],
       vendor: 'Elegant Designs',
       rating: 4.8,
       category: 'dresses',
-      inStock: true,
+      stock: 3,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
     },
     {
       id: '2',
       name: 'Bespoke Business Suit',
       price: 320,
-      image: '/placeholder.svg?height=300&width=300',
+      images: ['/placeholder.svg?height=300&width=300'],
       vendor: 'Sharp Tailors',
       rating: 4.9,
       category: 'suits',
-      inStock: true,
+      stock: 3,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
     },
     {
       id: '3',
       name: 'Handcrafted Silk Blouse',
       price: 85,
-      image: '/placeholder.svg?height=300&width=300',
+      images: ['/placeholder.svg?height=300&width=300'],
       vendor: 'Silk & Style',
       rating: 4.6,
       category: 'shirts',
-      inStock: false,
+      stock: 3,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
     },
     {
       id: '4',
       name: 'Designer Evening Gown',
       price: 650,
-      image: '/placeholder.svg?height=300&width=300',
+      images: ['/placeholder.svg?height=300&width=300'],
       vendor: 'Luxury Fashion',
       rating: 4.7,
       category: 'formal wear',
-      inStock: true,
+      stock: 3,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
     },
     {
       id: '5',
       name: 'Custom Leather Jacket',
       price: 280,
-      image: '/placeholder.svg?height=300&width=300',
+      images: ['/placeholder.svg?height=300&width=300'],
       vendor: 'Urban Craft',
       rating: 4.5,
       category: 'casual wear',
-      inStock: true,
+      stock: 3,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
     },
     {
       id: '6',
       name: 'Handmade Bow Tie Collection',
       price: 35,
-      image: '/placeholder.svg?height=300&width=300',
+      images: ['/placeholder.svg?height=300&width=300'],
       vendor: 'Accessory Art',
       rating: 4.4,
       category: 'accessories',
-      inStock: true,
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
     },
-    // Add more products for pagination demo
-    ...Array.from({ length: 20 }, (_, i) => ({
-      id: `${i + 7}`,
-      name: `Fashion Item ${i + 1}`,
-      price: Math.floor(Math.random() * 500) + 50,
-      image: '/placeholder.svg?height=300&width=300',
-      vendor: `Vendor ${i + 1}`,
-      rating: 4 + Math.random(),
-      category:
-        categories[Math.floor(Math.random() * (categories.length - 1)) + 1],
-      inStock: Math.random() > 0.2,
-    })),
   ]
 
-  // Filter and sort products
+  // Filter products
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
-
+    const matchesMaterials =
+      materialsToFilter.size === 0 || materialsToFilter.has(product.material)
+    const matchesBrand =
+      brandsToFilter.size === 0 || brandsToFilter.has(product.brand)
     const matchesCategory =
       selectedCategory === 'all' || product.category === selectedCategory
 
-    const matchesPriceRange =
-      priceRange === 'all' ||
-      (() => {
-        const [min, max] = priceRange.split('-').map((p) => p.replace('+', ''))
-        if (max) {
-          return (
-            product.price >= parseInt(min) && product.price <= parseInt(max)
-          )
-        } else {
-          return product.price >= parseInt(min)
-        }
-      })()
+    const [min, max] = filters.priceRange
+    const matchesPriceRange = product.price >= min && product.price <= max
 
-    return matchesSearch && matchesCategory && matchesPriceRange
+    const matchesInStock = !filters.inStockOnly || product.stock > 0
+    const matchesRating = product.rating > filters.minRating
+
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesRating &&
+      matchesPriceRange &&
+      matchesBrand &&
+      matchesMaterials &&
+      matchesInStock
+    )
   })
+
+  //clear filter
+  const clearFilters = () => {
+    setSearchQuery('')
+    setSelectedCategory('all')
+    setPriceRange([0, maxPrice])
+    setSelectedMaterials([])
+    setSelectedBrands([])
+    setInStockOnly(false)
+    setMinRating(0)
+    setCurrentPage(1)
+  }
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -189,26 +279,41 @@ const Marketplace = () => {
     }
   })
 
-  // Pagination
+  // Product Pagination
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedProducts = sortedProducts.slice(
     startIndex,
     startIndex + itemsPerPage
   )
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
+      <div className="hidden lg:block col-span-3 py-8">
+        <AdvancedFilters
+          priceRange={priceRange}
+          selectedMaterials={selectedMaterials}
+          selectedBrands={selectedBrands}
+          inStockOnly={inStockOnly}
+          minRating={minRating}
+          setPriceRange={setPriceRange}
+          setSelectedMaterials={setSelectedMaterials}
+          setSelectedBrands={setSelectedBrands}
+          setInStockOnly={setInStockOnly}
+          setMinRating={setMinRating}
+          setFilters={setFilters}
+        />
+      </div>
+      <div className="  py-8 col-span-5">
         {/* Enhanced Search and Filters */}
         <div className="mb-8">
+          {/* search */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1 relative">
+            <div className="flex-1 lg:max-w-2xl relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
                 placeholder={`Search for products...`}
@@ -219,77 +324,37 @@ const Marketplace = () => {
             </div>
             <Button
               variant="outline"
-              className="lg:w-auto"
+              className="lg:w-auto lg:hidden"
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
             >
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Advanced Filters
             </Button>
           </div>
-
           {/* Advanced Filters */}
           {showAdvancedFilters && (
-            <AdvancedFilters onClose={() => setShowAdvancedFilters(false)} />
+            <div className="lg:hidden">
+              <AdvancedFilters
+                onClose={() => setShowAdvancedFilters(false)}
+                priceRange={priceRange}
+                selectedMaterials={selectedMaterials}
+                selectedBrands={selectedBrands}
+                inStockOnly={inStockOnly}
+                minRating={minRating}
+                setPriceRange={setPriceRange}
+                setSelectedMaterials={setSelectedMaterials}
+                setSelectedBrands={setSelectedBrands}
+                setInStockOnly={setInStockOnly}
+                setMinRating={setMinRating}
+                setFilters={setFilters}
+              />
+            </div>
           )}
-
           {/* Category Filters */}
-
-          <Carousel
-            opts={{
-              align: 'end',
-            }}
-            className="w-full px-6 mb-6"
-          >
-            <CarouselContent>
-              {categories.map((category, index) => (
-                <CarouselItem
-                  key={index}
-                  className="basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/7"
-                >
-                  <Badge
-                    variant={
-                      selectedCategory === category ? 'default' : 'outline'
-                    }
-                    className={`cursor-pointer capitalize w-full py-2 ${
-                      selectedCategory === category
-                        ? 'bg-primary/90 hover:bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:bg-muted'
-                    }`}
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    {category.replace('-', ' ')}
-                  </Badge>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious
-              variant="ghost"
-              size="lg"
-              className="-left-2 size-4"
-            />
-            <CarouselNext
-              variant="ghost"
-              size="lg"
-              className="-right-2 size-4"
-            />
-          </Carousel>
-          {/* Price Filters */}
-          <div className="flex flex-wrap gap-2 px-6">
-            {priceRanges.map((range) => (
-              <Badge
-                key={range.value}
-                variant={priceRange === range.value ? 'default' : 'outline'}
-                className={`cursor-pointer py-2 px-4 ${
-                  priceRange === range.value
-                    ? 'bg-primary/90 hover:bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:bg-muted'
-                }`}
-                onClick={() => setPriceRange(range.value)}
-              >
-                {range.label}
-              </Badge>
-            ))}
-          </div>
+          <CategoriesCarousel
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
         </div>
 
         {/* Results Header with View Toggle */}
@@ -305,7 +370,7 @@ const Marketplace = () => {
           <div className="flex items-center space-x-2">
             <Label className="text-muted-foreground">Sort by:</Label>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 font-semibold text-base">
+              <SelectTrigger className="w-48 font-medium text-base">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -340,7 +405,7 @@ const Marketplace = () => {
 
         {/* Products Grid/List */}
         {viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {paginatedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -355,7 +420,7 @@ const Marketplace = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-4">
                     <img
-                      src={product.image}
+                      src={product.images[0]}
                       alt={product.name}
                       className="w-20 h-20 object-cover rounded-lg"
                     />
@@ -367,9 +432,9 @@ const Marketplace = () => {
                           ${product.price}
                         </span>
                         <Badge
-                          variant={product.inStock ? 'default' : 'secondary'}
+                          variant={product.stock ? 'default' : 'secondary'}
                         >
-                          {product.inStock ? 'In Stock' : 'Out of Stock'}
+                          {product.stock ? 'In Stock' : 'Out of Stock'}
                         </Badge>
                       </div>
                     </div>
@@ -441,15 +506,7 @@ const Marketplace = () => {
         {paginatedProducts.length === 0 && (
           <div className="text-center py-12">
             <p className=" text-lg">No product found matching your criteria.</p>
-            <Button
-              className="mt-4"
-              onClick={() => {
-                setSearchQuery('')
-                setSelectedCategory('all')
-                setPriceRange('all')
-                setCurrentPage(1)
-              }}
-            >
+            <Button className="mt-4" onClick={clearFilters}>
               Clear Filters
             </Button>
           </div>

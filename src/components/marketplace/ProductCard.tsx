@@ -3,18 +3,10 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Star, ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import type { Product } from '@/utils/types'
 
 interface ProductCardProps {
-  product: {
-    id: string
-    name: string
-    price: number
-    image: string
-    vendor: string
-    rating: number
-    category: string
-    inStock: boolean
-  }
+  product: Product
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
@@ -23,11 +15,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <CardHeader className="p-0">
         <div className="relative overflow-hidden rounded-t-lg">
           <img
-            src={product.image}
+            src={product.images[0]}
             alt={product.name}
             className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
           />
-          {!product.inStock && (
+          {!product.stock && (
             <Badge className="absolute top-2 left-2 bg-red-500">
               Out of Stock
             </Badge>
@@ -47,7 +39,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               {product.name}
             </h3>
           </Link>
-          <p className="text-sm text-gray-600">by {product.vendor}</p>
+          <p className="text-sm text-gray-600">by {product.businessname}</p>
           <div className="flex items-center space-x-1">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
             <span className="text-sm font-medium">{product.rating}</span>
@@ -60,7 +52,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <Button
               size="sm"
               className="bg-purple-600 hover:bg-purple-700"
-              disabled={!product.inStock}
+              disabled={!product.stock}
             >
               <ShoppingCart className="w-4 h-4 mr-1" />
               Add to Cart

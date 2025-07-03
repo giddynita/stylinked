@@ -207,3 +207,14 @@ export const nonUserFooterLinks = [
     ],
   },
 ]
+
+export const categories = [
+  'all',
+  'dresses',
+  'suits',
+  'shirts',
+  'pants',
+  'accessories',
+  'formal wear',
+  'casual wear',
+]

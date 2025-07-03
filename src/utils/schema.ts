@@ -127,4 +127,5 @@ export const productSchema = z.object({
     message: 'Please select a category',
   }),
   material: z.string(),
+  rating: z.number(),
 })
