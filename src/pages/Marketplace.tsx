@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -10,23 +8,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
 import { Search, SlidersHorizontal, Grid3X3, List } from 'lucide-react'
 import {
-  ProductCard,
   AdvancedFilters,
+  ProductGridCard,
+  ProductListCard,
   CategoriesCarousel,
 } from '@/components/marketplace'
 import { Label } from '@/components/ui/label'
 import type { Product } from '@/utils/types'
+import { CustomPagination } from '@/components/global'
 
 const Marketplace = () => {
   //filters
@@ -61,7 +52,7 @@ const Marketplace = () => {
   //hooks
 
   //constants
-  const itemsPerPage = 12
+  const itemsPerPage = 3
 
   const maxPrice = 1000
   // Mock product data
@@ -74,7 +65,7 @@ const Marketplace = () => {
       vendor: 'Elegant Designs',
       rating: 4.8,
       category: 'dresses',
-      stock: 3,
+      stock: 0,
       description: '',
       material: '',
       brand: '',
@@ -222,9 +213,320 @@ const Marketplace = () => {
       vendorid: '',
       createdat: '',
     },
+    {
+      id: '7',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '8',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '9',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '10',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '11',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '12',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '13',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '14',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '15',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '16',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '17',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
+    {
+      id: '18',
+      name: 'Handmade Bow Tie Collection',
+      price: 35,
+      images: ['/placeholder.svg?height=300&width=300'],
+      vendor: 'Accessory Art',
+      rating: 4.4,
+      category: 'accessories',
+      stock: 2,
+      description: '',
+      material: '',
+      brand: '',
+      variants: [
+        {
+          size: '',
+          colors: [
+            {
+              color: '',
+              quantity: 0,
+            },
+          ],
+        },
+      ],
+      vendorid: '',
+      createdat: '',
+    },
   ]
 
-  // Filter products
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
@@ -284,7 +586,7 @@ const Marketplace = () => {
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedProducts = sortedProducts.slice(
     startIndex,
-    startIndex + itemsPerPage
+    currentPage * itemsPerPage
   )
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
@@ -365,12 +667,12 @@ const Marketplace = () => {
             {sortedProducts.length})
           </h2>
         )}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between gap-2 mb-6">
           {/* Sort Dropdown */}
           <div className="flex items-center space-x-2">
             <Label className="text-muted-foreground">Sort by:</Label>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-48 font-medium text-base">
+              <SelectTrigger className="font-medium text-base w-32 sm:w-48">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -407,100 +709,24 @@ const Marketplace = () => {
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {paginatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductGridCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
           <div className="space-y-4 mb-8">
             {paginatedProducts.map((product) => (
-              <Card
-                key={product.id}
-                className="hover:shadow-md transition-shadow"
-              >
-                <CardContent className="p-4">
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-lg">{product.name}</h3>
-                      <p className="text-gray-600">{product.vendor}</p>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <span className="text-xl font-bold text-purple-600">
-                          ${product.price}
-                        </span>
-                        <Badge
-                          variant={product.stock ? 'default' : 'secondary'}
-                        >
-                          {product.stock ? 'In Stock' : 'Out of Stock'}
-                        </Badge>
-                      </div>
-                    </div>
-                    <Button className="bg-purple-600 hover:bg-purple-700">
-                      View Details
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              <ProductListCard key={product.id} product={product} />
             ))}
           </div>
         )}
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <Pagination className="mb-8">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() =>
-                    currentPage > 1 && handlePageChange(currentPage - 1)
-                  }
-                  className={
-                    currentPage <= 1
-                      ? 'pointer-events-none opacity-50'
-                      : 'cursor-pointer'
-                  }
-                />
-              </PaginationItem>
-
-              {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                const pageNum = i + 1
-                return (
-                  <PaginationItem key={pageNum}>
-                    <PaginationLink
-                      onClick={() => handlePageChange(pageNum)}
-                      isActive={currentPage === pageNum}
-                      className="cursor-pointer"
-                    >
-                      {pageNum}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-              })}
-
-              {totalPages > 5 && (
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-              )}
-
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    currentPage < totalPages &&
-                    handlePageChange(currentPage + 1)
-                  }
-                  className={
-                    currentPage >= totalPages
-                      ? 'pointer-events-none opacity-50'
-                      : 'cursor-pointer'
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+        {paginatedProducts.length > 0 && (
+          <CustomPagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+          />
         )}
 
         {paginatedProducts.length === 0 && (

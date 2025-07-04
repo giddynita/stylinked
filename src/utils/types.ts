@@ -108,3 +108,18 @@ export type UserDataType = {
   businessname?: string
   location?: string
 }
+
+export type ProductCardProps = {
+  product: Product
+}
+
+export interface SmartPaginationProps {
+  totalPages: number
+  currentPage: number
+  handlePageChange: (page: number) => void
+}
+
+export interface CategoriesCarouselProps {
+  selectedCategory: string
+  setSelectedCategory: (category: string) => void
+}
