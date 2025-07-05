@@ -68,7 +68,7 @@ function AppHeader() {
                 </Button>
 
                 <Button size="sm">
-                  <Link to="/auth/sign-up">Get Started</Link>
+                  <Link to="/auth/sign-up">Sign Up</Link>
                 </Button>
               </>
             )}

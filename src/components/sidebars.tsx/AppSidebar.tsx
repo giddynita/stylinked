@@ -106,7 +106,7 @@ export function AppSidebar() {
                     variant="default"
                     className="w-full"
                   >
-                    <Link to="/auth/sign-up">Get Started</Link>
+                    <Link to="/auth/sign-up">Sign Up</Link>
                   </Button>
                 </SidebarMenuItem>
               </>
