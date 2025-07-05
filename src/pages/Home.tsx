@@ -1,4 +1,5 @@
 import { TestimonialCarousel } from '@/components/global'
+import AppHeader from '@/components/headers/AppHeader'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -13,6 +14,7 @@ import { Link } from 'react-router-dom'
 const Home = () => {
   return (
     <>
+      <AppHeader />
       {/* Hero Section */}
       <section className="container py-20">
         <div className="text-center">

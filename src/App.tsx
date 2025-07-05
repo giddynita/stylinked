@@ -13,6 +13,8 @@ import {
   Verification,
   Products,
   Marketplace,
+  ProductDetails,
+  MarketplaceLayout,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -71,7 +73,18 @@ const router = createBrowserRouter([
       },
       {
         path: 'marketplace',
-        element: <Marketplace />,
+        element: <MarketplaceLayout />,
+        children: [
+          {
+            index: true,
+            element: <Marketplace />,
+          },
+
+          {
+            path: 'product/:productid',
+            element: <ProductDetails />,
+          },
+        ],
       },
     ],
   },

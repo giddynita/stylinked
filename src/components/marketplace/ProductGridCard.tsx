@@ -33,7 +33,7 @@ const ProductGridCard = ({ product }: ProductCardProps) => {
       <CardContent className="p-4">
         <h3 className="font-semibold text-base line-clamp-2 h-12">
           <Link
-            to={`product/${product.id}`}
+            to={`/marketplace/product/${product.id}`}
             className="hover:text-primary transition-colors"
           >
             {' '}
@@ -46,7 +46,7 @@ const ProductGridCard = ({ product }: ProductCardProps) => {
             to={`/vendors/${product.vendor}`}
             className="text-sm text-muted-foreground hover:text-accent-foreground"
           >
-            by {product.vendor}
+            Sold by {product.vendor}
           </Link>
         </p>
 

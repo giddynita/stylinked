@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import { Link } from 'react-router-dom'
 
 function ProductListCard({ product }: ProductCardProps) {
   return (
@@ -62,7 +63,9 @@ function ProductListCard({ product }: ProductCardProps) {
                     variant="outline"
                     className="text-[10px] w-full"
                   >
-                    View Details
+                    <Link to={`/marketplace/product/${product.id}`}>
+                      View Details
+                    </Link>
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>

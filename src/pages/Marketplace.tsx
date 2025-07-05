@@ -18,6 +18,7 @@ import {
 import { Label } from '@/components/ui/label'
 import type { Product } from '@/utils/types'
 import { CustomPagination } from '@/components/global'
+import AppHeader from '@/components/headers/AppHeader'
 
 const Marketplace = () => {
   //filters
@@ -594,151 +595,156 @@ const Marketplace = () => {
   }
 
   return (
-    <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
-      <div className="hidden lg:block col-span-3 py-8">
-        <AdvancedFilters
-          priceRange={priceRange}
-          selectedMaterials={selectedMaterials}
-          selectedBrands={selectedBrands}
-          inStockOnly={inStockOnly}
-          minRating={minRating}
-          setPriceRange={setPriceRange}
-          setSelectedMaterials={setSelectedMaterials}
-          setSelectedBrands={setSelectedBrands}
-          setInStockOnly={setInStockOnly}
-          setMinRating={setMinRating}
-          setFilters={setFilters}
-        />
-      </div>
-      <div className="  py-8 col-span-5">
-        {/* Enhanced Search and Filters */}
-        <div className="mb-8">
-          {/* search */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1 lg:max-w-2xl relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                placeholder={`Search for products...`}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+    <>
+      <AppHeader />
+      <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
+        <div className="hidden lg:block col-span-3 py-8">
+          <AdvancedFilters
+            priceRange={priceRange}
+            selectedMaterials={selectedMaterials}
+            selectedBrands={selectedBrands}
+            inStockOnly={inStockOnly}
+            minRating={minRating}
+            setPriceRange={setPriceRange}
+            setSelectedMaterials={setSelectedMaterials}
+            setSelectedBrands={setSelectedBrands}
+            setInStockOnly={setInStockOnly}
+            setMinRating={setMinRating}
+            setFilters={setFilters}
+          />
+        </div>
+        <div className="  py-8 col-span-5">
+          {/* Enhanced Search and Filters */}
+          <div className="mb-8">
+            {/* search */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <div className="flex-1 lg:max-w-2xl relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input
+                  placeholder={`Search for products...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Button
+                variant="outline"
+                className="lg:w-auto lg:hidden"
+                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              >
+                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                Advanced Filters
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              className="lg:w-auto lg:hidden"
-              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-            >
-              <SlidersHorizontal className="w-4 h-4 mr-2" />
-              Advanced Filters
-            </Button>
+            {/* Advanced Filters */}
+            {showAdvancedFilters && (
+              <div className="lg:hidden">
+                <AdvancedFilters
+                  onClose={() => setShowAdvancedFilters(false)}
+                  priceRange={priceRange}
+                  selectedMaterials={selectedMaterials}
+                  selectedBrands={selectedBrands}
+                  inStockOnly={inStockOnly}
+                  minRating={minRating}
+                  setPriceRange={setPriceRange}
+                  setSelectedMaterials={setSelectedMaterials}
+                  setSelectedBrands={setSelectedBrands}
+                  setInStockOnly={setInStockOnly}
+                  setMinRating={setMinRating}
+                  setFilters={setFilters}
+                />
+              </div>
+            )}
+            {/* Category Filters */}
+            <CategoriesCarousel
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
           </div>
-          {/* Advanced Filters */}
-          {showAdvancedFilters && (
-            <div className="lg:hidden">
-              <AdvancedFilters
-                onClose={() => setShowAdvancedFilters(false)}
-                priceRange={priceRange}
-                selectedMaterials={selectedMaterials}
-                selectedBrands={selectedBrands}
-                inStockOnly={inStockOnly}
-                minRating={minRating}
-                setPriceRange={setPriceRange}
-                setSelectedMaterials={setSelectedMaterials}
-                setSelectedBrands={setSelectedBrands}
-                setInStockOnly={setInStockOnly}
-                setMinRating={setMinRating}
-                setFilters={setFilters}
-              />
+
+          {/* Results Header with View Toggle */}
+          {searchQuery && (
+            <h2 className="text-2xl text mb-8">
+              Result{sortedProducts.length > 1 && 's'} for{' '}
+              <span className="font-bold">{searchQuery}</span> (
+              {sortedProducts.length})
+            </h2>
+          )}
+          <div className="flex items-center justify-between gap-2 mb-6">
+            {/* Sort Dropdown */}
+            <div className="flex items-center space-x-2">
+              <Label className="text-muted-foreground">Sort by:</Label>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="font-medium text-base w-36 sm:w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="relevance">Relevance</SelectItem>
+                  <SelectItem value="price-low">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="rating">Average Rating</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex border rounded-md">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+                className="rounded-r-none"
+              >
+                <Grid3X3 className="w-4 h-4" />
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+                className="rounded-l-none"
+              >
+                <List className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Products Grid/List */}
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+              {paginatedProducts.map((product) => (
+                <ProductGridCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4 mb-8">
+              {paginatedProducts.map((product) => (
+                <ProductListCard key={product.id} product={product} />
+              ))}
             </div>
           )}
-          {/* Category Filters */}
-          <CategoriesCarousel
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
+
+          {/* Pagination */}
+          {paginatedProducts.length > 0 && (
+            <CustomPagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              handlePageChange={handlePageChange}
+            />
+          )}
+
+          {paginatedProducts.length === 0 && (
+            <div className="text-center py-12">
+              <p className=" text-lg">
+                No product found matching your criteria.
+              </p>
+              <Button className="mt-4" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+            </div>
+          )}
         </div>
-
-        {/* Results Header with View Toggle */}
-        {searchQuery && (
-          <h2 className="text-2xl text mb-8">
-            Result{sortedProducts.length > 1 && 's'} for{' '}
-            <span className="font-bold">{searchQuery}</span> (
-            {sortedProducts.length})
-          </h2>
-        )}
-        <div className="flex items-center justify-between gap-2 mb-6">
-          {/* Sort Dropdown */}
-          <div className="flex items-center space-x-2">
-            <Label className="text-muted-foreground">Sort by:</Label>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="font-medium text-base w-32 sm:w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="relevance">Relevance</SelectItem>
-                <SelectItem value="price-low">Price: Low to High</SelectItem>
-                <SelectItem value="price-high">Price: High to Low</SelectItem>
-                <SelectItem value="rating">Average Rating</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* View Mode Toggle */}
-          <div className="flex border rounded-md">
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('grid')}
-              className="rounded-r-none"
-            >
-              <Grid3X3 className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className="rounded-l-none"
-            >
-              <List className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Products Grid/List */}
-        {viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-            {paginatedProducts.map((product) => (
-              <ProductGridCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-4 mb-8">
-            {paginatedProducts.map((product) => (
-              <ProductListCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-
-        {/* Pagination */}
-        {paginatedProducts.length > 0 && (
-          <CustomPagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            handlePageChange={handlePageChange}
-          />
-        )}
-
-        {paginatedProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className=" text-lg">No product found matching your criteria.</p>
-            <Button className="mt-4" onClick={clearFilters}>
-              Clear Filters
-            </Button>
-          </div>
-        )}
       </div>
-    </div>
+    </>
   )
 }
 

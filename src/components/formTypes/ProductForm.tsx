@@ -119,11 +119,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       .filter((variant) => variant.colors.length > 0) // remove size if no colors left
     setVariants(updated)
   }
-  const handleInputChange = (field: string, value: string) => {
-    if (field == 'price') {
-      const price = parseInt(value)
-      setFormData((prev) => ({ ...prev, [field]: price }))
-    }
+  const handleInputChange = (field: string | number, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
   const handleImageDelete = async (url: string, index: number) => {
@@ -198,12 +194,12 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
           </Label>
           <Input
             id="price"
-            type="text"
+            type="number"
             value={formData.price}
             onChange={(e) => handleInputChange('price', e.target.value)}
             placeholder="e.g. 2000"
             required
-            min={1}
+            min="1"
           />
         </div>
 
@@ -296,9 +292,10 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
             <div key={color} className="space-y-2">
               <Label>Quantity for {color} </Label>
               <Input
+                id="color"
                 type="number"
-                min={1}
-                value={colorQuantities[color] || 1}
+                min="1"
+                value={colorQuantities[color] || ''}
                 onChange={(e) =>
                   setColorQuantities({
                     ...colorQuantities,
