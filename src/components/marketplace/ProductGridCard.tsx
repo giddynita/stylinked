@@ -33,7 +33,7 @@ const ProductGridCard = ({ product }: ProductCardProps) => {
       <CardContent className="p-4">
         <h3 className="font-semibold text-base line-clamp-2 h-12">
           <Link
-            to={`/marketplace/product/${product.id}`}
+            to={`product/${product.id}`}
             className="hover:text-primary transition-colors"
           >
             {' '}

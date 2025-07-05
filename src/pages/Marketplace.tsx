@@ -20,6 +20,10 @@ import type { Product } from '@/utils/types'
 import { CustomPagination } from '@/components/global'
 import AppHeader from '@/components/headers/AppHeader'
 
+type ViewMode = 'grid' | 'list'
+const getViewMode =
+  (localStorage.getItem('product-view-mode') as ViewMode) || 'grid'
+
 const Marketplace = () => {
   //filters
   const [searchQuery, setSearchQuery] = useState('')
@@ -48,7 +52,12 @@ const Marketplace = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   //product view mode
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+
+  const [viewMode, setViewMode] = useState<ViewMode>(getViewMode)
+  const handleViewMode = (mode: ViewMode) => {
+    localStorage.setItem('product-view-mode', mode)
+    setViewMode(mode)
+  }
 
   //hooks
 
@@ -692,7 +701,7 @@ const Marketplace = () => {
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setViewMode('grid')}
+                onClick={() => handleViewMode('grid')}
                 className="rounded-r-none"
               >
                 <Grid3X3 className="w-4 h-4" />
@@ -700,7 +709,7 @@ const Marketplace = () => {
               <Button
                 variant={viewMode === 'list' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setViewMode('list')}
+                onClick={() => handleViewMode('list')}
                 className="rounded-l-none"
               >
                 <List className="w-4 h-4" />

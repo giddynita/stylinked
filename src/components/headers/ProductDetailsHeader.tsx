@@ -26,7 +26,9 @@ export function ProductDetailsHeader() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="font-medium">Breadcrumb</BreadcrumbPage>
+            <BreadcrumbPage className="text-primary font-medium">
+              Breadcrumb
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

@@ -43,8 +43,8 @@ function ProductListCard({ product }: ProductCardProps) {
             </div>
           </div>
           <div className="hidden sm:flex flex-col justify-between space-y-2">
-            <Button size="sm" variant="outline" className="text-[10px]">
-              View Details
+            <Button size="sm" variant="outline" className="text-[10px]" asChild>
+              <Link to={`product/${product.id}`}>View Details</Link>
             </Button>
             <Button size="sm" className="text-[10px]" disabled={!product.stock}>
               <ShoppingCart className="w-4 h-4" />
@@ -62,10 +62,9 @@ function ProductListCard({ product }: ProductCardProps) {
                     size="sm"
                     variant="outline"
                     className="text-[10px] w-full"
+                    asChild
                   >
-                    <Link to={`/marketplace/product/${product.id}`}>
-                      View Details
-                    </Link>
+                    <Link to={`product/${product.id}`}>View Details</Link>
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
