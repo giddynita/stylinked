@@ -8,7 +8,11 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Link } from 'react-router-dom'
 
-export function ProductDetailsHeader() {
+export function ProductDetailsHeader({
+  productName,
+}: {
+  productName: string | undefined
+}) {
   return (
     <header className="py-5 mb-4">
       <Breadcrumb>
@@ -27,7 +31,7 @@ export function ProductDetailsHeader() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage className="text-primary font-medium">
-              Breadcrumb
+              {productName}
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>

@@ -139,9 +139,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       return toast('At least one variant and one image must be added.')
     }
     const validatedData = validateWithZodSchema(productSchema, formData)
-    if (!validatedData) {
-      return
-    }
+
     const stockArray = variants.map((variant: Variant) =>
       variant.colors.map((color: ColorQuantity) => {
         return color.quantity

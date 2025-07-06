@@ -9,7 +9,7 @@ function ProductListCardSkeleton() {
           return (
             <Skeleton
               key={index}
-              className="bg-muted h-30 bg-background flex w-full p-2 space-x-2"
+              className="bg-muted h-30 bg-background flex w-full p-2 space-x-2 shadow-md"
             >
               <Skeleton className="h-full w-26 " />
               <div className="flex-1 space-y-2">

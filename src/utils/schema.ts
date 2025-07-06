@@ -129,3 +129,18 @@ export const productSchema = z.object({
   material: z.string(),
   rating: z.number(),
 })
+
+export const reviewSchema = z.object({
+  rating: z.number(),
+  text: z.string().refine(
+    (reviewText) => {
+      const wordCount = reviewText.split(' ').length
+      return wordCount >= 5 && wordCount <= 100
+    },
+    {
+      message: 'Description must be between 5 and 100 words.',
+    }
+  ),
+  name: z.string(),
+  productId: z.string(),
+})

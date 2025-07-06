@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Star, ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ProductCardProps } from '@/utils/types'
-import { currencyFormatter } from '@/utils/format'
+import { currencyFormatter, slugify } from '@/utils/format'
 
 const ProductGridCard = ({ product }: ProductCardProps) => {
   return (
@@ -33,7 +33,7 @@ const ProductGridCard = ({ product }: ProductCardProps) => {
       <CardContent className="p-4">
         <h3 className="font-semibold text-base line-clamp-2 h-12">
           <Link
-            to={`product/${product.id}`}
+            to={`${slugify(product.name)}/${product.id}`}
             className="hover:text-primary transition-colors"
           >
             {' '}

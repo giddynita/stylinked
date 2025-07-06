@@ -12,6 +12,8 @@ import { currencyFormatter } from '@/utils/format'
 import { Cart } from '@/components/marketplace'
 import { getSingleProduct } from '@/utils/loader'
 import { useQuery } from '@tanstack/react-query'
+import { useUserData } from '@/utils/hooks'
+import { reviewSchema, validateWithZodSchema } from '@/utils/schema'
 
 const ProductDetails = () => {
   const { productId } = useParams()
@@ -58,12 +60,11 @@ const ProductDetails = () => {
   } */
 
   //fetch single product
-
   const queryData = {
-    queryKey: ['single products', productId],
+    queryKey: ['single product', productId],
     queryFn: () => getSingleProduct(productId),
   }
-  const { data: product, isLoading, error } = useQuery(queryData)
+  const { data: product, isLoading } = useQuery(queryData)
 
   const reviews = [
     {
@@ -94,7 +95,16 @@ const ProductDetails = () => {
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Review submitted:', { rating: reviewRating, text: reviewText })
+    const { data: userData } = useUserData()
+    const name = `${userData?.firstname} ${userData?.lastname}`
+    const reviewData = {
+      productId,
+      rating: reviewRating,
+      text: reviewText,
+      name,
+    }
+    const validatedData = validateWithZodSchema(reviewSchema, reviewData)
+
     setReviewText('')
     setReviewRating(5)
   }
@@ -105,7 +115,7 @@ const ProductDetails = () => {
   return (
     <div className="min-h-screen relative container">
       {/*breadcrumbs */}
-      <ProductDetailsHeader />
+      <ProductDetailsHeader productName={product?.name} />
       {/* product details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
         {/* Product Images */}

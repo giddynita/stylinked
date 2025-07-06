@@ -44,13 +44,13 @@ import type { Variant, Product } from '@/utils/types'
 import { toast } from 'sonner'
 import { currencyFormatter } from '@/utils/format'
 import { ProductListSkeleton } from '@/components/skeletons'
+import { useVendorProducts } from '@/utils/hooks'
 import {
-  useAddProduct,
-  useDeleteProduct,
-  useUpdateProduct,
-  useVendorProducts,
-} from '@/utils/hooks'
-import { deleteImage } from '@/utils/action'
+  addProductAction,
+  deleteImage,
+  deleteProductAction,
+  updateProductAction,
+} from '@/utils/action'
 
 const Products = () => {
   //states
@@ -66,17 +66,17 @@ const Products = () => {
     mutate: deleteProduct,
     isError: deleteError,
     isPending: deleting,
-  } = useDeleteProduct()
+  } = deleteProductAction()
   const {
     mutate: addProduct,
     isError: addError,
     isPending: adding,
-  } = useAddProduct()
+  } = addProductAction()
   const {
     mutate: updateProduct,
     isError: updateError,
     isPending: updating,
-  } = useUpdateProduct()
+  } = updateProductAction()
 
   const filteredProducts =
     products?.filter((product) =>

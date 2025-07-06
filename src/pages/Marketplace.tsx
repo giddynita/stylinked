@@ -268,7 +268,7 @@ const Marketplace = () => {
                 No internet connection detected
               </p>
               <Button className="mt-4" onClick={() => window.location.reload()}>
-                Reload page
+                Reload Page
               </Button>
             </div>
           )}

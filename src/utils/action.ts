@@ -5,10 +5,18 @@ import type {
   ForgotPasswordAction,
   LoginAction,
   LogoutAction,
+  Product,
   ResetPasswordAction,
   SignUpAction,
+  UpdateProduct,
 } from './types'
 import { parseStringToArray } from './format'
+import {
+  useMutation,
+  useQueryClient,
+  type MutationFunction,
+} from '@tanstack/react-query'
+import { getAuthUser } from './loader'
 
 export const signUpAction = async (props: SignUpAction) => {
   const { email, password, confirmPassword, setSubmitting, navigate } = props
@@ -194,4 +202,71 @@ export const deleteImage = (url: string) => {
   const imageName = url.split('/').pop()
   if (!imageName) throw new Error('Invalid URL')
   return supabase.storage.from(bucket).remove([imageName])
+}
+
+export const deleteProductAction = () => {
+  const deleteProduct = async (productId: string) => {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', productId)
+    if (error) throw new Error(error.message)
+  }
+  const queryClient = useQueryClient()
+
+  const deleteProductFunction = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+    },
+  })
+
+  return deleteProductFunction
+}
+
+export const addProductAction = () => {
+  const addProduct = async (product: Product) => {
+    const user = await getAuthUser()
+    const { error } = await supabase.from('products').insert([
+      {
+        ...product,
+        vendorid: user?.id,
+      },
+    ])
+    if (error) throw new Error(error.message)
+  }
+  const queryClient = useQueryClient()
+
+  const addProductFunction = useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+    },
+  })
+
+  return addProductFunction
+}
+
+export const updateProductAction = () => {
+  const updateProduct: MutationFunction<{ data: any }, UpdateProduct> = async ({
+    id,
+    payload,
+  }) => {
+    const { data, error } = await supabase
+      .from('products')
+      .update(payload)
+      .eq('id', id)
+    if (error) {
+      throw new Error(error.message)
+    }
+    return { data }
+  }
+  const queryClient = useQueryClient()
+  const updateProductFunction = useMutation({
+    mutationFn: updateProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+    },
+  })
+  return updateProductFunction
 }

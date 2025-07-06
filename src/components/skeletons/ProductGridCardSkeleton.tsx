@@ -9,7 +9,7 @@ function ProductGridCardSkeleton() {
           return (
             <Skeleton
               key={index}
-              className="bg-muted h-75 bg-background w-full space-y-2"
+              className="bg-muted h-75 bg-background w-full space-y-2 shadow-md"
             >
               <div className="relative h-35 w-full bg-muted-foreground rounded-t-lg">
                 <Skeleton className="h-full  w-full rounded-b-none" />

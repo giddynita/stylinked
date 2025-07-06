@@ -20,3 +20,11 @@ export const currencyFormatter = (price: number) => {
 export const padNumber = (n: number) => {
   return String(n).padStart(2, '0')
 }
+
+export const slugify = (name: string) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+}

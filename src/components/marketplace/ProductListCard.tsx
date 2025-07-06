@@ -1,6 +1,6 @@
 import type { ProductCardProps } from '@/utils/types'
 import { Card, CardContent } from '../ui/card'
-import { currencyFormatter } from '@/utils/format'
+import { currencyFormatter, slugify } from '@/utils/format'
 import { MoreVertical, ShoppingCart } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
@@ -44,7 +44,9 @@ function ProductListCard({ product }: ProductCardProps) {
           </div>
           <div className="hidden sm:flex flex-col justify-between space-y-2">
             <Button size="sm" variant="outline" className="text-[10px]" asChild>
-              <Link to={`product/${product.id}`}>View Details</Link>
+              <Link to={`${slugify(product.name)}/${product.id}`}>
+                View Details
+              </Link>
             </Button>
             <Button size="sm" className="text-[10px]" disabled={!product.stock}>
               <ShoppingCart className="w-4 h-4" />
@@ -64,7 +66,9 @@ function ProductListCard({ product }: ProductCardProps) {
                     className="text-[10px] w-full"
                     asChild
                   >
-                    <Link to={`product/${product.id}`}>View Details</Link>
+                    <Link to={`${slugify(product.name)}/${product.id}`}>
+                      View Details
+                    </Link>
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
