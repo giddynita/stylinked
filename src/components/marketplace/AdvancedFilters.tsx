@@ -5,34 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Slider } from '@/components/ui/slider'
 import { X } from 'lucide-react'
 import { currencyFormatter } from '@/utils/format'
-
-type Filters = {
-  priceRange: number[]
-  selectedMaterials: string[]
-  selectedBrands: string[]
-  inStockOnly: boolean
-  minRating: number
-}
-interface AdvancedFiltersProps {
-  onClose?: () => void
-  priceRange: number[]
-  selectedMaterials: string[]
-  selectedBrands: string[]
-  inStockOnly: boolean
-  minRating: number
-  setPriceRange: (prices: number[]) => void
-  setSelectedMaterials: (materials: string[]) => void
-  setSelectedBrands: (brands: string[]) => void
-  setInStockOnly: (stock: boolean) => void
-  setMinRating: (price: number) => void
-  setFilters: ({
-    priceRange,
-    selectedMaterials,
-    selectedBrands,
-    inStockOnly,
-    minRating,
-  }: Filters) => void
-}
+import type { AdvancedFiltersProps } from '@/utils/types'
 
 const AdvancedFilters = ({
   onClose,
@@ -41,6 +14,7 @@ const AdvancedFilters = ({
   selectedBrands,
   inStockOnly,
   minRating,
+  searchQuery,
   setPriceRange,
   setSelectedMaterials,
   setSelectedBrands,
@@ -212,6 +186,7 @@ const AdvancedFilters = ({
                 selectedBrands,
                 inStockOnly,
                 minRating,
+                searchQuery,
               })
             }}
           >

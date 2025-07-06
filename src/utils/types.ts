@@ -109,7 +109,7 @@ export type UserDataType = {
   location?: string
 }
 
-export type ProductCardProps = {
+export interface ProductCardProps {
   product: Product
 }
 
@@ -122,4 +122,41 @@ export interface SmartPaginationProps {
 export interface CategoriesCarouselProps {
   selectedCategory: string
   setSelectedCategory: (category: string) => void
+}
+
+export type ProductFilter = {
+  priceRange: number[]
+  minRating: number
+  inStockOnly: boolean
+  selectedMaterials?: string[]
+  selectedBrands?: string[]
+  searchQuery?: string
+}
+export type getProductsType = {
+  currentPage: number
+  itemsPerPage: number
+  filters: ProductFilter
+}
+
+export interface AdvancedFiltersProps {
+  onClose?: () => void
+  priceRange: number[]
+  selectedMaterials: string[]
+  selectedBrands: string[]
+  inStockOnly: boolean
+  minRating: number
+  searchQuery: string
+  setPriceRange: (prices: number[]) => void
+  setSelectedMaterials: (materials: string[]) => void
+  setSelectedBrands: (brands: string[]) => void
+  setInStockOnly: (stock: boolean) => void
+  setMinRating: (price: number) => void
+  setFilters: ({
+    priceRange,
+    selectedMaterials,
+    selectedBrands,
+    inStockOnly,
+    minRating,
+    searchQuery,
+  }: ProductFilter) => void
 }

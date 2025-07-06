@@ -8,7 +8,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '../ui/pagination'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 function CustomPagination({
   totalPages,
@@ -37,10 +36,9 @@ function CustomPagination({
   }
 
   const pages = getPageRange()
-  console.log(currentPage)
 
   return (
-    <Pagination>
+    <Pagination className="mt-8">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

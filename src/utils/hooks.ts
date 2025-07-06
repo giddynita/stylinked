@@ -4,9 +4,9 @@ import {
   useQueryClient,
   type MutationFunction,
 } from '@tanstack/react-query'
-import { getAuthUser } from './action'
 import { supabase } from './supabaseClient'
 import type { Product, UpdateProduct, UserDataType, UserRole } from './types'
+import { getAuthUser } from './loader'
 
 const getAuthUserDetails = async () => {
   const user = await getAuthUser()

@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 
 function MarketplaceLayout() {
   return (
-    <main className="w-screen">
+    <main>
       <Outlet />
     </main>
   )

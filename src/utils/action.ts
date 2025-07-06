@@ -190,17 +190,6 @@ export const uploadImage = async (images: File[]) => {
   }
 }
 
-export const getAuthUser = async () => {
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) {
-    console.error('No user found or error:', error?.message)
-  }
-  return user
-}
-
 export const deleteImage = (url: string) => {
   const imageName = url.split('/').pop()
   if (!imageName) throw new Error('Invalid URL')

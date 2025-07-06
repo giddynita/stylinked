@@ -23,8 +23,9 @@ import {
 import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
 import ImageInput from '../form/ImageInput'
-import { deleteImage, getAuthUser } from '@/utils/action'
+import { deleteImage } from '@/utils/action'
 import { useUserData } from '@/utils/hooks'
+import { getAuthUser } from '@/utils/loader'
 
 const sizesList = ['S', 'M', 'L', 'XL']
 const colorsList = ['Red', 'Blue', 'Black', 'White']

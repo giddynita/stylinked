@@ -11,14 +11,20 @@ import {
 import { Search, SlidersHorizontal, Grid3X3, List } from 'lucide-react'
 import {
   AdvancedFilters,
-  ProductGridCard,
-  ProductListCard,
   CategoriesCarousel,
+  ProductGrid,
+  ProductList,
 } from '@/components/marketplace'
 import { Label } from '@/components/ui/label'
-import type { Product } from '@/utils/types'
+import type { ProductFilter } from '@/utils/types'
 import { CustomPagination } from '@/components/global'
 import AppHeader from '@/components/headers/AppHeader'
+import { useQuery } from '@tanstack/react-query'
+import { getProducts } from '@/utils/loader'
+import {
+  ProductGridCardSkeleton,
+  ProductListCardSkeleton,
+} from '@/components/skeletons'
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
@@ -33,16 +39,14 @@ const Marketplace = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [inStockOnly, setInStockOnly] = useState(false)
   const [minRating, setMinRating] = useState(0)
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<ProductFilter>({
     priceRange,
     selectedMaterials,
     selectedBrands,
     inStockOnly,
     minRating,
+    searchQuery,
   })
-  const brandsToFilter = new Set(filters.selectedBrands)
-
-  const materialsToFilter = new Set(filters.selectedBrands)
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
 
   //sorting
@@ -52,518 +56,23 @@ const Marketplace = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   //product view mode
-
   const [viewMode, setViewMode] = useState<ViewMode>(getViewMode)
+
   const handleViewMode = (mode: ViewMode) => {
     localStorage.setItem('product-view-mode', mode)
     setViewMode(mode)
   }
 
-  //hooks
+  const handleSearchQuery: (searchQuery: string) => void = (searchQuery) => {
+    setFilters({ ...filters, searchQuery: searchQuery })
+  }
 
-  //constants
-  const itemsPerPage = 3
-
-  const maxPrice = 1000
-  // Mock product data
-  const products: Product[] = [
-    {
-      id: '1',
-      name: 'Custom Tailored Wedding Dress',
-      price: 450,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Elegant Designs',
-      rating: 4.8,
-      category: 'dresses',
-      stock: 0,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '2',
-      name: 'Bespoke Business Suit',
-      price: 320,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Sharp Tailors',
-      rating: 4.9,
-      category: 'suits',
-      stock: 3,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '3',
-      name: 'Handcrafted Silk Blouse',
-      price: 85,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Silk & Style',
-      rating: 4.6,
-      category: 'shirts',
-      stock: 3,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '4',
-      name: 'Designer Evening Gown',
-      price: 650,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Luxury Fashion',
-      rating: 4.7,
-      category: 'formal wear',
-      stock: 3,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '5',
-      name: 'Custom Leather Jacket',
-      price: 280,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Urban Craft',
-      rating: 4.5,
-      category: 'casual wear',
-      stock: 3,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '6',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '7',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '8',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '9',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '10',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '11',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '12',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '13',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '14',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '15',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '16',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '17',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-    {
-      id: '18',
-      name: 'Handmade Bow Tie Collection',
-      price: 35,
-      images: ['/placeholder.svg?height=300&width=300'],
-      vendor: 'Accessory Art',
-      rating: 4.4,
-      category: 'accessories',
-      stock: 2,
-      description: '',
-      material: '',
-      brand: '',
-      variants: [
-        {
-          size: '',
-          colors: [
-            {
-              color: '',
-              quantity: 0,
-            },
-          ],
-        },
-      ],
-      vendorid: '',
-      createdat: '',
-    },
-  ]
-
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-    const matchesMaterials =
-      materialsToFilter.size === 0 || materialsToFilter.has(product.material)
-    const matchesBrand =
-      brandsToFilter.size === 0 || brandsToFilter.has(product.brand)
-    const matchesCategory =
-      selectedCategory === 'all' || product.category === selectedCategory
-
-    const [min, max] = filters.priceRange
-    const matchesPriceRange = product.price >= min && product.price <= max
-
-    const matchesInStock = !filters.inStockOnly || product.stock > 0
-    const matchesRating = product.rating > filters.minRating
-
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesRating &&
-      matchesPriceRange &&
-      matchesBrand &&
-      matchesMaterials &&
-      matchesInStock
-    )
-  })
+  //fetch filtered products
+  const queryData = {
+    queryKey: ['products', currentPage, filters],
+    queryFn: () => getProducts({ currentPage, itemsPerPage: 12, filters }),
+  }
+  const { data, isLoading } = useQuery(queryData)
 
   //clear filter
   const clearFilters = () => {
@@ -576,29 +85,29 @@ const Marketplace = () => {
     setMinRating(0)
     setCurrentPage(1)
   }
+  //constants
+  const itemsPerPage = 3
+  const maxPrice = 1000
+  const filteredProducts = data?.products
+  const totalPages = data && Math.ceil(data?.total / itemsPerPage)
 
   // Sort products
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
-      case 'price-low':
-        return a.price - b.price
-      case 'price-high':
-        return b.price - a.price
-      case 'rating':
-        return b.rating - a.rating
-      default:
-        return 0
-    }
-  })
+  const sortedProducts =
+    filteredProducts &&
+    [...filteredProducts].sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return a.price - b.price
+        case 'price-high':
+          return b.price - a.price
+        case 'rating':
+          return b.rating - a.rating
+        default:
+          return 0
+      }
+    })
 
-  // Product Pagination
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedProducts = sortedProducts.slice(
-    startIndex,
-    currentPage * itemsPerPage
-  )
-  const handlePageChange = (page: number) => {
+  const handlePageChange: (page: number) => void = (page) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -607,13 +116,14 @@ const Marketplace = () => {
     <>
       <AppHeader />
       <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
-        <div className="hidden lg:block col-span-3 py-8">
+        <section className="hidden lg:block col-span-3 py-8">
           <AdvancedFilters
             priceRange={priceRange}
             selectedMaterials={selectedMaterials}
             selectedBrands={selectedBrands}
             inStockOnly={inStockOnly}
             minRating={minRating}
+            searchQuery={searchQuery}
             setPriceRange={setPriceRange}
             setSelectedMaterials={setSelectedMaterials}
             setSelectedBrands={setSelectedBrands}
@@ -621,20 +131,28 @@ const Marketplace = () => {
             setMinRating={setMinRating}
             setFilters={setFilters}
           />
-        </div>
-        <div className="  py-8 col-span-5">
+        </section>
+        <section className="  py-8 col-span-5">
           {/* Enhanced Search and Filters */}
-          <div className="mb-8">
+          <section className="mb-8">
             {/* search */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="flex-1 lg:max-w-2xl relative">
+              <div className="flex flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
                   placeholder={`Search for products...`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 outline-none focus-visible:outline-none focus-visible:ring-0 border-r-0 focus:border-r-0 rounded-r-none"
                 />
+
+                <Button
+                  size="lg"
+                  className=" h-12 rounded-l-none sm:px-8 border border-l-none border-primary"
+                  onClick={() => handleSearchQuery(searchQuery)}
+                >
+                  Search
+                </Button>
               </div>
               <Button
                 variant="outline"
@@ -655,6 +173,7 @@ const Marketplace = () => {
                   selectedBrands={selectedBrands}
                   inStockOnly={inStockOnly}
                   minRating={minRating}
+                  searchQuery={searchQuery}
                   setPriceRange={setPriceRange}
                   setSelectedMaterials={setSelectedMaterials}
                   setSelectedBrands={setSelectedBrands}
@@ -669,71 +188,72 @@ const Marketplace = () => {
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
             />
-          </div>
-
+          </section>
           {/* Results Header with View Toggle */}
-          {searchQuery && (
-            <h2 className="text-2xl text mb-8">
-              Result{sortedProducts.length > 1 && 's'} for{' '}
-              <span className="font-bold">{searchQuery}</span> (
-              {sortedProducts.length})
-            </h2>
-          )}
-          <div className="flex items-center justify-between gap-2 mb-6">
-            {/* Sort Dropdown */}
-            <div className="flex items-center space-x-2">
-              <Label className="text-muted-foreground">Sort by:</Label>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="font-medium text-base w-36 sm:w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="relevance">Relevance</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Average Rating</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <section className="mb-8">
+            {searchQuery && sortedProducts && (
+              <h2 className="text-2xl text mb-8">
+                Result{sortedProducts.length > 1 && 's'} for{' '}
+                <span className="font-bold">{searchQuery}</span> (
+                {sortedProducts.length})
+              </h2>
+            )}
+            <div className="flex items-center justify-between gap-2">
+              {/* Sort Dropdown */}
+              <div className="flex items-center space-x-2">
+                <Label className="text-muted-foreground">Sort by:</Label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="font-medium text-base w-36 sm:w-48">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="relevance">Relevance</SelectItem>
+                    <SelectItem value="price-low">
+                      Price: Low to High
+                    </SelectItem>
+                    <SelectItem value="price-high">
+                      Price: High to Low
+                    </SelectItem>
+                    <SelectItem value="rating">Average Rating</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* View Mode Toggle */}
-            <div className="flex border rounded-md">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => handleViewMode('grid')}
-                className="rounded-r-none"
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => handleViewMode('list')}
-                className="rounded-l-none"
-              >
-                <List className="w-4 h-4" />
-              </Button>
+              {/* View Mode Toggle */}
+              <div className="flex border rounded-md">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => handleViewMode('grid')}
+                  className="rounded-r-none"
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => handleViewMode('list')}
+                  className="rounded-l-none"
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
-          </div>
-
+          </section>
           {/* Products Grid/List */}
-          {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-              {paginatedProducts.map((product) => (
-                <ProductGridCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4 mb-8">
-              {paginatedProducts.map((product) => (
-                <ProductListCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
+          <section>
+            {isLoading && viewMode === 'grid' && <ProductGridCardSkeleton />}
+            {isLoading && viewMode === 'list' && <ProductListCardSkeleton />}
+            {isLoading && viewMode === 'grid' && (
+              <ProductGrid sortedProducts={sortedProducts} />
+            )}
+            {isLoading && viewMode === 'list' && (
+              <ProductList sortedProducts={sortedProducts} />
+            )}
+          </section>
 
-          {/* Pagination */}
-          {paginatedProducts.length > 0 && (
+          {/*   {/* Pagination */}
+          {!totalPages || (
             <CustomPagination
               totalPages={totalPages}
               currentPage={currentPage}
@@ -741,17 +261,32 @@ const Marketplace = () => {
             />
           )}
 
-          {paginatedProducts.length === 0 && (
+          {/* No product found */}
+          {!navigator.onLine && (
             <div className="text-center py-12">
-              <p className=" text-lg">
-                No product found matching your criteria.
+              <p className="text-lg font-medium">
+                No internet connection detected
               </p>
-              <Button className="mt-4" onClick={clearFilters}>
-                Clear Filters
+              <Button className="mt-4" onClick={() => window.location.reload()}>
+                Reload page
               </Button>
             </div>
           )}
-        </div>
+
+          {navigator.onLine &&
+            !isLoading &&
+            sortedProducts &&
+            sortedProducts.length == 0 && (
+              <div className=" text-center py-12">
+                <p className=" text-lg">
+                  No product found matching your criteria.
+                </p>
+                <Button className="mt-4" onClick={clearFilters}>
+                  Clear Filters
+                </Button>
+              </div>
+            )}
+        </section>
       </div>
     </>
   )

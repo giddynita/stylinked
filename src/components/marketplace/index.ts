@@ -1,5 +1,5 @@
 export { default as AdvancedFilters } from './AdvancedFilters'
-export { default as ProductGridCard } from './ProductGridCard'
-export { default as ProductListCard } from './ProductListCard'
+export { default as ProductGrid } from './ProductGrid'
+export { default as ProductList } from './ProductList'
 export { default as CategoriesCarousel } from './CategoriesCarousel'
 export { default as Cart } from './Cart'

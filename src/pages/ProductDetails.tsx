@@ -10,6 +10,8 @@ import { Link, useParams } from 'react-router-dom'
 import { ProductDetailsHeader } from '@/components/headers/ProductDetailsHeader'
 import { currencyFormatter } from '@/utils/format'
 import { Cart } from '@/components/marketplace'
+import { getSingleProduct } from '@/utils/loader'
+import { useQuery } from '@tanstack/react-query'
 
 const ProductDetails = () => {
   const { productId } = useParams()
@@ -20,7 +22,7 @@ const ProductDetails = () => {
   const [reviewRating, setReviewRating] = useState(5)
 
   // Mock product data
-  const product = {
+  /*  const product = {
     id: productId || '1',
     name: 'Custom Tailored Wedding Dress',
     price: 450,
@@ -53,7 +55,15 @@ const ProductDetails = () => {
     inStock: true,
     estimatedDelivery: '2-3 weeks',
     materials: '100% Silk, French Lace',
+  } */
+
+  //fetch single product
+
+  const queryData = {
+    queryKey: ['single products', productId],
+    queryFn: () => getSingleProduct(productId),
   }
+  const { data: product, isLoading, error } = useQuery(queryData)
 
   const reviews = [
     {
@@ -89,6 +99,9 @@ const ProductDetails = () => {
     setReviewRating(5)
   }
 
+  if (isLoading) {
+  }
+
   return (
     <div className="min-h-screen relative container">
       {/*breadcrumbs */}
@@ -99,18 +112,18 @@ const ProductDetails = () => {
         <div>
           <div className="mb-4 bg-muted p-6  h-max">
             <img
-              src={product.images[0]}
-              alt={product.name}
+              src={product?.images[0]}
+              alt={product?.name}
               className="w-full max-w-xs mx-auto  object-cover rounded-lg"
               loading="lazy"
             />
           </div>
           <div className="grid grid-cols-3 gap-2">
-            {product.images.map((image, index) => (
+            {product?.images.map((image, index) => (
               <img
                 key={index}
                 src={image}
-                alt={`${product.name} ${index + 1}`}
+                alt={`${product?.name} ${index + 1}`}
                 className="w-full h-30 object-cover rounded cursor-pointer hover:opacity-75 transition-opacity"
                 loading="lazy"
               />
@@ -121,13 +134,13 @@ const ProductDetails = () => {
         {/* Product Info */}
         <div>
           <div className="mb-4">
-            <Badge className="mb-2">{product.category}</Badge>
-            <h1 className="text-xl font-bold  mb-2">{product.name}</h1>
+            <Badge className="mb-2">{product?.category}</Badge>
+            <h1 className="text-xl font-bold  mb-2">{product?.name}</h1>
             <Link
-              to={`/vendor/${product.vendor.id}`}
+              to={`/vendor/${product?.vendorid}`}
               className="text-primary hover:underline"
             >
-              Sold by {product.vendor.name}
+              Sold by {product?.vendor}
             </Link>
           </div>
 
@@ -139,18 +152,18 @@ const ProductDetails = () => {
                   className="w-5 h-5 fill-yellow-400 text-yellow-400"
                 />
               ))}
-              <span className="font-medium ml-2">{product.rating}</span>
+              <span className="font-medium ml-2">{product?.rating}</span>
             </div>
             <span className="text-muted-foreground">
-              ({product.totalReviews} reviews)
+              ({/* {product.totalReviews} */} 124 reviews)
             </span>
           </div>
 
           <p className="mb-6 text-primary font-bold text-xl">
-            {currencyFormatter(product.price)}
+            {currencyFormatter(product?.price || 0)}
           </p>
 
-          <p className="text-muted-foreground mb-6">{product.description}</p>
+          <p className="text-muted-foreground mb-6">{product?.description}</p>
 
           {/* Features */}
           <div className="mb-6">
@@ -158,11 +171,11 @@ const ProductDetails = () => {
             <ul className="space-y-1">
               <li className="text-sm text-muted-foreground flex items-center">
                 <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
-                Made from {/* material */}
+                Made from {product?.material}
               </li>
               <li className="text-sm text-gray-600 flex items-center">
                 <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
-                Designed by {/* brand */}
+                Designed by {product?.brand}
               </li>
             </ul>
           </div>
@@ -171,7 +184,7 @@ const ProductDetails = () => {
           <div className="mb-6">
             <Label className=" mb-2">Choose a Size</Label>
             <div className="flex flex-wrap gap-2">
-              {product.sizes.map((size) => (
+              {product?.variants.map(({ size }) => (
                 <Button
                   key={size}
                   variant={selectedSize === size ? 'default' : 'outline'}
@@ -188,16 +201,18 @@ const ProductDetails = () => {
           <div className="mb-6">
             <Label className="block mb-2">Choose a Color</Label>
             <div className="flex flex-wrap gap-2">
-              {product.colors.map((color) => (
-                <Button
-                  key={color}
-                  variant={selectedColor === color ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedColor(color)}
-                >
-                  {color}
-                </Button>
-              ))}
+              {product?.variants.map(({ colors }) =>
+                colors.map(({ color }) => (
+                  <Button
+                    key={color}
+                    variant={selectedColor === color ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedColor(color)}
+                  >
+                    {color}
+                  </Button>
+                ))
+              )}
             </div>
           </div>
 
@@ -218,14 +233,14 @@ const ProductDetails = () => {
 
           {/* Action Buttons */}
           <div className="space-y-4 mb-6 mx-auto">
-            <Button className="w-full" size="lg" disabled={!product.inStock}>
+            <Button className="w-full" size="lg" disabled={!product?.stock}>
               <ShoppingCart className="w-5 h-5 mr-2" />
               Add to Cart{' '}
               {quantity > 0 && (
                 <span className="flex items-center gap-1 ">
                   {' '}
                   <Minus className="text-white" />{' '}
-                  {currencyFormatter(product.price * quantity)}{' '}
+                  {currencyFormatter(product?.price || 0 * quantity)}{' '}
                 </span>
               )}
             </Button>
