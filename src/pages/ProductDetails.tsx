@@ -8,15 +8,17 @@ import { Textarea } from '@/components/ui/textarea'
 import { Star, ShoppingCart, MessageCircle, Minus } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { ProductDetailsHeader } from '@/components/headers/ProductDetailsHeader'
-import { currencyFormatter } from '@/utils/format'
-import { Cart } from '@/components/marketplace'
-import { getSingleProduct } from '@/utils/loader'
+import { averageRating, currencyFormatter } from '@/utils/format'
+import { Cart, Ratings } from '@/components/marketplace'
+import { getReviews, getSingleProduct } from '@/utils/loader'
 import { useQuery } from '@tanstack/react-query'
 import { useUserData } from '@/utils/hooks'
 import { reviewSchema, validateWithZodSchema } from '@/utils/schema'
+import { addReviewAction, updateProductRatingAction } from '@/utils/action'
+import { toast } from 'sonner'
 
 const ProductDetails = () => {
-  const { productId } = useParams()
+  const { productid } = useParams()
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedColor, setSelectedColor] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -60,13 +62,14 @@ const ProductDetails = () => {
   } */
 
   //fetch single product
-  const queryData = {
-    queryKey: ['single product', productId],
-    queryFn: () => getSingleProduct(productId),
+  const queryProduct = {
+    queryKey: ['single product', productid],
+    queryFn: () => getSingleProduct(productid),
   }
-  const { data: product, isLoading } = useQuery(queryData)
+  const { data: product, isLoading: productInfoLoading } =
+    useQuery(queryProduct)
 
-  const reviews = [
+  /* const reviews = [
     {
       id: 1,
       author: 'Sarah Johnson',
@@ -91,25 +94,51 @@ const ProductDetails = () => {
       text: 'Love the dress but delivery took a bit longer than expected. Quality is excellent though!',
       helpful: 5,
     },
-  ]
+  
+  ] */
 
+  //fetch and calculate ratings
+  const queryReviews = {
+    queryKey: ['reviews'],
+    queryFn: () => getReviews(productid),
+  }
+  const { data: reviews, isLoading: ProductReviewsLoading } =
+    useQuery(queryReviews)
+  const rating = averageRating(reviews)
+
+  // add reviews and updata product rating
+  const { mutate: addReview, isError, isPending } = addReviewAction()
+
+  const { mutate: updateProductRating, isError: updateProductRatingError } =
+    updateProductRatingAction()
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const { data: userData } = useUserData()
     const name = `${userData?.firstname} ${userData?.lastname}`
     const reviewData = {
-      productId,
+      productid,
       rating: reviewRating,
-      text: reviewText,
+      comment: reviewText,
       name,
     }
     const validatedData = validateWithZodSchema(reviewSchema, reviewData)
+    if (validatedData) {
+      addReview(validatedData)
+    }
+    if (isError) {
+      toast('Uploading Review failed. Try again.')
+      return
+    }
+    const newProductRating = averageRating(reviews, reviewRating)
 
+    if (newProductRating !== undefined && productid !== undefined) {
+      updateProductRating({ newProductRating, productid })
+    }
+    if (updateProductRatingError) {
+      toast('Error updating product rating. Please refresh the page.')
+    }
     setReviewText('')
     setReviewRating(5)
-  }
-
-  if (isLoading) {
   }
 
   return (
@@ -155,17 +184,9 @@ const ProductDetails = () => {
           </div>
 
           <div className="flex items-center space-x-4 mb-6">
-            <div className="flex items-center space-x-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                />
-              ))}
-              <span className="font-medium ml-2">{product?.rating}</span>
-            </div>
+            <Ratings rating={rating} />
             <span className="text-muted-foreground">
-              ({/* {product.totalReviews} */} 124 reviews)
+              ({reviews?.length ?? 0}reviews)
             </span>
           </div>
 
@@ -272,42 +293,33 @@ const ProductDetails = () => {
       {/* Reviews Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
         {/* Existing Reviews */}
-        <div>
-          <h2 className="text-xl font-bold mb-6">
-            Customer Reviews ({reviews.length})
-          </h2>
-          <div className="space-y-6">
-            {reviews.map((review) => (
-              <Card key={review.id}>
-                <CardContent className="">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="font-medium">{review.author}</span>
-                        <div className="flex items-center space-x-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className={`w-4 h-4 ${
-                                star <= review.rating
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-muted-foreground'
-                              }`}
-                            />
-                          ))}
+        {reviews && reviews.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold mb-6">
+              Customer Reviews ({reviews.length})
+            </h2>
+            <div className="space-y-6">
+              {reviews.map((review) => (
+                <Card key={review.id}>
+                  <CardContent className="">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className="font-medium">{review.name}</span>
+                          <Ratings rating={review.rating} />
                         </div>
+                        <p className="text-sm text-muted-foreground">
+                          {review.createdat}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {review.date}
-                      </p>
                     </div>
-                  </div>
-                  <p className="text-foreground mb-3">{review.text}</p>
-                </CardContent>
-              </Card>
-            ))}
+                    <p className="text-foreground mb-3">{review.comment}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Write a Review */}
         <div>
@@ -347,9 +359,10 @@ const ProductDetails = () => {
                 <Button
                   type="submit"
                   className="w-full bg-purple-600 hover:bg-purple-700"
+                  disabled={isPending}
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
-                  Submit Review
+                  {isPending ? 'Submitting...' : 'Submit Review'}
                 </Button>
               </form>
             </CardContent>

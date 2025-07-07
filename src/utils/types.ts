@@ -63,10 +63,11 @@ export type Testimonials = {
   rating: number
 }
 
-export type ProductFormProps = {
+export interface ProductFormProps {
   product?: any
   onSubmit: (data: any) => void
   onCancel: () => void
+  onSubmitting: boolean
 }
 
 export type ColorQuantity = { color: string; quantity: number }
@@ -159,4 +160,20 @@ export interface AdvancedFiltersProps {
     minRating,
     searchQuery,
   }: ProductFilter) => void
+}
+
+export type ReviewsForm = {
+  name: string
+  comment: string
+  rating: number
+  productid: string
+}
+
+export type Reviews = {
+  rating: number
+  productid: string
+  name: string
+  comment: string
+  id: string
+  createdat: string
 }

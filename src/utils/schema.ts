@@ -123,7 +123,7 @@ export const productSchema = z.object({
       message: 'Price must be greater than 0',
     }),
   brand: z.string(),
-  category: z.string().min(2, {
+  category: z.string().min(1, {
     message: 'Please select a category',
   }),
   material: z.string(),
@@ -131,16 +131,18 @@ export const productSchema = z.object({
 })
 
 export const reviewSchema = z.object({
-  rating: z.number(),
-  text: z.string().refine(
+  rating: z.number().min(1, {
+    message: 'Please give a rating',
+  }),
+  comment: z.string().refine(
     (reviewText) => {
       const wordCount = reviewText.split(' ').length
-      return wordCount >= 5 && wordCount <= 100
+      return wordCount <= 100
     },
     {
-      message: 'Description must be between 5 and 100 words.',
+      message: 'Comment must not be greater than between 100 words.',
     }
   ),
   name: z.string(),
-  productId: z.string(),
+  productid: z.string(),
 })

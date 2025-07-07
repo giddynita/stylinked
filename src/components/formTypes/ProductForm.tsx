@@ -30,7 +30,12 @@ import { getAuthUser } from '@/utils/loader'
 const sizesList = ['S', 'M', 'L', 'XL']
 const colorsList = ['Red', 'Blue', 'Black', 'White']
 
-const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
+const ProductForm = ({
+  product,
+  onSubmit,
+  onCancel,
+  onSubmitting,
+}: ProductFormProps) => {
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
@@ -440,7 +445,13 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       </Card>
       <div className="flex gap-2 pt-4">
         <Button type="submit">
-          {product ? 'Update Product' : 'Add Product'}
+          {product
+            ? onSubmitting
+              ? 'Updating product...'
+              : 'Update Product'
+            : onSubmitting
+            ? 'Adding product...'
+            : 'Add Product'}
         </Button>
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel

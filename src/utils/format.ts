@@ -1,3 +1,5 @@
+import type { Reviews } from './types'
+
 export const parseStringToArray = (
   input: string,
   separator: string = ','
@@ -27,4 +29,20 @@ export const slugify = (name: string) => {
     .trim()
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, '-')
+}
+
+export const averageRating = (
+  reviews: Reviews[] | undefined,
+  newRating?: number
+) => {
+  if (reviews) {
+    let ratingsSum = reviews.reduce((acc, current) => acc + current.rating, 0)
+    if (newRating) {
+      ratingsSum += newRating
+    }
+
+    const averageRating = ratingsSum / (reviews.length + 1)
+
+    return parseInt(averageRating.toFixed(1))
+  }
 }

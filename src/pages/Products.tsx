@@ -103,9 +103,6 @@ const Products = () => {
       return
     }
     addProduct(product)
-    if (adding) {
-      toast('Adding product...')
-    }
     if (addError) {
       return toast('Error adding product')
     }
@@ -122,9 +119,6 @@ const Products = () => {
       id: selectedProduct?.id,
       payload: product,
     })
-    if (updating) {
-      toast('Updating product...')
-    }
     if (updateError) {
       return toast('Error updating product')
     }
@@ -139,9 +133,6 @@ const Products = () => {
       return
     }
     deleteProduct(productId)
-    if (deleting) {
-      toast('Deleting Product...')
-    }
     if (deleteError) {
       return toast('Error deleting product')
     }
@@ -186,6 +177,7 @@ const Products = () => {
             <ProductForm
               onSubmit={handleAddProduct}
               onCancel={() => setIsAddDialogOpen(false)}
+              onSubmitting={adding}
             />
           </DialogContent>
         </Dialog>
@@ -318,7 +310,7 @@ const Products = () => {
                                         )
                                       }
                                     >
-                                      Delete
+                                      {deleting ? 'Deleting...' : 'Delete'}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -380,6 +372,7 @@ const Products = () => {
                 setIsEditDialogOpen(false)
                 setSelectedProduct(null)
               }}
+              onSubmitting={updating}
             />
           )}
         </DialogContent>

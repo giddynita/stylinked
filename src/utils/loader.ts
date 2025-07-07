@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient'
-import type { getProductsType, Product } from './types'
+import type { getProductsType, Product, Reviews } from './types'
 
 export const getAuthUser = async () => {
   const {
@@ -66,5 +66,18 @@ export const getSingleProduct = async (productId: string | undefined) => {
     if (error) throw new Error(error.message)
 
     return data as Product
+  }
+}
+
+export const getReviews = async (productid: string | undefined) => {
+  if (productid) {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('productid', productid)
+
+    if (error) throw new Error(error.message)
+
+    return data as Reviews[]
   }
 }
