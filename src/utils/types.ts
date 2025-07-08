@@ -36,6 +36,7 @@ export type LoginAction = {
   password: string
   setSubmitting: (value: boolean) => void
   navigate: (value: string) => void
+  pathname: string
 }
 export type LogoutAction = {
   setLogout: (value: boolean) => void

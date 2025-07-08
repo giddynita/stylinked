@@ -8,13 +8,14 @@ import { FormInput, FormPassword, SubmitButton } from '@/components/form'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { AuthFormsHeading } from '@/components/headings'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { loginAction } from '@/utils/action'
 import { AuthContainer } from '@/components/auth'
+import { GlobalContext } from '@/utils/globalContext'
 function Login() {
   const [submitting, setSubmitting] = useState<boolean>(false)
   const navigate = useNavigate()
-
+  const { pathname, setPathname } = useContext(GlobalContext)
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -23,8 +24,9 @@ function Login() {
     },
   })
   const onSubmit = (data: LoginFormSchema) => {
-    const request = { ...data, setSubmitting, navigate }
+    const request = { ...data, setSubmitting, navigate, pathname }
     loginAction(request)
+    return setPathname('/')
   }
 
   return (

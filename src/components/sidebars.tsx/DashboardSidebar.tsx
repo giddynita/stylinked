@@ -126,8 +126,8 @@ function DashboardSidebar() {
                 <SidebarMenuButton asChild>
                   {logout ? (
                     <div className="py-2 pl-2 pr-4">
-                      <span>Logging out</span>
                       <Loader2Icon className="animate-spin" />
+                      <span>Logging out</span>
                     </div>
                   ) : (
                     <div className="py-2 pl-2 pr-4">

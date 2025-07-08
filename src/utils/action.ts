@@ -66,7 +66,7 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
 }
 
 export const loginAction = async (props: LoginAction) => {
-  const { email, password, setSubmitting, navigate } = props
+  const { email, password, setSubmitting, navigate, pathname } = props
   setSubmitting(true)
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -79,7 +79,8 @@ export const loginAction = async (props: LoginAction) => {
   }
   toast("Welcome! You're logged in.")
   setSubmitting(false)
-  return navigate('/')
+
+  return navigate(pathname)
 }
 
 export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
@@ -158,6 +159,7 @@ export const completeRegistrationAction = async (props: any) => {
 export const logoutAction = async (props: LogoutAction) => {
   const { setLogout, navigate } = props
   setLogout(true)
+  navigate('/')
   const { error } = await supabase.auth.signOut()
   if (error) {
     toast(error.message)
@@ -166,7 +168,7 @@ export const logoutAction = async (props: LogoutAction) => {
   }
   toast("You're logged out successfully.")
   setLogout(false)
-  return navigate('/')
+  return
 }
 
 export const uploadImage = async (images: File[]) => {
