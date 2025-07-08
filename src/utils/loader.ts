@@ -23,7 +23,7 @@ export const getProducts = async ({
   let query = supabase.from('products').select('*', { count: 'exact' })
 
   if (filters.searchQuery) {
-    query = query.ilike('name', `%${filters.searchQuery}%`)
+    query = query.ilike('name', `%${filters.searchQuery.trim()}%`)
   }
 
   if (filters.priceRange) {
@@ -40,12 +40,12 @@ export const getProducts = async ({
     query = query.in('material', filters.selectedMaterials)
   }
 
-  if (filters.minRating !== 0) {
+  if (typeof filters.minRating === 'number') {
     query = query.gte('rating', filters.minRating)
   }
 
   if (filters.inStockOnly) {
-    query = query.gt('stock', 0)
+    query = query.gte('stock', 1)
   }
 
   const { data, error, count } = await query.range(fromIndex, toIndex)

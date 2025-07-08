@@ -4,9 +4,20 @@ import { Badge } from '@/components/ui/badge'
 import { Star, ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ProductCardProps } from '@/utils/types'
-import { currencyFormatter, slugify } from '@/utils/format'
+import { averageRating, currencyFormatter, slugify } from '@/utils/format'
+import { getReviews } from '@/utils/loader'
+import { useQuery } from '@tanstack/react-query'
+import { Skeleton } from '../ui/skeleton'
 
 const ProductGridCard = ({ product }: ProductCardProps) => {
+  const queryReviews = {
+    queryKey: ['reviews'],
+    queryFn: () => getReviews(product.id),
+  }
+  const { data: reviews, isLoading: productReviewsLoading } =
+    useQuery(queryReviews)
+  const rating = averageRating(reviews)
+  const totalReviews = reviews?.length
   return (
     <Card className="group p-0 hover:shadow-lg transition-all duration-300 hover:scale-101 gap-0">
       <CardHeader className="p-0">
@@ -41,19 +52,30 @@ const ProductGridCard = ({ product }: ProductCardProps) => {
           </Link>
         </h3>
 
-        <p className="w-max line-clamp-1">
-          <Link
-            to={`/vendors/${product.vendor}`}
-            className="text-sm text-muted-foreground hover:text-accent-foreground"
-          >
+        <p className="text-sm text-muted-foreground hover:text-accent-foreground text-ellipsis overflow-hidden line-clamp-1 w-full">
+          <Link to={`/vendors/${product.vendor}`}>
             Sold by {product.vendor}
           </Link>
         </p>
 
-        <div className="flex items-center space-x-1 mt-1 mb-3">
-          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-          <span className="text-sm font-medium">{product.rating}</span>
-          <span className="text-sm text-gray-500">(124 reviews)</span>
+        <div className="flex items-center space-x-1 my-2 h-6">
+          {productReviewsLoading ? (
+            <Skeleton className="w-16 h-6" />
+          ) : (
+            reviews &&
+            reviews?.length > 1 && (
+              <>
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <span className="text-sm font-medium">{rating}</span>
+                <span className="text-sm text-muted-foreground">
+                  (
+                  {totalReviews &&
+                    `${totalReviews} review${totalReviews > 1 && 's'}`}
+                  )
+                </span>
+              </>
+            )
+          )}
         </div>
         <div className="flex items-center justify-between flex-wrap gap-2">
           <span className="text-base font-bold text-primary">

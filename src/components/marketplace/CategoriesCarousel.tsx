@@ -8,7 +8,6 @@ import {
 import { categories } from '@/utils/data'
 import { Badge } from '../ui/badge'
 import type { CategoriesCarouselProps } from '@/utils/types'
-import { Button } from '../ui/button'
 
 function CategoriesCarousel({
   selectedCategory,

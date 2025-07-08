@@ -99,13 +99,13 @@ function DashboardSidebar() {
         <SidebarMenu className="space-y-2">
           <SidebarMenuItem>
             <Tooltip>
-              <TooltipTrigger>
-                <SidebarMenuButton
-                  asChild
-                  className="bg-muted text-muted-foreground w-max hover:text-accent-foreground"
-                >
-                  <Link to="/">
-                    <Home />
+              <TooltipTrigger className="border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer w-max rounded-sm">
+                <SidebarMenuButton asChild>
+                  <Link
+                    to="/"
+                    className="flex items-center text-xs gap-2 py-2 pl-2 pr-4"
+                  >
+                    <Home className="w-4 h-4" />
                     <span>Back to Home</span>
                   </Link>
                 </SidebarMenuButton>
@@ -119,21 +119,21 @@ function DashboardSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <Tooltip>
-              <TooltipTrigger>
-                <SidebarMenuButton
-                  className="bg-destructive/80 hover:bg-destructive w-max  text-white pl-2 pr-4"
-                  onClick={() => logoutAction({ navigate, setLogout })}
-                >
+              <TooltipTrigger
+                className="bg-destructive/80 hover:bg-destructive w-max  text-white flex items-center text-xs gap-2 rounded-sm"
+                onClick={() => logoutAction({ navigate, setLogout })}
+              >
+                <SidebarMenuButton asChild>
                   {logout ? (
-                    <>
+                    <div className="py-2 pl-2 pr-4">
                       <span>Logging out</span>
                       <Loader2Icon className="animate-spin" />
-                    </>
+                    </div>
                   ) : (
-                    <>
-                      <LogOutIcon className="rotate-180" />
+                    <div className="py-2 pl-2 pr-4">
+                      <LogOutIcon className="rotate-180 w-4 h-4" />
                       <span>Log out</span>
-                    </>
+                    </div>
                   )}
                 </SidebarMenuButton>
               </TooltipTrigger>

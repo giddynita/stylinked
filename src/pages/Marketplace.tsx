@@ -34,7 +34,7 @@ const Marketplace = () => {
   //filters
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [priceRange, setPriceRange] = useState([0, 1000])
+  const [priceRange, setPriceRange] = useState([0, 50000])
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [inStockOnly, setInStockOnly] = useState(false)
@@ -67,12 +67,14 @@ const Marketplace = () => {
     setFilters({ ...filters, searchQuery: searchQuery })
   }
 
+  const itemsPerPage = 3
+  const maxPrice = 50000
   //fetch filtered products
   const queryData = {
     queryKey: ['products', currentPage, filters],
-    queryFn: () => getProducts({ currentPage, itemsPerPage: 12, filters }),
+    queryFn: () => getProducts({ currentPage, itemsPerPage, filters }),
   }
-  const { data, isLoading } = useQuery(queryData)
+  const { data, isLoading, isError } = useQuery(queryData)
 
   //clear filter
   const clearFilters = () => {
@@ -86,8 +88,7 @@ const Marketplace = () => {
     setCurrentPage(1)
   }
   //constants
-  const itemsPerPage = 3
-  const maxPrice = 1000
+
   const filteredProducts = data?.products
   const totalPages = data && Math.ceil(data?.total / itemsPerPage)
 
@@ -106,6 +107,25 @@ const Marketplace = () => {
           return 0
       }
     })
+
+  console.log(isLoading)
+
+  let productView
+  if (isLoading) {
+    productView =
+      viewMode === 'grid' ? (
+        <ProductGridCardSkeleton />
+      ) : (
+        <ProductListCardSkeleton />
+      )
+  } else {
+    productView =
+      viewMode === 'grid' ? (
+        <ProductGrid sortedProducts={sortedProducts} />
+      ) : (
+        <ProductList sortedProducts={sortedProducts} />
+      )
+  }
 
   const handlePageChange: (page: number) => void = (page) => {
     setCurrentPage(page)
@@ -241,16 +261,7 @@ const Marketplace = () => {
             </div>
           </section>
           {/* Products Grid/List */}
-          <section>
-            {isLoading && viewMode === 'grid' && <ProductGridCardSkeleton />}
-            {isLoading && viewMode === 'list' && <ProductListCardSkeleton />}
-            {isLoading && viewMode === 'grid' && (
-              <ProductGrid sortedProducts={sortedProducts} />
-            )}
-            {isLoading && viewMode === 'list' && (
-              <ProductList sortedProducts={sortedProducts} />
-            )}
-          </section>
+          <section>{productView}</section>
 
           {/*   {/* Pagination */}
           {!totalPages || (
@@ -261,31 +272,25 @@ const Marketplace = () => {
             />
           )}
 
-          {/* No product found */}
-          {!navigator.onLine && (
+          {/*fetching product failed */}
+          {!isLoading && isError && (
             <div className="text-center py-12">
-              <p className="text-lg font-medium">
-                No internet connection detected
-              </p>
+              <p className="text-lg font-medium">Error fetching products.</p>
               <Button className="mt-4" onClick={() => window.location.reload()}>
                 Reload Page
               </Button>
             </div>
           )}
-
-          {navigator.onLine &&
-            !isLoading &&
-            sortedProducts &&
-            sortedProducts.length == 0 && (
-              <div className=" text-center py-12">
-                <p className=" text-lg">
-                  No product found matching your criteria.
-                </p>
-                <Button className="mt-4" onClick={clearFilters}>
-                  Clear Filters
-                </Button>
-              </div>
-            )}
+          {!isLoading && !isError && !sortedProducts?.length && (
+            <div className=" text-center py-12">
+              <p className=" text-lg font-medium">
+                No product found matching your criteria.
+              </p>
+              <Button className="mt-4" onClick={clearFilters}>
+                Clear Filters
+              </Button>
+            </div>
+          )}
         </section>
       </div>
     </>

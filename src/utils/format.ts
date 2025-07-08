@@ -31,18 +31,25 @@ export const slugify = (name: string) => {
     .replace(/\s+/g, '-')
 }
 
-export const averageRating = (
-  reviews: Reviews[] | undefined,
-  newRating?: number
-) => {
+export const averageRating = (reviews: Reviews[] | undefined) => {
   if (reviews) {
-    let ratingsSum = reviews.reduce((acc, current) => acc + current.rating, 0)
-    if (newRating) {
-      ratingsSum += newRating
-    }
+    const ratingsSum = reviews.reduce((acc, current) => acc + current.rating, 0)
 
-    const averageRating = ratingsSum / (reviews.length + 1)
+    const averageRating = ratingsSum / reviews.length
 
     return parseInt(averageRating.toFixed(1))
+  }
+}
+
+export const formatCreatedAt = (timestamp: string | undefined) => {
+  if (timestamp) {
+    const date = new Date(timestamp)
+    const formattedDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    })
+
+    return formattedDate
   }
 }

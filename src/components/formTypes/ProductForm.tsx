@@ -137,13 +137,20 @@ const ProductForm = ({
 
     setValidImages(removedImage)
   }
+  const { data: userData } = useUserData()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!validImages || !variants) {
-      return toast('At least one variant and one image must be added.')
-    }
     const validatedData = validateWithZodSchema(productSchema, formData)
+    if (!validatedData) {
+      return
+    }
+    if (!variants.length) {
+      return toast('Add size and color options for this product.')
+    }
+    if (!validImages.length) {
+      return toast('Please add at least one image of the product.')
+    }
 
     const stockArray = variants.map((variant: Variant) =>
       variant.colors.map((color: ColorQuantity) => {
@@ -155,7 +162,6 @@ const ProductForm = ({
       .reduce((a: number, b: number) => a + b, 0)
 
     const user = await getAuthUser()
-    const { data: userData } = useUserData()
 
     const allData = {
       ...validatedData,

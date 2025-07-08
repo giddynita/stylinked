@@ -98,44 +98,35 @@ const Products = () => {
   }
 
   const handleAddProduct = async (product: Product) => {
-    if (!navigator.onLine) {
-      toast('Failed to add product: No network connection')
-      return
-    }
-    addProduct(product)
     if (addError) {
       return toast('Error adding product')
     }
+    addProduct(product)
+
     setIsAddDialogOpen(false)
     toast('Product added successfully!')
   }
 
   const handleEditProduct = (product: Product) => {
-    if (!navigator.onLine) {
-      toast('Failed to update product: No network connection')
-      return
+    if (updateError) {
+      return toast('Error updating product')
     }
     updateProduct({
       id: selectedProduct?.id,
       payload: product,
     })
-    if (updateError) {
-      return toast('Error updating product')
-    }
+
     setIsEditDialogOpen(false)
     setSelectedProduct(null)
     toast('Product updated successfully!')
   }
 
   const handleDeleteProduct = async (productId: string, images: string[]) => {
-    if (!navigator.onLine) {
-      toast('Failed to delete product: No network connection')
-      return
-    }
-    deleteProduct(productId)
     if (deleteError) {
       return toast('Error deleting product')
     }
+    deleteProduct(productId)
+
     for (let i = 0; i < images?.length; i++) {
       const file = images[i]
       await deleteImage(file)

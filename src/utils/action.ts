@@ -277,6 +277,7 @@ export const addReviewAction = () => {
     const { error } = await supabase.from('reviews').insert([review])
     if (error) throw new Error(error.message)
   }
+
   const queryClient = useQueryClient()
 
   const addReviewFunction = useMutation({
@@ -287,31 +288,4 @@ export const addReviewAction = () => {
   })
 
   return addReviewFunction
-}
-
-export const updateProductRatingAction = () => {
-  const updateRating: MutationFunction<
-    { data: any },
-    { newProductRating: number; productid: string }
-  > = async ({ newProductRating, productid }) => {
-    const { data, error } = await supabase
-      .from('products')
-      .update({ rating: newProductRating })
-      .eq('id', productid)
-      .select()
-    if (error) {
-      throw new Error(error.message)
-    }
-    return { data }
-  }
-  const queryClient = useQueryClient()
-  const updateProductRatingFunction = useMutation({
-    mutationFn: updateRating,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['vendorProducts', 'products', 'reviews'],
-      })
-    },
-  })
-  return updateProductRatingFunction
 }

@@ -11,10 +11,10 @@ function ProductGridCardSkeleton() {
               key={index}
               className="bg-muted h-75 bg-background w-full space-y-2 shadow-md"
             >
-              <div className="relative h-35 w-full bg-muted-foreground rounded-t-lg">
-                <Skeleton className="h-full  w-full rounded-b-none" />
-                <Skeleton className="absolute top-2 right-2 h-4 w-12" />
-                <Skeleton className="absolute top-2 left-2 h-4 w-12" />
+              <div className="relative h-35 w-full bg-background rounded-t-lg p-2">
+                <Skeleton className="h-full  w-full rounded-b-none border-0" />
+                <Skeleton className="absolute top-4 right-4 h-4 w-12 bg-muted-foreground/30" />
+                <Skeleton className="absolute top-4 left-4 h-4 w-12 bg-muted-foreground/30" />
               </div>
               <div className="p-2 space-y-2">
                 <Skeleton className="w-full h-8" />
