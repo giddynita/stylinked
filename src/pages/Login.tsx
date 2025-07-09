@@ -23,7 +23,7 @@ function Login() {
       password: '',
     },
   })
-  const onSubmit = (data: LoginFormSchema) => {
+  const onSubmit = async (data: LoginFormSchema) => {
     const request = { ...data, setSubmitting, navigate, pathname }
     loginAction(request)
     return setPathname('/')

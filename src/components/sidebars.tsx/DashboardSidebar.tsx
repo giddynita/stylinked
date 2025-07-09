@@ -24,6 +24,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useState } from 'react'
 import { logoutAction } from '@/utils/action'
+
 const navigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Products', url: 'products', icon: PackageIcon },
@@ -121,7 +122,9 @@ function DashboardSidebar() {
             <Tooltip>
               <TooltipTrigger
                 className="bg-destructive/80 hover:bg-destructive w-max  text-white flex items-center text-xs gap-2 rounded-sm"
-                onClick={() => logoutAction({ navigate, setLogout })}
+                onClick={() => {
+                  logoutAction({ navigate, setLogout })
+                }}
               >
                 <SidebarMenuButton asChild>
                   {logout ? (

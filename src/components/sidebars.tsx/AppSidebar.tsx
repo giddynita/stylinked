@@ -25,7 +25,6 @@ export function AppSidebar() {
   const location = useLocation()
   const pathname = location.pathname
   const user = useUser()
-
   const [logout, setLogout] = useState<boolean>(false)
   const navigate = useNavigate()
 
@@ -69,7 +68,9 @@ export function AppSidebar() {
                   size="lg"
                   variant="destructive"
                   className="w-full"
-                  onClick={() => logoutAction({ navigate, setLogout })}
+                  onClick={() => {
+                    logoutAction({ navigate, setLogout })
+                  }}
                 >
                   {logout ? (
                     <>
