@@ -89,8 +89,15 @@ const Marketplace = () => {
   }
   //constants
 
-  const filteredProducts = data?.products
+  const products = data?.products
   const totalPages = data && Math.ceil(data?.total / itemsPerPage)
+
+  const filteredProducts = products?.filter((product) => {
+    const matchesCategory =
+      selectedCategory == 'all' || product.category == selectedCategory
+
+    return matchesCategory
+  })
 
   // Sort products
   const sortedProducts =
@@ -107,8 +114,6 @@ const Marketplace = () => {
           return 0
       }
     })
-
-  console.log(isLoading)
 
   let productView
   if (isLoading) {
@@ -264,7 +269,7 @@ const Marketplace = () => {
           <section>{productView}</section>
 
           {/*   {/* Pagination */}
-          {!totalPages || (
+          {totalPages && sortedProducts && sortedProducts.length > 0 && (
             <CustomPagination
               totalPages={totalPages}
               currentPage={currentPage}

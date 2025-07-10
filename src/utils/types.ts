@@ -178,3 +178,21 @@ export type Reviews = {
   id: string
   createdat: string
 }
+
+export type CartItems = {
+  images: string[]
+  name: string
+  price: number
+  color: string
+  size: string
+  amount: number
+  id: string
+}
+
+export interface Cart {
+  cartItems: CartItems[]
+  numItemsInCart: number
+  cartTotal: number
+  shipping: number
+  orderTotal: number
+}
