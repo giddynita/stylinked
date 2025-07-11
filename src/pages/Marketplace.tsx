@@ -34,7 +34,7 @@ const Marketplace = () => {
   //filters
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [priceRange, setPriceRange] = useState([0, 50000])
+  const [priceRange, setPriceRange] = useState([0, 1000000])
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [inStockOnly, setInStockOnly] = useState(false)
@@ -68,28 +68,37 @@ const Marketplace = () => {
   }
 
   const itemsPerPage = 3
-  const maxPrice = 50000
   //fetch filtered products
   const queryData = {
     queryKey: ['products', currentPage, filters],
     queryFn: () => getProducts({ currentPage, itemsPerPage, filters }),
   }
   const { data, isLoading, isError } = useQuery(queryData)
+  const maxPrice =
+    data && Math.max(...data?.products?.map((product) => product?.price))
 
   //clear filter
   const clearFilters = () => {
     setSearchQuery('')
     setSelectedCategory('all')
-    setPriceRange([0, maxPrice])
+    setPriceRange([0, maxPrice ?? 1000000])
     setSelectedMaterials([])
     setSelectedBrands([])
     setInStockOnly(false)
     setMinRating(0)
     setCurrentPage(1)
+    setFilters({
+      priceRange: [0, 50000],
+      selectedMaterials: [],
+      selectedBrands: [],
+      inStockOnly: false,
+      minRating: 0,
+    })
   }
   //constants
 
   const products = data?.products
+
   const totalPages = data && Math.ceil(data?.total / itemsPerPage)
 
   const filteredProducts = products?.filter((product) => {
@@ -155,6 +164,8 @@ const Marketplace = () => {
             setInStockOnly={setInStockOnly}
             setMinRating={setMinRating}
             setFilters={setFilters}
+            isLoading={isLoading}
+            maxPrice={maxPrice}
           />
         </section>
         <section className="  py-8 col-span-5">
@@ -205,6 +216,8 @@ const Marketplace = () => {
                   setInStockOnly={setInStockOnly}
                   setMinRating={setMinRating}
                   setFilters={setFilters}
+                  isLoading={isLoading}
+                  maxPrice={maxPrice}
                 />
               </div>
             )}
@@ -269,7 +282,7 @@ const Marketplace = () => {
           <section>{productView}</section>
 
           {/*   {/* Pagination */}
-          {totalPages && sortedProducts && sortedProducts.length > 0 && (
+          {sortedProducts && sortedProducts.length >= 1 && totalPages && (
             <CustomPagination
               totalPages={totalPages}
               currentPage={currentPage}
@@ -291,7 +304,11 @@ const Marketplace = () => {
               <p className=" text-lg font-medium">
                 No product found matching your criteria.
               </p>
-              <Button className="mt-4" onClick={clearFilters}>
+              <Button
+                disabled={isLoading}
+                className="mt-4"
+                onClick={clearFilters}
+              >
                 Clear Filters
               </Button>
             </div>

@@ -161,6 +161,8 @@ export interface AdvancedFiltersProps {
     minRating,
     searchQuery,
   }: ProductFilter) => void
+  isLoading: boolean
+  maxPrice: number | undefined
 }
 
 export type ReviewsForm = {

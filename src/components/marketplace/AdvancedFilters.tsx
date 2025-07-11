@@ -21,6 +21,8 @@ const AdvancedFilters = ({
   setInStockOnly,
   setMinRating,
   setFilters,
+  isLoading,
+  maxPrice,
 }: AdvancedFiltersProps) => {
   const materials = [
     'Cotton',
@@ -64,13 +66,13 @@ const AdvancedFilters = ({
 
   const clearFilters = () => {
     setFilters({
-      priceRange: [0, 1000],
+      priceRange: [0, maxPrice ?? 1000000],
       selectedMaterials: [],
       selectedBrands: [],
       inStockOnly: false,
       minRating: 0,
     })
-    setPriceRange([0, 1000])
+    setPriceRange([0, maxPrice ?? 1000000])
     setSelectedMaterials([])
     setSelectedBrands([])
     setInStockOnly(false)
@@ -138,13 +140,13 @@ const AdvancedFilters = ({
             <Slider
               value={priceRange}
               onValueChange={setPriceRange}
-              max={1000}
-              step={10}
+              max={maxPrice ?? 1000000}
+              step={1000}
               className="w-full"
             />
             <div className="flex justify-between text-sm text-gray-600">
               <span>{currencyFormatter(priceRange[0])}</span>
-              <span>{currencyFormatter(priceRange[1])}</span>
+              <span>{currencyFormatter(maxPrice ?? priceRange[1])}</span>
             </div>
           </div>
           {/* Rating */}
@@ -175,10 +177,11 @@ const AdvancedFilters = ({
 
         {/* Action Buttons */}
         <div className="flex justify-end space-x-3 pt-4 border-t">
-          <Button variant="outline" onClick={clearFilters}>
+          <Button disabled={isLoading} variant="outline" onClick={clearFilters}>
             Clear All
           </Button>
           <Button
+            disabled={isLoading}
             onClick={() => {
               setFilters({
                 priceRange,
