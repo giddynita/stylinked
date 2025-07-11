@@ -179,7 +179,7 @@ export type Reviews = {
   createdat: string
 }
 
-export type CartItems = {
+export type CartItem = {
   images: string[]
   name: string
   price: number
@@ -190,7 +190,7 @@ export type CartItems = {
 }
 
 export interface Cart {
-  cartItems: CartItems[]
+  cartItems: CartItem[]
   numItemsInCart: number
   cartTotal: number
   shipping: number

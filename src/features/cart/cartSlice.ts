@@ -1,4 +1,4 @@
-import type { Cart, CartItems } from '@/utils/types'
+import type { Cart, CartItem } from '@/utils/types'
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
 
@@ -22,7 +22,7 @@ const cartSlice = createSlice({
     addItem: (state, action) => {
       const { product } = action.payload
       const item = state.cartItems.find(
-        (i: CartItems) =>
+        (i: CartItem) =>
           i.id === product.id &&
           i.color === product.color &&
           i.size === product.size
@@ -38,7 +38,11 @@ const cartSlice = createSlice({
         state.cartTotal += product.price * product.amount
       }
       cartSlice.caseReducers.calculateTotals(state)
-      toast(`${product.name} added to your cart`)
+      toast(
+        `${product.amount > 1 ? `${product.amount}X` : ''} ${
+          product.name
+        } added to your cart`
+      )
     },
     clearCart: () => {
       localStorage.setItem('cart', JSON.stringify(defaultState))
@@ -47,9 +51,9 @@ const cartSlice = createSlice({
     removeItem: (state, action) => {
       const { id, size, color, name } = action.payload
       const product = state.cartItems.find(
-        (i: CartItems) => i.id === id && i.size === size && i.color === color
+        (i: CartItem) => i.id === id && i.size === size && i.color === color
       )
-      state.cartItems = state.cartItems.filter((i: CartItems) => i.id !== id)
+      state.cartItems = state.cartItems.filter((i: CartItem) => i.id !== id)
       state.numItemsInCart -= product.amount
       state.cartTotal -= product.price * product.amount
       cartSlice.caseReducers.calculateTotals(state)
@@ -58,7 +62,7 @@ const cartSlice = createSlice({
     editItem: (state, action) => {
       const { id, size, color, amount } = action.payload
       const item = state.cartItems.find(
-        (i: CartItems) => i.id === id && i.size === size && i.color === color
+        (i: CartItem) => i.id === id && i.size === size && i.color === color
       )
       state.numItemsInCart += amount - item.amount
       state.cartTotal += item.price * (amount - item.amount)

@@ -24,6 +24,9 @@ import {
   ExistingReviewsSkeleton,
   ProductInfoSkeleton,
 } from '@/components/skeletons'
+import type { CartItem } from '@/utils/types'
+import { addItem } from '@/features/cart/cartSlice'
+import { useDispatch } from 'react-redux'
 
 const ProductDetails = () => {
   const { productid } = useParams()
@@ -77,6 +80,16 @@ const ProductDetails = () => {
   const { data: product, isLoading: productInfoLoading } =
     useQuery(queryProduct)
 
+  const cartItem = product && {
+    images: product.images,
+    name: product.name,
+    price: product.price,
+    color: selectedColor,
+    size: selectedSize,
+    amount: quantity,
+    id: product.id,
+  }
+
   /* const reviews = [
     {
       id: 1,
@@ -104,6 +117,7 @@ const ProductDetails = () => {
     },
   
   ] */
+
   //fetch user data
   const { data: userData } = useUserData()
 
@@ -117,6 +131,27 @@ const ProductDetails = () => {
 
   const rating = averageRating(reviews)
   const totalReviews = reviews?.length
+
+  //add to cart
+  const dispatch = useDispatch()
+  const addItemToCart = (item: CartItem | undefined) => {
+    if (item && !item.size) {
+      return toast('Please select a size')
+    }
+    if (item && !item.color) {
+      return toast('Please select a color')
+    }
+    if (item) {
+      if (!item.amount || item.amount < 1) {
+        return toast('Quantity must be greater than or equal to 1')
+      }
+    }
+
+    dispatch(addItem({ product: item }))
+    setSelectedColor('')
+    setSelectedSize('')
+    setQuantity(1)
+  }
 
   // add reviews
   const {
@@ -290,14 +325,19 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <div className="space-y-4 mb-6 mx-auto">
-              <Button className="w-full" size="lg" disabled={!product?.stock}>
+              <Button
+                className="w-full"
+                size="lg"
+                disabled={!product?.stock}
+                onClick={() => addItemToCart(cartItem)}
+              >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Add to Cart{' '}
                 {quantity > 0 && (
                   <span className="flex items-center gap-1 ">
                     {' '}
                     <Minus className="text-white" />{' '}
-                    {currencyFormatter(product?.price || 0 * quantity)}{' '}
+                    {currencyFormatter((product?.price || 0) * quantity)}{' '}
                   </span>
                 )}
               </Button>
