@@ -36,43 +36,7 @@ const ProductDetails = () => {
   const [reviewText, setReviewText] = useState('')
   const [reviewRating, setReviewRating] = useState(5)
 
-  // Mock product data
-  /*  const product = {
-    id: productId || '1',
-    name: 'Custom Tailored Wedding Dress',
-    price: 450,
-    originalPrice: 550,
-    images: [
-      '/placeholder.svg?height=500&width=500',
-      '/placeholder.svg?height=500&width=500',
-      '/placeholder.svg?height=500&width=500',
-    ],
-    vendor: {
-      name: 'Elegant Designs',
-      id: 'vendor-1',
-      rating: 4.8,
-      location: 'New York, NY',
-    },
-    rating: 4.8,
-    totalReviews: 124,
-    category: 'Wedding Dresses',
-    description:
-      'Exquisite custom-tailored wedding dress crafted with premium silk and delicate lace details. Each dress is made to order with precise measurements and can be customized to match your vision perfectly.',
-    features: [
-      'Premium silk fabric',
-      'Hand-sewn lace details',
-      'Custom measurements',
-      'Free alterations included',
-      '30-day satisfaction guarantee',
-    ],
-    sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom'],
-    colors: ['Ivory', 'White', 'Champagne', 'Blush'],
-    inStock: true,
-    estimatedDelivery: '2-3 weeks',
-    materials: '100% Silk, French Lace',
-  } */
-
-  //fetch single product
+  //fech single product
   const queryProduct = {
     queryKey: ['single product', productid],
     queryFn: () => getSingleProduct(productid),
@@ -88,6 +52,8 @@ const ProductDetails = () => {
     size: selectedSize,
     amount: quantity,
     id: product.id,
+    vendor: product.vendor,
+    availableVariants: product.variants,
   }
 
   /* const reviews = [
