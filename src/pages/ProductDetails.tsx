@@ -24,7 +24,7 @@ import {
   ExistingReviewsSkeleton,
   ProductInfoSkeleton,
 } from '@/components/skeletons'
-import type { CartItem } from '@/utils/types'
+import type { CartItemType } from '@/utils/types'
 import { addItem } from '@/features/cart/cartSlice'
 import { useDispatch } from 'react-redux'
 
@@ -134,7 +134,7 @@ const ProductDetails = () => {
 
   //add to cart
   const dispatch = useDispatch()
-  const addItemToCart = (item: CartItem | undefined) => {
+  const addItemToCart = (item: CartItemType | undefined) => {
     if (item && !item.size) {
       return toast('Please select a size')
     }

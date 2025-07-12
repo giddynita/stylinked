@@ -1,6 +1,6 @@
 function Carousel({ carouselItems }: { carouselItems: string[] }) {
   return (
-    <div className="carousel rounded-box h-[40vh]">
+    <div className="carousel rounded-box h-[40vh] w-full">
       {carouselItems.map((item: string, index) => {
         return (
           <div key={index} className="carousel-item w-[40%]">

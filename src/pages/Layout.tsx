@@ -7,10 +7,10 @@ function Layout() {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
-      <main className="bg-gradient-to-b from-primary/10 to-accent/50 w-screen">
+      <div className="bg-gradient-to-b from-primary/10 to-accent/50 w-screen">
         <Outlet />
         <AppFooter />
-      </main>
+      </div>
     </SidebarProvider>
   )
 }

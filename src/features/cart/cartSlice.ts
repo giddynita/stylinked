@@ -1,4 +1,4 @@
-import type { Cart, CartItem } from '@/utils/types'
+import type { Cart, CartItemType } from '@/utils/types'
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'sonner'
 
@@ -8,6 +8,7 @@ const defaultState: Cart = {
   cartTotal: 0,
   shipping: 1200,
   orderTotal: 0,
+  tax: 0,
 }
 
 const getCartFromLocalStorage = () => {
@@ -22,7 +23,7 @@ const cartSlice = createSlice({
     addItem: (state, action) => {
       const { product } = action.payload
       const item = state.cartItems.find(
-        (i: CartItem) =>
+        (i: CartItemType) =>
           i.id === product.id &&
           i.color === product.color &&
           i.size === product.size
@@ -38,31 +39,40 @@ const cartSlice = createSlice({
         state.cartTotal += product.price * product.amount
       }
       cartSlice.caseReducers.calculateTotals(state)
-      toast(
+      toast.success(
         `${product.amount > 1 ? `${product.amount}X` : ''} ${
           product.name
-        } added to your cart`
+        } in color ${product.color} and size ${product.size} added to your cart`
       )
     },
-    clearCart: () => {
+    clearCart: (state) => {
+      state.cartItems = []
+      state.numItemsInCart = 0
+      state.cartTotal = 0
+      state.shipping = 1200
+      state.orderTotal = 0
       localStorage.setItem('cart', JSON.stringify(defaultState))
-      toast('Cart Cleared')
+      toast.success('Cart Cleared')
     },
     removeItem: (state, action) => {
       const { id, size, color, name } = action.payload
       const product = state.cartItems.find(
-        (i: CartItem) => i.id === id && i.size === size && i.color === color
+        (i: CartItemType) => i.id === id && i.size === size && i.color === color
       )
-      state.cartItems = state.cartItems.filter((i: CartItem) => i.id !== id)
+      state.cartItems = state.cartItems.filter(
+        (i: CartItemType) => !(i.id == id && i.size == size && i.color == color)
+      )
       state.numItemsInCart -= product.amount
       state.cartTotal -= product.price * product.amount
       cartSlice.caseReducers.calculateTotals(state)
-      toast(`${name} removed from your cart`)
+      toast.success(
+        `${name} in color ${color} and size ${size} removed from your cart`
+      )
     },
     editItem: (state, action) => {
       const { id, size, color, amount } = action.payload
       const item = state.cartItems.find(
-        (i: CartItem) => i.id === id && i.size === size && i.color === color
+        (i: CartItemType) => i.id === id && i.size === size && i.color === color
       )
       state.numItemsInCart += amount - item.amount
       state.cartTotal += item.price * (amount - item.amount)
@@ -71,7 +81,8 @@ const cartSlice = createSlice({
       toast.success('Cart updated')
     },
     calculateTotals: (state) => {
-      state.orderTotal = state.cartTotal + state.shipping
+      state.tax = 0.02 * state.cartTotal
+      state.orderTotal = state.cartTotal + state.shipping + state.tax
       localStorage.setItem('cart', JSON.stringify(state))
     },
   },

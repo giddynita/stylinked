@@ -15,6 +15,7 @@ import {
   Marketplace,
   ProductDetails,
   MarketplaceLayout,
+  Cart,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
             element: <ProductDetails />,
           },
         ],
+      },
+      {
+        path: 'cart',
+        element: <Cart />,
       },
     ],
   },

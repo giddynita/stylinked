@@ -181,20 +181,23 @@ export type Reviews = {
   createdat: string
 }
 
-export type CartItem = {
+export type CartItemType = {
   images: string[]
   name: string
   price: number
   color: string
   size: string
+  availableVariants: Variant[]
   amount: number
   id: string
+  vendor: string
 }
 
 export interface Cart {
-  cartItems: CartItem[]
+  cartItems: CartItemType[]
   numItemsInCart: number
   cartTotal: number
   shipping: number
   orderTotal: number
+  tax: number
 }
