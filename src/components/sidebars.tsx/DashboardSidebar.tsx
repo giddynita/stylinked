@@ -60,7 +60,7 @@ function DashboardSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-2">
+            <SidebarMenu className="space-y-3">
               {navigation.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <Tooltip>
@@ -79,9 +79,9 @@ function DashboardSidebar() {
                       </SidebarMenuButton>
                     </TooltipTrigger>
                     <TooltipContent
-                      className={` translate-x-[0px] translate-y-[10px] ${
-                        !tooltip && 'hidden'
-                      }`}
+                      side="right"
+                      sideOffset={-4}
+                      className={`${!tooltip && 'hidden'}`}
                     >
                       {item.title}
                     </TooltipContent>
@@ -109,7 +109,9 @@ function DashboardSidebar() {
                 </SidebarMenuButton>
               </TooltipTrigger>
               <TooltipContent
-                className={` translate-y-[12px] ${!tooltip && 'hidden'}`}
+                side="right"
+                sideOffset={-4}
+                className={` ${!tooltip && 'hidden'}`}
               >
                 Back to Home
               </TooltipContent>
@@ -140,7 +142,11 @@ function DashboardSidebar() {
                   )}
                 </SidebarMenuButton>
               </TooltipTrigger>
-              <TooltipContent className={`  ${!tooltip && 'hidden'}`}>
+              <TooltipContent
+                side="right"
+                sideOffset={-4}
+                className={`  ${!tooltip && 'hidden'}`}
+              >
                 Log out
               </TooltipContent>
             </Tooltip>

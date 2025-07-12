@@ -40,7 +40,6 @@ function AppHeader() {
             {nonUserNavLinks.map((item, index) => (
               <Button variant="ghost" size="sm" key={index}>
                 <NavLink
-                  key={item.title}
                   className={({ isActive }) =>
                     isActive ? 'text-primary' : 'text-muted-foreground'
                   }
