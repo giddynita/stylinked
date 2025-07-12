@@ -102,14 +102,14 @@ const ProductDetails = () => {
   const dispatch = useDispatch()
   const addItemToCart = (item: CartItemType | undefined) => {
     if (item && !item.size) {
-      return toast('Please select a size')
+      return toast.warning('Please select a size')
     }
     if (item && !item.color) {
-      return toast('Please select a color')
+      return toast.warning('Please select a color')
     }
     if (item) {
       if (!item.amount || item.amount < 1) {
-        return toast('Quantity must be greater than or equal to 1')
+        return toast.warning('Quantity must be greater than or equal to 1')
       }
     }
 
@@ -138,14 +138,14 @@ const ProductDetails = () => {
     const validatedData = validateWithZodSchema(reviewSchema, reviewData)
     if (validatedData) {
       if (addReviewError) {
-        return toast('Uploading Review failed. Please try again.')
+        return toast.error('Uploading Review failed. Please try again.')
       }
       addReview(validatedData)
     } else {
       return
     }
 
-    toast('Review submitted successfully! Thank you for your feedback.')
+    toast.success('Review submitted successfully! Thank you for your feedback.')
     setReviewText('')
     setReviewRating(5)
   }

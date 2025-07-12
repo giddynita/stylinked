@@ -87,7 +87,7 @@ function CompleteRegistration() {
   const onSubmit = (data: schemaTypes) => {
     const { role } = data
     if (!role) {
-      return toast('You need to select an account type.')
+      return toast.warning('You need to select an account type.')
     }
     const request = { ...data, setSubmitting, navigate }
     completeRegistrationAction(request)

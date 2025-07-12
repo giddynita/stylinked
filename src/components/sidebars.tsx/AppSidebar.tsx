@@ -64,10 +64,8 @@ export function AppSidebar() {
           <SidebarMenu>
             {user ? (
               <SidebarMenuItem>
-                <Button
-                  size="lg"
-                  variant="destructive"
-                  className="w-full"
+                <SidebarMenuButton
+                  className="w-full bg-destructive hover:bg-red-500 cursor-pointer"
                   onClick={() => {
                     logoutAction({ navigate, setLogout })
                   }}
@@ -83,7 +81,7 @@ export function AppSidebar() {
                       <span>Log out</span>
                     </>
                   )}
-                </Button>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ) : (
               <>

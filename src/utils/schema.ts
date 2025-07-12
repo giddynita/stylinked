@@ -90,7 +90,7 @@ export function validateWithZodSchema<T>(schema: ZodSchema<T>, data: unknown) {
   const result = schema.safeParse(data)
   if (!result.success) {
     const errors = result.error.errors.map((error) => error.message)
-    toast(errors.join(', '))
+    toast.error(errors.join(', '))
     return
   }
   return result.data

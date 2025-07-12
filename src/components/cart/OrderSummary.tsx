@@ -10,7 +10,7 @@ function OrderSummary() {
   )
 
   return (
-    <Card className="sticky top-8">
+    <Card className="sticky top-20">
       <CardHeader>
         <CardTitle>Order Summary</CardTitle>
       </CardHeader>

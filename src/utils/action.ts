@@ -22,7 +22,7 @@ import { getAuthUser } from './loader'
 export const signUpAction = async (props: SignUpAction) => {
   const { email, password, confirmPassword, setSubmitting, navigate } = props
   if (password !== confirmPassword) {
-    toast('Passwords do not match')
+    toast.warning('Passwords do not match')
     return
   }
   setSubmitting(true)
@@ -35,11 +35,12 @@ export const signUpAction = async (props: SignUpAction) => {
     },
   })
   if (error) {
-    toast(error.message)
+    toast.error('Failed to sign up')
+    console.log(error.message)
     setSubmitting(false)
     return
   }
-  toast(
+  toast.success(
     "We've sent a verification email to complete your account registration."
   )
   setSubmitting(false)
@@ -49,7 +50,7 @@ export const signUpAction = async (props: SignUpAction) => {
 export const resetPasswordAction = async (props: ResetPasswordAction) => {
   const { password, confirmPassword, setSubmitting, navigate } = props
   if (password !== confirmPassword) {
-    toast('Passwords do not match')
+    toast.warning('Passwords do not match')
     return
   }
   setSubmitting(true)
@@ -57,11 +58,13 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
     password,
   })
   if (error) {
-    toast('Password reset failed!')
+    toast.error('Password reset failed!')
     navigate('/auth/forgot-password')
     console.log(error.message)
   }
-  toast('Password reset successful! You can now log in with your new password')
+  toast.success(
+    'Password reset successful! You can now log in with your new password'
+  )
   return navigate('/auth/login')
 }
 
@@ -73,11 +76,12 @@ export const loginAction = async (props: LoginAction) => {
     password,
   })
   if (error) {
-    toast(error.message)
+    toast.error('Failed to login')
+    console.log(error.message)
     setSubmitting(false)
     return
   }
-  toast("Welcome! You're logged in.")
+  toast.success("Welcome! You're logged in.")
   setSubmitting(false)
 
   return navigate(pathname)
@@ -90,11 +94,12 @@ export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
     redirectTo: 'https://stylinked.netlify.app/auth/reset-password',
   })
   if (error) {
-    toast(error.message)
+    toast.error('Failed')
+    console.log(error.message)
     setSubmitting(false)
     return
   }
-  toast(
+  toast.success(
     'If an account with this email exists, a password reset link has been sent.'
   )
   setSubmitting(false)
@@ -152,7 +157,7 @@ export const completeRegistrationAction = async (props: any) => {
       coveragearea: coverageareaArray,
     })
   }
-  toast('Account created successfully!')
+  toast.success('Account created successfully!')
   navigate('/')
 }
 
@@ -162,11 +167,11 @@ export const logoutAction = async (props: LogoutAction) => {
   navigate('/')
   const { error } = await supabase.auth.signOut()
   if (error) {
-    toast(error.message)
+    toast.error('Failed to logout')
     setLogout(false)
     return
   }
-  toast("You're logged out successfully.")
+  toast.success("You're logged out successfully.")
   setLogout(false)
   return
 }
@@ -185,7 +190,7 @@ export const uploadImage = async (images: File[]) => {
 
       if (error) {
         console.log(`Upload error: ${error.message}`)
-        toast('Images upload failed!')
+        toast.error('Images upload failed!')
         return
       }
       const { data: publicUrlData } = supabase.storage

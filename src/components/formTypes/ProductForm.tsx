@@ -62,7 +62,7 @@ const ProductForm = ({
 
   const handleAddVariant = () => {
     if (!selectedSize || selectedColors.length === 0) {
-      toast('Please select a size and at least one color.')
+      toast.warning('Please select a size and at least one color.')
       return
     }
     const newColors: ColorQuantity[] = selectedColors.map((color) => ({
@@ -146,10 +146,10 @@ const ProductForm = ({
       return
     }
     if (!variants.length) {
-      return toast('Add size and color options for this product.')
+      return toast.warning('Add size and color options for this product.')
     }
     if (!validImages.length) {
-      return toast('Please add at least one image of the product.')
+      return toast.warning('Please add at least one image of the product.')
     }
 
     const stockArray = variants.map((variant: Variant) =>

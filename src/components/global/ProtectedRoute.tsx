@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children }: { children: any }) => {
   }
 
   if (!user) {
-    toast('You must be logged in to access this page.')
+    toast.warning('You must be logged in to access this page.')
     return <Navigate to="/auth/login" />
   }
   return children

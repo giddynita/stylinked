@@ -33,7 +33,7 @@ const ImageInput = ({
       files.length > maxFiles ||
       files.length + validImages.length > maxFiles
     ) {
-      toast(`You can only upload up to ${maxFiles} images.`)
+      toast.warning(`You can only upload up to ${maxFiles} images.`)
       return
     } else {
       files.forEach((newFile) => {
@@ -41,11 +41,11 @@ const ImageInput = ({
         const isUnderSize = newFile.size <= MAX_SIZE_MB * 1024 * 1024
 
         if (!isImage) {
-          toast(`${newFile.name} is not an image.`)
+          toast.warning(`${newFile.name} is not an image.`)
           return
         }
         if (!isUnderSize) {
-          toast(`${newFile.name} exceeds ${MAX_SIZE_MB}MB.`)
+          toast.warning(`${newFile.name} exceeds ${MAX_SIZE_MB}MB.`)
           return
         }
 
@@ -53,7 +53,7 @@ const ImageInput = ({
       })
     }
     if (!navigator.onLine) {
-      toast('Image Upload failed! Check your internet connection.')
+      toast.error('Image Upload failed! Check your internet connection.')
       return
     }
     setLoadingImagesStatus(true)

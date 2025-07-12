@@ -99,17 +99,17 @@ const Products = () => {
 
   const handleAddProduct = async (product: Product) => {
     if (addError) {
-      return toast('Error adding product')
+      return toast.error('Error adding product')
     }
     addProduct(product)
 
     setIsAddDialogOpen(false)
-    toast('Product added successfully!')
+    toast.success('Product added successfully!')
   }
 
   const handleEditProduct = (product: Product) => {
     if (updateError) {
-      return toast('Error updating product')
+      return toast.error('Error updating product')
     }
     updateProduct({
       id: selectedProduct?.id,
@@ -118,12 +118,12 @@ const Products = () => {
 
     setIsEditDialogOpen(false)
     setSelectedProduct(null)
-    toast('Product updated successfully!')
+    toast.success('Product updated successfully!')
   }
 
   const handleDeleteProduct = async (productId: string, images: string[]) => {
     if (deleteError) {
-      return toast('Error deleting product')
+      return toast.error('Error deleting product')
     }
     deleteProduct(productId)
 
@@ -131,7 +131,7 @@ const Products = () => {
       const file = images[i]
       await deleteImage(file)
     }
-    toast('Product deleted successfully!')
+    toast.success('Product deleted successfully!')
   }
 
   const handleViewProduct = (product: Product) => {

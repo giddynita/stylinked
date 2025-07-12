@@ -46,15 +46,12 @@ function DashboardSidebar() {
       className="bg-gradient-to-b from-primary/10 to-accent/50"
       collapsible="icon"
     >
-      <SidebarHeader className="h-16  flex items-center justify-center">
+      <SidebarHeader className="h-16">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild className=" mt-1.5 w-max">
               <Link to="/">
-                <LinkIcon className="w-6 h-6 font-bolder text-primary" />
-                <span className="text-sm font-bold mt-1 text-primary">
-                  STYLINKED
-                </span>
+                <LinkIcon className="w-10 h-10 font-bolder text-primary" />
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -121,12 +118,15 @@ function DashboardSidebar() {
           <SidebarMenuItem>
             <Tooltip>
               <TooltipTrigger
-                className="bg-destructive/80 hover:bg-destructive w-max  text-white flex items-center text-xs gap-2 rounded-sm"
+                className=" w-max  text-white flex items-center text-xs gap-2 rounded-sm"
                 onClick={() => {
                   logoutAction({ navigate, setLogout })
                 }}
               >
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  asChild
+                  className="bg-destructive hover:bg-red-500 cursor-pointer"
+                >
                   {logout ? (
                     <div className="py-2 pl-2 pr-4">
                       <Loader2Icon className="animate-spin" />
