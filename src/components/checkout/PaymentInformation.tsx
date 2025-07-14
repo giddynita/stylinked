@@ -6,7 +6,6 @@ import type { PaymentMethodOption } from '@/utils/types'
 import { Button } from '../ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { handleStepChange } from '@/features/checkout/checkoutSlice'
-import { addSpace } from '@/utils/format'
 
 function PaymentInformation() {
   const dispatch = useDispatch()
@@ -39,10 +38,8 @@ function PaymentInformation() {
           >
             Back to Review
           </Button>
-          {paymentMethod && (
-            <Button className="flex-1">
-              Pay via {addSpace(paymentMethod)}
-            </Button>
+          {paymentMethod.name && (
+            <Button className="flex-1">Pay via {paymentMethod.name}</Button>
           )}
         </div>
       </CardContent>

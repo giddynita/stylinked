@@ -9,8 +9,8 @@ function PaymentMethod({ method }: { method: PaymentMethodOption }) {
   const { id, title, description, icon, popular } = method
   const { paymentMethod } = useSelector((state: any) => state.checkoutState)
   const dispatch = useDispatch()
-  const handleMethod = (method: string) => {
-    dispatch(handlePaymentMethod({ method }))
+  const handleMethod = (id: string, name: string) => {
+    dispatch(handlePaymentMethod({ id, name }))
   }
 
   const Icon = icon
@@ -21,18 +21,22 @@ function PaymentMethod({ method }: { method: PaymentMethodOption }) {
         relative cursor-pointer transition-all duration-200 
         hover:shadow-md
         ${
-          paymentMethod === id
+          paymentMethod.id === id
             ? 'bg-accent border-green-600 shadow-md'
             : 'bg-muted/80 hover:bg-muted'
         }
       `}
-      onClick={() => handleMethod(id)}
+      onClick={() => handleMethod(id, title)}
     >
       <div className="flex items-center p-6">
         <div
           className={`
             'grid place-content-center place-items-center w-12 h-12 rounded-lg mr-4 text-foreground  transition-colors 
-            ${paymentMethod === id ? 'bg-green-600 ' : 'bg-background'}
+            ${
+              paymentMethod.id === id
+                ? 'text-white bg-green-600 '
+                : 'bg-background'
+            }
           `}
         >
           <Icon className="w-6 h-6" />
@@ -50,13 +54,13 @@ function PaymentMethod({ method }: { method: PaymentMethodOption }) {
           className={`
             'grid place-items-center place-content-center w-6 h-6 rounded-full border-2 transition-all duration-200 
             ${
-              paymentMethod === id
-                ? 'bg-green-600 text-foreground'
+              paymentMethod.id === id
+                ? 'bg-green-600 text-white'
                 : 'border-accent bg-background'
             }
           `}
         >
-          {paymentMethod === id && <Check className="w-4 h-4" />}
+          {paymentMethod.id === id && <Check className="w-4 h-4" />}
         </div>
       </div>
     </Card>

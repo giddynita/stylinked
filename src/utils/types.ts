@@ -214,7 +214,10 @@ export interface CheckoutType {
     phone: string
   }
   step: number
-  paymentMethod: string
+  paymentMethod: {
+    id: string
+    name: string
+  }
 }
 
 export type PaymentMethod =

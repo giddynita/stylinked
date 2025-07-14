@@ -20,7 +20,7 @@ const Checkout = () => {
         <ProgressIndicator />
 
         {/* Main Content */}
-        <section className="lg:col-span-2">
+        <section className="max-w-4xl mx-auto">
           {/* Step 1: Shipping Information */}
           {step === 1 && <ShippingInformation />}
 

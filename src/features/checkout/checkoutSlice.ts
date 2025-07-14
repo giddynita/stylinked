@@ -14,7 +14,10 @@ const defaultState: CheckoutType = {
     country: 'Nigeria',
   },
   step: 1,
-  paymentMethod: '',
+  paymentMethod: {
+    id: '',
+    name: '',
+  },
 }
 const checkoutSlice = createSlice({
   name: 'checkout',
@@ -29,8 +32,9 @@ const checkoutSlice = createSlice({
       state.step = step
     },
     handlePaymentMethod: (state, action) => {
-      const { method } = action.payload
-      state.paymentMethod = method
+      const { id, name } = action.payload
+      state.paymentMethod.id = id
+      state.paymentMethod.name = name
     },
   },
 })
