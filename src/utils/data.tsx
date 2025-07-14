@@ -6,6 +6,10 @@ import {
   Home,
   StoreIcon,
   Users,
+  CreditCard,
+  Building2,
+  ArrowLeftRight,
+  Hash,
 } from 'lucide-react'
 import type { Testimonials } from './types'
 
@@ -217,4 +221,46 @@ export const categories = [
   'accessories',
   'formal wear',
   'casual wear',
+]
+
+export const progress = [
+  {
+    number: 1,
+    name: 'shipping',
+  },
+  {
+    number: 2,
+    name: 'review',
+  },
+  {
+    number: 3,
+    name: 'payment',
+  },
+]
+export const paymentMethods = [
+  {
+    id: 'BankCard',
+    title: 'Bank Card',
+    description: 'Pay instantly with your debit or credit card',
+    icon: CreditCard,
+    popular: true,
+  },
+  {
+    id: 'BankAccount',
+    title: 'Bank Account',
+    description: 'Direct payment from your bank account',
+    icon: Building2,
+  },
+  {
+    id: 'BankTransfer',
+    title: 'Bank Transfer',
+    description: 'Transfer funds directly between banks',
+    icon: ArrowLeftRight,
+  },
+  {
+    id: 'BankUssd',
+    title: 'Bank USSD',
+    description: 'Pay using USSD codes from your mobile device',
+    icon: Hash,
+  },
 ]

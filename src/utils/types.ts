@@ -201,3 +201,32 @@ export interface Cart {
   orderTotal: number
   tax: number
 }
+export interface CheckoutType {
+  shippingForm: {
+    email: string
+    firstname: string
+    lastname: string
+    address: string
+    city: string
+    state: string
+    zipcode: string
+    country: string
+    phone: string
+  }
+  step: number
+  paymentMethod: string
+}
+
+export type PaymentMethod =
+  | 'BankAccount'
+  | 'BankTransfer'
+  | 'BankCard'
+  | 'BankUssd'
+
+export interface PaymentMethodOption {
+  id: PaymentMethod
+  title: string
+  description: string
+  icon: any
+  popular?: boolean
+}

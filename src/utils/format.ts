@@ -53,3 +53,8 @@ export const formatCreatedAt = (timestamp: string | undefined) => {
     return formattedDate
   }
 }
+
+export const addSpace = (str: string) => {
+  const result = str.replace(/([A-Z])/g, ' $1').trim()
+  return result
+}

@@ -65,7 +65,7 @@ function OrderSummary() {
         </div>
 
         {/* Checkout Button */}
-        <Link to="/checkout" className="block">
+        <Link to="checkout" className="block">
           <Button
             className="w-full bg-purple-600 hover:bg-purple-700"
             size="lg"

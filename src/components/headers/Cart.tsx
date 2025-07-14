@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 function Cart() {
   const { numItemsInCart } = useSelector((state: any) => state.cartState)
   const pathname = useLocation().pathname
-  console.log(pathname)
+
   return (
     <div className="relative mr-3">
       <Button size="sm" variant="ghost" asChild>

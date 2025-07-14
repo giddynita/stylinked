@@ -24,39 +24,118 @@ export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export const logisticsFormSchema = z.object({
   role: z.enum(['buyer', 'vendor', 'logistics'], {
-    required_error: 'You need to select an account type.',
+    required_error: 'You need to select an account type',
   }),
-  firstname: z.string().min(2).max(20),
-  lastname: z.string().min(2).max(20),
-  businessname: z.string().min(2).max(30),
-  phone: z.string(),
+  firstname: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters',
+    })
+    .max(20, {
+      message: 'name must be less than 20 characters',
+    }),
+  lastname: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters',
+    })
+    .max(20, {
+      message: 'name must be less than 20 characters',
+    }),
+  businessname: z
+    .string()
+    .min(2, {
+      message: 'Business name must be at least 2 characters',
+    })
+    .max(30, {
+      message: 'name must be less than 30 characters',
+    }),
+  phone: z
+    .string()
+    .trim()
+    .startsWith('0', { message: 'Phone number must start with 0' })
+    .length(11, {
+      message: 'Please enter a valid 11-digit phone number',
+    }),
   vehicletype: z.string({
-    required_error: 'Please select an option',
+    required_error: 'Please select a vehicle type',
   }),
-  coveragearea: z.string().min(1),
+  coveragearea: z.string().min(3),
 })
 
 export type LogisticsFormSchema = z.infer<typeof logisticsFormSchema>
 
 export const vendorFormSchema = z.object({
   role: z.enum(['buyer', 'vendor', 'logistics'], {
-    required_error: 'You need to select an account type.',
+    required_error: 'You need to select an account type',
   }),
-  firstname: z.string().min(2).max(20),
-  lastname: z.string().min(2).max(20),
-  businessname: z.string().min(2).max(30),
-  phone: z.string(),
-  location: z.string().max(10),
+  firstname: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters',
+    })
+    .max(20, {
+      message: 'name must be less than 20 characters',
+    }),
+  lastname: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters',
+    })
+    .max(20, {
+      message: 'name must be less than 20 characters',
+    }),
+  businessname: z
+    .string()
+    .min(2, {
+      message: 'Business name must be at least 2 characters.',
+    })
+    .max(30, {
+      message: 'name must be less than 30 characters.',
+    }),
+  phone: z
+    .string()
+    .trim()
+    .startsWith('0', { message: 'Phone number must start with 0.' })
+    .length(11, {
+      message: 'Please enter a valid 11-digit phone number.',
+    }),
+  location: z
+    .string()
+    .min(3, {
+      message: 'Please enter a valid location.',
+    })
+    .max(10),
 })
 export type VendorFormSchema = z.infer<typeof vendorFormSchema>
 
 export const buyerFormSchema = z.object({
   role: z.enum(['buyer', 'vendor', 'logistics'], {
-    required_error: 'You need to select an account type.',
+    required_error: 'You need to select an account type',
   }),
-  firstname: z.string().min(2).max(20),
-  lastname: z.string().min(2).max(20),
-  phone: z.string(),
+  firstname: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters',
+    })
+    .max(20, {
+      message: 'name must be less than 20 characters',
+    }),
+  lastname: z
+    .string()
+    .min(2, {
+      message: 'name must be at least 2 characters',
+    })
+    .max(20, {
+      message: 'name must be less than 20 characters',
+    }),
+  phone: z
+    .string()
+    .trim()
+    .startsWith('0', { message: 'Phone number must start with 0' })
+    .length(11, {
+      message: 'Please enter a valid 11-digit phone number',
+    }),
 })
 
 export type BuyerFormSchema = z.infer<typeof buyerFormSchema>
@@ -76,11 +155,11 @@ export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>
 export const resetPasswordSchema = z.object({
   password: z
     .string()
-    .min(6, { message: 'Password must contain at least 6 character(s).' })
+    .min(6, { message: 'Password must contain at least 6 character(s)' })
     .max(50),
   confirmPassword: z
     .string()
-    .min(6, { message: 'Password must contain at least 6 character(s).' })
+    .min(6, { message: 'Password must contain at least 6 character(s)' })
     .max(50),
 })
 
@@ -100,18 +179,18 @@ export const productSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: 'name must be at least 2 characters.',
+      message: 'name must be at least 2 characters',
     })
-    .max(100, {
-      message: 'name must be less than 100 characters.',
+    .max(50, {
+      message: 'name must be less than 50 characters',
     }),
   description: z.string().refine(
     (description) => {
       const wordCount = description.split(' ').length
-      return wordCount >= 10 && wordCount <= 1000
+      return wordCount >= 10 && wordCount <= 100
     },
     {
-      message: 'Description must be between 10 and 1000 words',
+      message: 'Description must be between 10 and 100 words',
     }
   ),
   price: z.coerce
@@ -127,11 +206,10 @@ export const productSchema = z.object({
     message: 'Please select a category',
   }),
   material: z.string(),
-  rating: z.number(),
 })
 
 export const reviewSchema = z.object({
-  rating: z.number().min(1, {
+  rating: z.number().int().min(1, {
     message: 'Please give a rating',
   }),
   comment: z.string().refine(
@@ -140,9 +218,40 @@ export const reviewSchema = z.object({
       return wordCount <= 100
     },
     {
-      message: 'Comment must not be greater than between 100 words.',
+      message: 'Comment must not be greater than between 100 words',
     }
   ),
   name: z.string(),
   productid: z.string(),
+})
+
+export const shippingInfoSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email' }),
+  firstname: z
+    .string()
+    .trim()
+    .min(2, { message: 'Please enter a valid first name' }),
+  lastname: z.string().trim().min(2, { message: 'Please enter a last name.' }),
+  address: z.string().refine(
+    (address) => {
+      const wordCount = address.split(' ').length
+      return wordCount >= 4
+    },
+    {
+      message: 'Please enter a valid address',
+    }
+  ),
+  zipcode: z
+    .string()
+    .length(6, { message: 'Please enter a valid zip or postal code' }),
+  city: z.string().trim().min(3, { message: 'Please enter valid city' }),
+  state: z.string().trim().min(3, { message: 'Please enter valid state' }),
+  country: z.string(),
+  phone: z
+    .string()
+    .trim()
+    .startsWith('0', { message: 'Phone number must start with 0' })
+    .length(11, {
+      message: 'Please enter a valid 11-digit phone number',
+    }),
 })

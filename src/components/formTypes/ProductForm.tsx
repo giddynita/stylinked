@@ -43,7 +43,6 @@ const ProductForm = ({
     category: product?.category || '',
     material: product?.material || '',
     brand: product?.brand || '',
-    rating: product?.rating || 0,
   })
   //others
   const [selectedSize, setSelectedSize] = useState<string>('')

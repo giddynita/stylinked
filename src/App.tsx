@@ -16,6 +16,8 @@ import {
   ProductDetails,
   MarketplaceLayout,
   Cart,
+  Checkout,
+  CartLayout,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -89,7 +91,21 @@ const router = createBrowserRouter([
       },
       {
         path: 'cart',
-        element: <Cart />,
+        element: <CartLayout />,
+        children: [
+          {
+            index: true,
+            element: <Cart />,
+          },
+          {
+            path: 'checkout',
+            element: (
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            ),
+          },
+        ],
       },
     ],
   },
