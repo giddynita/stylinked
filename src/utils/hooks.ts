@@ -290,7 +290,7 @@ export const useVendorProfile = (vendorId: string | undefined) => {
   return queryData
 }
 
-interface OpayAmount {
+/* interface OpayAmount {
   currency: string
   total: number
 }
@@ -322,9 +322,9 @@ export interface OpayPaymentData {
   returnUrl: string
   userInfo: OpayUserInfo
   displayName: string
-}
+} */
 
-export const useOpayPayment = (data: OpayPaymentData) => {
+/* export const useOpayPayment = (data: OpayPaymentData) => {
   const initiatePayment = async () => {
     try {
       const res = await axios.post(
@@ -354,3 +354,4 @@ export const useOpayPayment = (data: OpayPaymentData) => {
 
   return queryData
 }
+ */

@@ -6,9 +6,8 @@ import type { PaymentMethodOption } from '@/utils/types'
 import { Button } from '../ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { handleStepChange } from '@/features/checkout/checkoutSlice'
-import { useOpayPayment, useUserData } from '@/utils/hooks'
+import { useUserData } from '@/utils/hooks'
 import { useUser } from '@supabase/auth-helpers-react'
-import { toast } from 'sonner'
 
 function PaymentInformation() {
   const dispatch = useDispatch()
@@ -45,12 +44,12 @@ function PaymentInformation() {
     },
     displayName: userName,
   }
-  const { data: response, isLoading: paymentLoading } =
-    useOpayPayment(orderData)
+  /* const { data: response, isLoading: paymentLoading } =
+    useOpayPayment(orderData) */
   const makePayment = () => {
-    if (paymentLoading) {
+    /*  if (paymentLoading) {
       toast.loading('Payment initiated')
-    }
+    } */
     /* if (response?.code !== '00000') {
       return toast.error(response?.message)
     }
