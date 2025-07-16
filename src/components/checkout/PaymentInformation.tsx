@@ -45,15 +45,16 @@ function PaymentInformation() {
     },
     displayName: userName,
   }
+  const { data: response, isLoading: paymentLoading } =
+    useOpayPayment(orderData)
   const makePayment = () => {
-    const { data: response, isLoading } = useOpayPayment(orderData)
-    if (isLoading) {
+    if (paymentLoading) {
       toast.loading('Payment initiated')
     }
-    if (response.code !== '00000') {
-      return toast.error(response.message)
+    /* if (response?.code !== '00000') {
+      return toast.error(response?.message)
     }
-    window.location.href = response.data.cashierUrl
+    window.location.href = response?.data?.cashierUrl */
   }
 
   return (

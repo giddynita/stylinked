@@ -1,10 +1,10 @@
-import type { Product } from '@/utils/types'
+import type { ProductWithRating } from '@/utils/types'
 import ProductListCard from './ProductListCard'
 
 function ProductList({
   sortedProducts,
 }: {
-  sortedProducts: Product[] | undefined
+  sortedProducts: ProductWithRating[] | undefined
 }) {
   return (
     <div className="space-y-4">

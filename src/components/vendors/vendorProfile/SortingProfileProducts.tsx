@@ -5,11 +5,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select'
+} from '../../ui/select'
 import type { Dispatch, SetStateAction } from 'react'
-import { Label } from '../ui/label'
+import { Label } from '../../ui/label'
 
-function Sorting({
+function SortingProfileProducts({
   sortBy,
   setSortBy,
 }: {
@@ -25,13 +25,13 @@ function Sorting({
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="rating">Highest Rated</SelectItem>
-          <SelectItem value="reviews">Most Reviews</SelectItem>
+          <SelectItem value="rating">Rating</SelectItem>
+          <SelectItem value="price-low">Price: Low to High</SelectItem>
+          <SelectItem value="price-high">Price: High to Low</SelectItem>
           <SelectItem value="newest">Newest</SelectItem>
-          <SelectItem value="products">Most Products</SelectItem>
         </SelectContent>
       </Select>
     </div>
   )
 }
-export default Sorting
+export default SortingProfileProducts

@@ -219,6 +219,7 @@ export const reviewSchema = z.object({
   ),
   name: z.string(),
   productid: z.string(),
+  productname: z.string(),
 })
 
 export const shippingInfoSchema = z.object({

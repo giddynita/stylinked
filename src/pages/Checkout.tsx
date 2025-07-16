@@ -1,4 +1,3 @@
-import CheckoutHeader from '@/components/headers/CheckoutHeader'
 import {
   OrderReview,
   PaymentInformation,
@@ -6,6 +5,7 @@ import {
   ShippingInformation,
 } from '@/components/checkout'
 import { useSelector } from 'react-redux'
+import SubPagesHeader from '@/components/headers/SubPagesHeader'
 
 const Checkout = () => {
   const { step } = useSelector((state: any) => state.checkoutState)
@@ -13,7 +13,7 @@ const Checkout = () => {
   return (
     <div className="min-h-screen container">
       {/* Header */}
-      <CheckoutHeader />
+      <SubPagesHeader currentPage="Checkout" previousPage="cart" />
 
       <div className="pt-2 pb-12 space-y-8">
         {/* Progress Indicator */}

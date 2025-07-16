@@ -1,4 +1,4 @@
-import type { CartItemType, ProductCardProps } from '@/utils/types'
+import type { CartItemType, ProductWithRating } from '@/utils/types'
 import { Card, CardContent } from '../ui/card'
 import { currencyFormatter, slugify } from '@/utils/format'
 import { MoreVertical, ShoppingCart } from 'lucide-react'
@@ -17,7 +17,7 @@ import { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '@/utils/globalContext'
 import Reviews from './Reviews'
 
-function ProductListCard({ product }: ProductCardProps) {
+function ProductListCard({ product }: { product: ProductWithRating }) {
   const { cartItems, numItemsInCart } = useSelector(
     (state: any) => state.cartState
   )
@@ -51,9 +51,12 @@ function ProductListCard({ product }: ProductCardProps) {
                 {product.name}
               </h3>
               <p className="text-muted-foreground text-sm line-clamp-1">
-                {product.vendor}
+                Sold by {product.vendor}
               </p>
-              <Reviews productId={product.id} />
+              <Reviews
+                totalReviews={product.totalReviews}
+                averageRating={product.averageRating}
+              />
               <div className="flex items-center space-x-4">
                 <span className="text-base font-bold text-primary">
                   {currencyFormatter(product.price)}

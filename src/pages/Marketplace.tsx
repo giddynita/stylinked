@@ -121,7 +121,7 @@ const Marketplace = () => {
         case 'price-high':
           return b.price - a.price
         case 'rating':
-          return b.rating - a.rating
+          return b.averageRating - a.averageRating
         default:
           return 0
       }
@@ -222,7 +222,7 @@ const Marketplace = () => {
           <section>
             {/* Results Header */}
             <QueryHeading
-              query={searchQuery}
+              query={filters.searchQuery}
               queryResult={sortedProducts}
               type="product"
             />
@@ -232,7 +232,7 @@ const Marketplace = () => {
               <div className="flex items-center space-x-2">
                 <Label className="text-muted-foreground">Sort by:</Label>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="font-medium text-base w-36 sm:w-48">
+                  <SelectTrigger className="max-w-35 sm:max-w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

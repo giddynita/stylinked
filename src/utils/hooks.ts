@@ -2,11 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from './supabaseClient'
 import type {
   getProductsType,
-  Product,
+  ProductWithRating,
   UserDataType,
   UserRole,
   VendorCardProp,
   VendorFilter,
+  VendorProfile,
 } from './types'
 import { getAuthUser } from './loader'
 import axios from 'axios'
@@ -102,11 +103,32 @@ export const useAllProducts = ({
       query = query.gte('stock', 1)
     }
 
-    const { data, error, count } = await query.range(fromIndex, toIndex)
+    const {
+      data: productsData,
+      error: productsError,
+      count,
+    } = await query.range(fromIndex, toIndex)
 
-    if (error) throw new Error(error.message)
+    if (productsError) throw new Error(productsError.message)
 
-    return { products: data as Product[], total: count ?? 0 }
+    const { data: reviewsData, error: reviewsError } = await supabase
+      .from('reviews')
+      .select('id, productid, rating')
+
+    if (reviewsError) throw new Error(reviewsError.message)
+
+    const productsWithRating = productsData.map((p) => {
+      const productReviews = reviewsData.filter((r) => r.productid == p.id)
+      const year = new Date(p.createdat).getFullYear().toString()
+      const totalReviews = productReviews.length
+      const totalRating = productReviews.reduce((sum, r) => sum + r.rating, 0)
+      const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+      return { ...p, created: year, averageRating, totalReviews }
+    })
+    return {
+      products: productsWithRating as ProductWithRating[],
+      total: count ?? 0,
+    }
   }
   const queryData = useQuery({
     queryKey: ['products', currentPage, filters],
@@ -196,6 +218,78 @@ export const useVendorsWithStats = (
   return queryData
 }
 
+export const useVendorProfile = (vendorId: string | undefined) => {
+  const getVendorProfile = async () => {
+    if (vendorId) {
+      const { data: vendorData, error: vendorError } = await supabase
+        .from('vendors')
+        .select('*')
+        .eq('id', vendorId)
+        .single()
+
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('id, created_at')
+        .eq('id', vendorId)
+        .single()
+
+      const { data: productsData, error: productsError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('vendorid', vendorId)
+
+      if (productsError || !productsData) {
+        throw new Error(productsError?.message)
+      }
+
+      const productsIds = productsData.map((p) => p.id)
+
+      const { data: reviewsData, error: reviewsError } = await supabase
+        .from('reviews')
+        .select('*')
+        .in('productid', productsIds)
+
+      if (userError || vendorError || reviewsError) {
+        throw new Error(
+          userError?.message || vendorError?.message || reviewsError?.message
+        )
+      }
+      const productsDataWithRating = productsData.map((p) => {
+        const productReviews = reviewsData.filter((r) => r.productid == p.id)
+        const year = new Date(p.createdat).getFullYear().toString()
+        const totalReviews = productReviews.length
+        const totalRating = productReviews.reduce((sum, r) => sum + r.rating, 0)
+        const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+
+        return { ...p, created: year, averageRating, totalReviews }
+      })
+
+      const year = new Date(userData?.created_at).getFullYear().toString()
+      const totalReviews = reviewsData.length
+      const totalRating = reviewsData.reduce((sum, r) => sum + r.rating, 0)
+      const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+      const vendorProfile: VendorProfile = {
+        ...vendorData,
+        joinedDate: year,
+        vendorProducts: productsDataWithRating,
+        vendorReviews: reviewsData,
+        totalProducts: productsData.length,
+        totalReviews,
+        rating: averageRating,
+      }
+
+      return vendorProfile
+    }
+  }
+
+  const queryData = useQuery({
+    queryKey: ['vendors', vendorId],
+    queryFn: getVendorProfile,
+  })
+
+  return queryData
+}
+
 interface OpayAmount {
   currency: string
   total: number
@@ -238,8 +332,8 @@ export const useOpayPayment = (data: OpayPaymentData) => {
         data,
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPAY_PUBLIC_KEY}`,
-            MerchantId: process.env.NEXT_PUBLIC_OPAY_MERCHANT_ID!,
+            Authorization: import.meta.env.VITE_PUBLIC_KEY,
+            MerchantId: import.meta.env.VITE_MERCHANT_ID,
             'Content-Type': 'application/json',
           },
         }

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import type { CartItemType, ProductCardProps } from '@/utils/types'
+import type { CartItemType, ProductWithRating } from '@/utils/types'
 import { currencyFormatter, slugify } from '@/utils/format'
 import AddToCart from './AddToCart'
 import { GlobalContext } from '@/utils/globalContext'
@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { useContext, useEffect, useState } from 'react'
 import { MdOutlineAddShoppingCart } from 'react-icons/md'
 
-const ProductGridCard = ({ product }: ProductCardProps) => {
+const ProductGridCard = ({ product }: { product: ProductWithRating }) => {
   const { cartItems, numItemsInCart } = useSelector(
     (state: any) => state.cartState
   )
@@ -73,7 +73,10 @@ const ProductGridCard = ({ product }: ProductCardProps) => {
           </p>
 
           <div className="my-2">
-            <Reviews productId={product.id} />
+            <Reviews
+              totalReviews={product.totalReviews}
+              averageRating={product.averageRating}
+            />
           </div>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <span className="text-base font-bold text-primary">

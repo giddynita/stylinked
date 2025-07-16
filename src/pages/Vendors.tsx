@@ -74,7 +74,7 @@ const Vendors = () => {
     setFilters({
       searchQuery,
       selectedCity,
-      selectedState,
+      selectedState: selectedState === 'all' ? '' : selectedState,
     })
   }
   const itemsPerPage = 3
@@ -84,7 +84,6 @@ const Vendors = () => {
     itemsPerPage,
     filters
   )
-  console.log(data)
   const totalPages = data && Math.ceil(data?.totalCount / itemsPerPage)
   const filteredVendors = data?.vendors
   const sortedVendors =
@@ -167,7 +166,7 @@ const Vendors = () => {
         <section>
           {/* Results Header */}
           <QueryHeading
-            query={searchQuery}
+            query={filters.searchQuery}
             queryResult={sortedVendors}
             type="vendor"
           />

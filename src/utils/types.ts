@@ -170,6 +170,7 @@ export type ReviewsForm = {
   comment: string
   rating: number
   productid: string
+  productname: string
 }
 
 export type Reviews = {
@@ -179,6 +180,7 @@ export type Reviews = {
   comment: string
   id: string
   createdat: string
+  productname: string
 }
 
 export type CartItemType = {
@@ -270,4 +272,14 @@ export type Vendor = {
   state: string
   description: string
   image: string
+}
+
+export type ProductWithRating = Product & {
+  created: string
+  averageRating: number
+  totalReviews: number
+}
+export type VendorProfile = VendorCardProp & {
+  vendorProducts: ProductWithRating[]
+  vendorReviews: Reviews[]
 }

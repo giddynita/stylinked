@@ -3,7 +3,8 @@ import { Card, CardContent } from '../ui/card'
 import { Calendar, MapPin, Star, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '../ui/button'
-import VendorAvatar from './Avatar'
+import VendorAvatar from './VendorAvatar'
+import { slugify } from '@/utils/format'
 
 function VendorGridCard({
   id,
@@ -22,7 +23,9 @@ function VendorGridCard({
       <CardContent className="p-6 space-y-4">
         <div className="text-center space-y-2 ">
           <div className="w-max mx-auto">
-            <VendorAvatar businessname={businessname} image={image} />
+            <figure className="w-20 h-20">
+              <VendorAvatar businessname={businessname} image={image} />
+            </figure>
           </div>
           <h3 className="text-lg font-semibold text-foreground">
             {businessname}
@@ -47,7 +50,9 @@ function VendorGridCard({
           </div>
           <div className="flex items-center space-x-2">
             <Users className="w-4 h-4 text-muted-foreground" />
-            <span>{totalProducts} products</span>
+            <span>{`${totalProducts} product${
+              totalProducts > 1 ? 's' : ''
+            }`}</span>
           </div>
         </div>
 
@@ -58,7 +63,7 @@ function VendorGridCard({
         )}
 
         <Button asChild className="w-full">
-          <Link to={`/vendor/${id}`}>View Profile</Link>
+          <Link to={`${slugify(businessname)}/${id}`}>View Profile</Link>
         </Button>
       </CardContent>
     </Card>

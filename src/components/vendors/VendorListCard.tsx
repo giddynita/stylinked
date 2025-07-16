@@ -3,7 +3,8 @@ import { Card, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin, Star, Users } from 'lucide-react'
-import VendorAvatar from './Avatar'
+import VendorAvatar from './VendorAvatar'
+import { slugify } from '@/utils/format'
 
 function VendorListCard({
   id,
@@ -21,8 +22,9 @@ function VendorListCard({
     <Card className="hover:shadow-lg transition-shadow p-0">
       <CardContent className="p-4">
         <div className="flex items-start space-x-4">
-          <VendorAvatar businessname={businessname} image={image} />
-
+          <figure className="w-20 h-20">
+            <VendorAvatar businessname={businessname} image={image} />
+          </figure>
           <div className="flex-1 space-y-4">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-2">
@@ -61,7 +63,7 @@ function VendorListCard({
               </p>
             )}
             <Button asChild className="w-full">
-              <Link to={`/vendor/${id}`}>View Profile</Link>
+              <Link to={`${slugify(businessname)}/${id}`}>View Profile</Link>
             </Button>
           </div>
         </div>

@@ -20,10 +20,12 @@ import {
   CartLayout,
   Orders,
   Vendors,
+  VendorsLayout,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute } from './components/global'
+import VendorProfile from './pages/VendorProfile'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -111,7 +113,17 @@ const router = createBrowserRouter([
       },
       {
         path: 'vendors',
-        element: <Vendors />,
+        element: <VendorsLayout />,
+        children: [
+          {
+            index: true,
+            element: <Vendors />,
+          },
+          {
+            path: ':vendorname/:vendorid',
+            element: <VendorProfile />,
+          },
+        ],
       },
     ],
   },

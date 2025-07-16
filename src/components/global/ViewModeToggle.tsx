@@ -9,12 +9,12 @@ function ViewModeToggle({
   handleViewMode: (mode: 'grid' | 'list') => void
 }) {
   return (
-    <div className="flex border rounded-md">
+    <div className="flex ml-auto h-12 border rounded-md">
       <Button
         variant={viewMode === 'grid' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => handleViewMode('grid')}
-        className="rounded-r-none"
+        className="rounded-r-none h-full w-12"
       >
         <Grid3X3 className="w-4 h-4" />
       </Button>
@@ -22,7 +22,7 @@ function ViewModeToggle({
         variant={viewMode === 'list' ? 'default' : 'ghost'}
         size="sm"
         onClick={() => handleViewMode('list')}
-        className="rounded-l-none"
+        className="rounded-l-none h-full w-12"
       >
         <List className="w-4 h-4" />
       </Button>

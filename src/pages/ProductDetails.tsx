@@ -7,13 +7,12 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Star, ShoppingCart, MessageCircle, Minus } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
-import { ProductDetailsHeader } from '@/components/headers/ProductDetailsHeader'
 import {
   averageRating,
   currencyFormatter,
   formatCreatedAt,
 } from '@/utils/format'
-import { Cart, Ratings } from '@/components/marketplace'
+import { Cart } from '@/components/marketplace'
 import { getReviews, getSingleProduct } from '@/utils/loader'
 import { useQuery } from '@tanstack/react-query'
 import { useUserData } from '@/utils/hooks'
@@ -27,6 +26,8 @@ import {
 import type { CartItemType } from '@/utils/types'
 import { addItem } from '@/features/cart/cartSlice'
 import { useDispatch } from 'react-redux'
+import SubPagesHeader from '@/components/headers/SubPagesHeader'
+import { Ratings } from '@/components/global'
 
 const ProductDetails = () => {
   const { productid } = useParams()
@@ -38,7 +39,7 @@ const ProductDetails = () => {
 
   //fech single product
   const queryProduct = {
-    queryKey: ['single product', productid],
+    queryKey: ['products', productid],
     queryFn: () => getSingleProduct(productid),
   }
   const { data: product, isLoading: productInfoLoading } =
@@ -134,6 +135,7 @@ const ProductDetails = () => {
       rating: reviewRating,
       comment: reviewText,
       name,
+      productname: product?.name,
     }
     const validatedData = validateWithZodSchema(reviewSchema, reviewData)
     if (validatedData) {
@@ -153,7 +155,7 @@ const ProductDetails = () => {
   return (
     <div className="min-h-screen relative container">
       {/*breadcrumbs */}
-      <ProductDetailsHeader productName={product?.name} />
+      <SubPagesHeader currentPage={product?.name} previousPage="marketplace" />
       {/* product details */}
       {productInfoLoading ? (
         <ProductInfoSkeleton />
@@ -161,7 +163,7 @@ const ProductDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
           {/* Product Images */}
           <div>
-            <div className="mb-4 bg-muted p-6  h-max">
+            <div className="mb-4 p-6  h-max">
               <img
                 src={product?.images[0]}
                 alt={product?.name}
@@ -185,7 +187,7 @@ const ProductDetails = () => {
           {/* Product Info */}
           <div>
             <div className="mb-4">
-              <Badge className="mb-2">{product?.category}</Badge>
+              <Badge className="mb-2 capitalize">{product?.category}</Badge>
               <h1 className="text-xl font-bold  mb-2">{product?.name}</h1>
               <Link to={`/vendor/${product?.vendorid}`} className="font-medium">
                 Sold by{' '}

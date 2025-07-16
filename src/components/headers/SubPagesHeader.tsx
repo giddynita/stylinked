@@ -8,7 +8,13 @@ import {
   BreadcrumbSeparator,
 } from '../ui/breadcrumb'
 
-function CheckoutHeader() {
+function SubPagesHeader({
+  currentPage,
+  previousPage,
+}: {
+  currentPage: string | undefined
+  previousPage: string
+}) {
   return (
     <header className="py-5 mb-4">
       <Breadcrumb>
@@ -21,13 +27,15 @@ function CheckoutHeader() {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="/cart">Cart</Link>
+              <Link to={`/${previousPage}`} className="capitalize">
+                {previousPage}
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage className="text-primary font-medium">
-              Checkout
+              {currentPage}
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -35,4 +43,4 @@ function CheckoutHeader() {
     </header>
   )
 }
-export default CheckoutHeader
+export default SubPagesHeader

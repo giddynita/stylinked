@@ -3,7 +3,7 @@ import { Skeleton } from '../ui/skeleton'
 function ProductListCardSkeleton() {
   return (
     <div className="space-y-4">
-      {Array(6)
+      {Array(3)
         .fill(null)
         .map((_, index) => {
           return (
