@@ -10,7 +10,6 @@ import type {
   VendorProfile,
 } from './types'
 import { getAuthUser } from './loader'
-import axios from 'axios'
 
 export const useUserData = () => {
   const getAuthUserDetails = async () => {

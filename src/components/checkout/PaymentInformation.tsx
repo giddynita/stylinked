@@ -6,8 +6,6 @@ import type { PaymentMethodOption } from '@/utils/types'
 import { Button } from '../ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { handleStepChange } from '@/features/checkout/checkoutSlice'
-import { useUserData } from '@/utils/hooks'
-import { useUser } from '@supabase/auth-helpers-react'
 
 function PaymentInformation() {
   const dispatch = useDispatch()
@@ -15,7 +13,7 @@ function PaymentInformation() {
     dispatch(handleStepChange({ step }))
   }
   const { paymentMethod } = useSelector((state: any) => state.checkoutState)
-  const { orderTotal } = useSelector((state: any) => state.cartState)
+  /*  const { orderTotal } = useSelector((state: any) => state.cartState)
   const { data: userData, isLoading } = useUserData()
   const user = useUser()
   const reference = Date.now.toString()
@@ -43,7 +41,7 @@ function PaymentInformation() {
       userName,
     },
     displayName: userName,
-  }
+  } */
 
   const makePayment = () => {}
 
@@ -72,11 +70,7 @@ function PaymentInformation() {
             Back to Review
           </Button>
           {paymentMethod.name && (
-            <Button
-              className="flex-1"
-              onClick={makePayment}
-              disabled={isLoading}
-            >
+            <Button className="flex-1" onClick={makePayment}>
               Pay via {paymentMethod.name}
             </Button>
           )}
