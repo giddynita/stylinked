@@ -84,14 +84,14 @@ const Marketplace = () => {
   const clearFilters = () => {
     setSearchQuery('')
     setSelectedCategory('all')
-    setPriceRange([0, maxPrice ?? 1000000])
+    setPriceRange([0, 1000000])
     setSelectedMaterials([])
     setSelectedBrands([])
     setInStockOnly(false)
     setMinRating(0)
     setCurrentPage(1)
     setFilters({
-      priceRange: [0, 50000],
+      priceRange: [0, 1000000],
       selectedMaterials: [],
       selectedBrands: [],
       inStockOnly: false,

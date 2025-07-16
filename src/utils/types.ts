@@ -283,3 +283,9 @@ export type VendorProfile = VendorCardProp & {
   vendorProducts: ProductWithRating[]
   vendorReviews: Reviews[]
 }
+
+export type SingleProductWithRating = Product & {
+  productReviews: Reviews[]
+  totalReviews: number
+  averageRating: number
+}

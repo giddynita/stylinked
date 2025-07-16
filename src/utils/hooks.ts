@@ -58,7 +58,7 @@ export const useVendorProducts = () => {
   }
 
   const queryData = useQuery({
-    queryKey: ['vendorProducts'],
+    queryKey: ['products'],
     queryFn: getVendorProducts,
   })
 
@@ -130,7 +130,7 @@ export const useAllProducts = ({
     }
   }
   const queryData = useQuery({
-    queryKey: ['products', currentPage, filters],
+    queryKey: ['products', currentPage, filters, 'reviews'],
     queryFn: getProducts,
   })
 
@@ -210,7 +210,7 @@ export const useVendorsWithStats = (
   }
 
   const queryData = useQuery({
-    queryKey: ['vendors', currentPage, filters],
+    queryKey: ['vendors', currentPage, filters, 'products', 'reviews'],
     queryFn: getVendorsWithStats,
   })
 
@@ -282,8 +282,48 @@ export const useVendorProfile = (vendorId: string | undefined) => {
   }
 
   const queryData = useQuery({
-    queryKey: ['vendors', vendorId],
+    queryKey: ['vendors', vendorId, 'products', 'reviews'],
     queryFn: getVendorProfile,
+  })
+
+  return queryData
+}
+
+export const useSingleProduct = (id: string | undefined) => {
+  const getSingleProductWithRating = async () => {
+    if (id) {
+      const { data: product, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+      if (productError) throw new Error(productError.message)
+
+      const { data: reviews, error: reviewsError } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('productid', id)
+
+      if (reviewsError) throw new Error(reviewsError.message)
+
+      const totalReviews = reviews.length
+      const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0)
+      const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+
+      const singleProductWithRating = {
+        ...product,
+        productReviews: reviews,
+        totalReviews,
+        averageRating,
+      }
+      return singleProductWithRating
+    }
+  }
+
+  const queryData = useQuery({
+    queryKey: [id, 'products', 'reviews'],
+    queryFn: getSingleProductWithRating,
   })
 
   return queryData

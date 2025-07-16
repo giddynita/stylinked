@@ -3,12 +3,20 @@ import type { VendorProfile } from '@/utils/types'
 import VendorAvatar from '../VendorAvatar'
 import { Calendar, MapPin, MessageCircle, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import ContactVendorDialog from './ContactSellerDialog'
 
 function ProfileCard({
   vendorProfile,
 }: {
   vendorProfile: VendorProfile | undefined
 }) {
+  const [contactSellerDialogOpen, setContactSellerDialogOpen] = useState(false)
+
+  const handleDialogClose = () => {
+    setContactSellerDialogOpen(false)
+  }
+
   return (
     <>
       <Card className="p-0">
@@ -38,14 +46,22 @@ function ProfileCard({
                     </div>
                   </div>
                 </div>
-                <Button className="max-w-48">
-                  <MessageCircle className="w-4 h-4 " />
-                  Contact Vendor
-                </Button>
+                <div>
+                  <Button
+                    className="max-w-48"
+                    onClick={() => setContactSellerDialogOpen(true)}
+                  >
+                    <MessageCircle className="w-4 h-4 " />
+                    Contact Vendor
+                  </Button>
+                  <ContactVendorDialog
+                    vendorProfile={vendorProfile}
+                    contactSellerDialogOpen={contactSellerDialogOpen}
+                    setContactSellerDialogOpen={handleDialogClose}
+                  />
+                </div>
               </div>
-
               <p className="text-foreground">{vendorProfile?.description}</p>
-
               <div className="flex items-center space-x-2">
                 <div className="flex items-center space-x-1">
                   <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />

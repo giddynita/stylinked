@@ -7,27 +7,19 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Star, ShoppingCart, MessageCircle, Minus } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
-import {
-  averageRating,
-  currencyFormatter,
-  formatCreatedAt,
-} from '@/utils/format'
+import { currencyFormatter } from '@/utils/format'
 import { Cart } from '@/components/marketplace'
-import { getReviews, getSingleProduct } from '@/utils/loader'
-import { useQuery } from '@tanstack/react-query'
-import { useUserData } from '@/utils/hooks'
+import { useSingleProduct, useUserData } from '@/utils/hooks'
 import { reviewSchema, validateWithZodSchema } from '@/utils/schema'
 import { addReviewAction } from '@/utils/action'
 import { toast } from 'sonner'
-import {
-  ExistingReviewsSkeleton,
-  ProductInfoSkeleton,
-} from '@/components/skeletons'
-import type { CartItemType } from '@/utils/types'
+import { ProductInfoSkeleton } from '@/components/skeletons'
+import type { CartItemType, ColorQuantity } from '@/utils/types'
 import { addItem } from '@/features/cart/cartSlice'
 import { useDispatch } from 'react-redux'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
 import { Ratings } from '@/components/global'
+import ProductReviews from '@/components/global/ProductReviews'
 
 const ProductDetails = () => {
   const { productid } = useParams()
@@ -36,14 +28,11 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1)
   const [reviewText, setReviewText] = useState('')
   const [reviewRating, setReviewRating] = useState(5)
+  const [selectedImage, setSelectedImage] = useState(0)
 
   //fech single product
-  const queryProduct = {
-    queryKey: ['products', productid],
-    queryFn: () => getSingleProduct(productid),
-  }
-  const { data: product, isLoading: productInfoLoading } =
-    useQuery(queryProduct)
+  const { data: product, isLoading: productLoading } =
+    useSingleProduct(productid)
 
   const cartItem = product && {
     images: product.images,
@@ -57,47 +46,13 @@ const ProductDetails = () => {
     availableVariants: product.variants,
   }
 
-  /* const reviews = [
-    {
-      id: 1,
-      author: 'Sarah Johnson',
-      rating: 5,
-      date: '2 weeks ago',
-      text: 'Absolutely gorgeous dress! The craftsmanship is exceptional and it fit perfectly. Worth every penny!',
-      helpful: 12,
-    },
-    {
-      id: 2,
-      author: 'Emily Chen',
-      rating: 5,
-      date: '1 month ago',
-      text: 'Amazing quality and beautiful design. The vendor was very responsive and accommodating.',
-      helpful: 8,
-    },
-    {
-      id: 3,
-      author: 'Maria Rodriguez',
-      rating: 4,
-      date: '2 months ago',
-      text: 'Love the dress but delivery took a bit longer than expected. Quality is excellent though!',
-      helpful: 5,
-    },
-  
-  ] */
-
   //fetch user data
   const { data: userData } = useUserData()
 
   //fetch reviews and calculate ratings
-  const queryReviews = {
-    queryKey: ['reviews'],
-    queryFn: () => getReviews(productid),
-  }
-  const { data: reviews, isLoading: productReviewsLoading } =
-    useQuery(queryReviews)
 
-  const rating = averageRating(reviews)
-  const totalReviews = reviews?.length
+  const rating = product?.averageRating
+  const totalReviews = product?.totalReviews
 
   //add to cart
   const dispatch = useDispatch()
@@ -157,7 +112,7 @@ const ProductDetails = () => {
       {/*breadcrumbs */}
       <SubPagesHeader currentPage={product?.name} previousPage="marketplace" />
       {/* product details */}
-      {productInfoLoading ? (
+      {productLoading ? (
         <ProductInfoSkeleton />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
@@ -165,20 +120,23 @@ const ProductDetails = () => {
           <div>
             <div className="mb-4 p-6  h-max">
               <img
-                src={product?.images[0]}
+                src={product?.images[selectedImage]}
                 alt={product?.name}
                 className="w-full max-w-xs mx-auto  object-cover rounded-lg"
                 loading="lazy"
               />
             </div>
             <div className="flex flex-row items-center justify-center gap-2">
-              {product?.images.map((image, index) => (
+              {product?.images.map((image: string, index: number) => (
                 <img
                   key={index}
                   src={image}
                   alt={`${product?.name} ${index + 1}`}
-                  className="w-[25%] h-30 object-cover rounded cursor-pointer hover:opacity-75 transition-opacity"
+                  className={`w-[25%] h-30 object-cover rounded cursor-pointer hover:opacity-75 transition-opacity ${
+                    index === selectedImage && 'border border-primary border-2'
+                  }`}
                   loading="lazy"
+                  onClick={() => setSelectedImage(index)}
                 />
               ))}
             </div>
@@ -231,7 +189,7 @@ const ProductDetails = () => {
                     </li>
                   )}
                   {!product?.brand || (
-                    <li className="text-sm text-gray-600 flex items-center">
+                    <li className="text-sm text-muted-foreground flex items-center">
                       <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
                       Designed by {product?.brand}
                     </li>
@@ -244,7 +202,7 @@ const ProductDetails = () => {
             <div className="mb-6">
               <Label className=" mb-2">Choose a Size</Label>
               <div className="flex flex-wrap gap-2">
-                {product?.variants.map(({ size }) => (
+                {product?.variants.map(({ size }: { size: string }) => (
                   <Button
                     key={size}
                     variant={selectedSize === size ? 'default' : 'outline'}
@@ -261,17 +219,20 @@ const ProductDetails = () => {
             <div className="mb-6">
               <Label className="block mb-2">Choose a Color</Label>
               <div className="flex flex-wrap gap-2">
-                {product?.variants.map(({ colors }) =>
-                  colors.map(({ color }) => (
-                    <Button
-                      key={color}
-                      variant={selectedColor === color ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setSelectedColor(color)}
-                    >
-                      {color}
-                    </Button>
-                  ))
+                {product?.variants.map(
+                  ({ colors }: { colors: ColorQuantity[] }) =>
+                    colors.map(({ color }: { color: string }) => (
+                      <Button
+                        key={color}
+                        variant={
+                          selectedColor === color ? 'default' : 'outline'
+                        }
+                        size="sm"
+                        onClick={() => setSelectedColor(color)}
+                      >
+                        {color}
+                      </Button>
+                    ))
                 )}
               </div>
             </div>
@@ -328,86 +289,59 @@ const ProductDetails = () => {
       {/* Reviews Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
         {/* Existing Reviews */}
-        {productReviewsLoading ? (
-          <ExistingReviewsSkeleton />
-        ) : (
-          reviews &&
-          reviews.length > 0 && (
-            <div>
-              <h2 className="text-xl font-bold mb-6">
-                {`Customer Review ${reviews.length > 1 ? 's' : ''}`} (
-                {reviews.length})
-              </h2>
-              <div className="space-y-6">
-                {reviews.map((review) => (
-                  <Card key={review.id}>
-                    <CardContent className="">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <div className="flex items-center space-x-2 mb-1">
-                            <span className="font-medium">{review.name}</span>
-                            <Ratings rating={review.rating} />
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            on {formatCreatedAt(review.createdat)}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-foreground mb-3">{review.comment}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          )
-        )}
-        {/* Write a Review */}
-        <div>
-          <h2 className="text-xl font-bold mb-6">Write a Review</h2>
-          <Card>
-            <CardContent>
-              <form onSubmit={handleReviewSubmit} className="space-y-8">
-                <div>
-                  <Label className="block mb-2">Rating</Label>
-                  <div className="flex items-center space-x-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`w-6 h-6 cursor-pointer ${
-                          star <= reviewRating
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'text-muted-foreground/50'
-                        }`}
-                        onClick={() => setReviewRating(star)}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <Label htmlFor="review">Your Review</Label>
-                  <Textarea
-                    id="review"
-                    placeholder="Share your experience with this product..."
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    rows={8}
-                    className="resize-none p-6"
-                    required
-                  />
-                </div>
+        <section>
+          <ProductReviews reviews={product?.productReviews} />
+        </section>
 
-                <Button
-                  type="submit"
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                  disabled={isPending}
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  {isPending ? 'Submitting...' : 'Submit Review'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Write a Review */}
+        {userData && (
+          <section>
+            <h2 className="text-xl font-bold mb-4">Write a Review</h2>
+            <Card>
+              <CardContent>
+                <form onSubmit={handleReviewSubmit} className="space-y-8">
+                  <div>
+                    <Label className="block mb-2">Rating</Label>
+                    <div className="flex items-center space-x-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-6 h-6 cursor-pointer ${
+                            star <= reviewRating
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'text-muted-foreground/50'
+                          }`}
+                          onClick={() => setReviewRating(star)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <Label htmlFor="review">Your Review</Label>
+                    <Textarea
+                      id="review"
+                      placeholder="Share your experience with this product..."
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      rows={8}
+                      className="resize-none p-6"
+                      required
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    disabled={isPending}
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    {isPending ? 'Submitting...' : 'Submit Review'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </section>
+        )}
       </div>
       {/* cart */}
       <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">

@@ -225,7 +225,7 @@ export const deleteProductAction = () => {
   const deleteProductFunction = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
     },
   })
 
@@ -248,7 +248,7 @@ export const addProductAction = () => {
   const addProductFunction = useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
     },
   })
 
@@ -273,7 +273,7 @@ export const updateProductAction = () => {
   const updateProductFunction = useMutation({
     mutationFn: updateProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vendorProducts'] })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
     },
   })
   return updateProductFunction

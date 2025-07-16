@@ -63,16 +63,16 @@ const AdvancedFilters = ({
       setSelectedBrands(selectedBrands.filter((s) => s !== brand))
     }
   }
-
+  const max = maxPrice && maxPrice > 0 ? maxPrice : 0
   const clearFilters = () => {
     setFilters({
-      priceRange: [0, maxPrice ?? 1000000],
+      priceRange: [0, 1000000],
       selectedMaterials: [],
       selectedBrands: [],
       inStockOnly: false,
       minRating: 0,
     })
-    setPriceRange([0, maxPrice ?? 1000000])
+    setPriceRange([0, 1000000])
     setSelectedMaterials([])
     setSelectedBrands([])
     setInStockOnly(false)
@@ -140,13 +140,13 @@ const AdvancedFilters = ({
             <Slider
               value={priceRange}
               onValueChange={setPriceRange}
-              max={maxPrice ?? 1000000}
+              max={max}
               step={1000}
               className="w-full"
             />
             <div className="flex justify-between text-sm text-gray-600">
               <span>{currencyFormatter(priceRange[0])}</span>
-              <span>{currencyFormatter(maxPrice ?? priceRange[1])}</span>
+              <span>{currencyFormatter(max ?? priceRange[1])}</span>
             </div>
           </div>
           {/* Rating */}

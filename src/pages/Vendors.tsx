@@ -84,8 +84,12 @@ const Vendors = () => {
     itemsPerPage,
     filters
   )
-  const totalPages = data && Math.ceil(data?.totalCount / itemsPerPage)
-  const filteredVendors = data?.vendors
+
+  const filteredVendors = data?.vendors.filter(
+    (vendor) => vendor.totalProducts >= 1
+  )
+  const totalPages =
+    filteredVendors && Math.ceil(filteredVendors.length / itemsPerPage)
   const sortedVendors =
     filteredVendors &&
     filteredVendors.flat().sort((a, b) => {
