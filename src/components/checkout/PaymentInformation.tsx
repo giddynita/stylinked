@@ -44,17 +44,8 @@ function PaymentInformation() {
     },
     displayName: userName,
   }
-  /* const { data: response, isLoading: paymentLoading } =
-    useOpayPayment(orderData) */
-  const makePayment = () => {
-    /*  if (paymentLoading) {
-      toast.loading('Payment initiated')
-    } */
-    /* if (response?.code !== '00000') {
-      return toast.error(response?.message)
-    }
-    window.location.href = response?.data?.cashierUrl */
-  }
+
+  const makePayment = () => {}
 
   return (
     <Card>
