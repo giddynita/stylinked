@@ -100,12 +100,8 @@ export const vendorFormSchema = z.object({
     .length(11, {
       message: 'Please enter a valid 11-digit phone number.',
     }),
-  location: z
-    .string()
-    .min(3, {
-      message: 'Please enter a valid location.',
-    })
-    .max(10),
+  city: z.string().trim().min(3, { message: 'Please enter valid city' }),
+  state: z.string().trim().min(3, { message: 'Please enter valid state' }),
 })
 export type VendorFormSchema = z.infer<typeof vendorFormSchema>
 

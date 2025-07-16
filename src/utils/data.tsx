@@ -119,7 +119,7 @@ export const nonUserNavLinks = [
     url: '/marketplace',
   },
   {
-    title: 'Find Vendors',
+    title: 'Vendors',
     url: '/vendors',
   },
 ]
@@ -264,3 +264,12 @@ export const paymentMethods = [
     icon: Hash,
   },
 ]
+
+export const southwestStates = {
+  Lagos: ['Ikeja', 'Badagry', 'Epe', 'Ikorodu', 'Surulere'],
+  Ogun: ['Abeokuta', 'Ijebu-Ode', 'Sagamu', 'Ota', 'Ilaro'],
+  Oyo: ['Ibadan', 'Ogbomoso', 'Oyo', 'Iseyin', 'Eruwa'],
+  Osun: ['Osogbo', 'Ilesa', 'Ife', 'Ikirun', 'Ejigbo'],
+  Ondo: ['Akure', 'Owo', 'Ondo', 'Okitipupa', 'Ikare'],
+  Ekiti: ['Ado-Ekiti', 'Ikere', 'Ise', 'Oye', 'Ijero'],
+}

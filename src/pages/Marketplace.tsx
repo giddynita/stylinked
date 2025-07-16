@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -8,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Search, SlidersHorizontal, Grid3X3, List } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import {
   AdvancedFilters,
   CategoriesCarousel,
@@ -17,14 +16,18 @@ import {
 } from '@/components/marketplace'
 import { Label } from '@/components/ui/label'
 import type { ProductFilter } from '@/utils/types'
-import { CustomPagination } from '@/components/global'
+import {
+  CustomPagination,
+  SearchBar,
+  ViewModeToggle,
+} from '@/components/global'
 import AppHeader from '@/components/headers/AppHeader'
-import { useQuery } from '@tanstack/react-query'
-import { getProducts } from '@/utils/loader'
 import {
   ProductGridCardSkeleton,
   ProductListCardSkeleton,
 } from '@/components/skeletons'
+import { useAllProducts } from '@/utils/hooks'
+import { QueryHeading } from '@/components/headings'
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
@@ -64,16 +67,16 @@ const Marketplace = () => {
   }
 
   const handleSearchQuery: (searchQuery: string) => void = (searchQuery) => {
-    setFilters({ ...filters, searchQuery: searchQuery })
+    setFilters({ ...filters, searchQuery })
   }
 
   const itemsPerPage = 3
   //fetch filtered products
-  const queryData = {
-    queryKey: ['products', currentPage, filters],
-    queryFn: () => getProducts({ currentPage, itemsPerPage, filters }),
-  }
-  const { data, isLoading, isError } = useQuery(queryData)
+  const { data, isLoading, isError } = useAllProducts({
+    currentPage,
+    itemsPerPage,
+    filters,
+  })
   const maxPrice =
     data && Math.max(...data?.products?.map((product) => product?.price))
 
@@ -168,28 +171,17 @@ const Marketplace = () => {
             maxPrice={maxPrice}
           />
         </section>
-        <section className="  py-8 col-span-5">
+        <section className="py-8 col-span-5">
           {/* Enhanced Search and Filters */}
-          <section className="mb-8">
+          <div className="mb-8">
             {/* search */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="flex flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  placeholder={`Search for products...`}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 outline-none focus-visible:outline-none focus-visible:ring-0 border-r-0 focus:border-r-0 rounded-r-none"
-                />
-
-                <Button
-                  size="lg"
-                  className=" h-12 rounded-l-none sm:px-8 border border-l-none border-primary"
-                  onClick={() => handleSearchQuery(searchQuery)}
-                >
-                  Search
-                </Button>
-              </div>
+              <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                handleSearchQuery={handleSearchQuery}
+                placeholder="Search products by name..."
+              />
               <Button
                 variant="outline"
                 className="lg:w-auto lg:hidden"
@@ -226,17 +218,16 @@ const Marketplace = () => {
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
             />
-          </section>
-          {/* Results Header with View Toggle */}
-          <section className="mb-8">
-            {searchQuery && sortedProducts && (
-              <h2 className="text-2xl text mb-8">
-                Result{sortedProducts.length > 1 && 's'} for{' '}
-                <span className="font-bold">{searchQuery}</span> (
-                {sortedProducts.length})
-              </h2>
-            )}
-            <div className="flex items-center justify-between gap-2">
+          </div>
+          <section>
+            {/* Results Header */}
+            <QueryHeading
+              query={searchQuery}
+              queryResult={sortedProducts}
+              type="product"
+            />
+            {/*  Sorting &  View Toggle */}
+            <div className="flex items-center justify-between gap-2 mb-8">
               {/* Sort Dropdown */}
               <div className="flex items-center space-x-2">
                 <Label className="text-muted-foreground">Sort by:</Label>
@@ -258,61 +249,51 @@ const Marketplace = () => {
               </div>
 
               {/* View Mode Toggle */}
-              <div className="flex border rounded-md">
+              <ViewModeToggle
+                viewMode={viewMode}
+                handleViewMode={handleViewMode}
+              />
+            </div>
+
+            {/* Products Grid/List */}
+            {productView}
+
+            {/* Pagination */}
+            {sortedProducts && sortedProducts.length >= 1 && totalPages && (
+              <CustomPagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                handlePageChange={handlePageChange}
+              />
+            )}
+
+            {/*fetching product failed */}
+            {!isLoading && isError && (
+              <div className="text-center py-12">
+                <p className="text-lg font-medium">Error fetching products.</p>
                 <Button
-                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => handleViewMode('grid')}
-                  className="rounded-r-none"
+                  className="mt-4"
+                  onClick={() => window.location.reload()}
                 >
-                  <Grid3X3 className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant={viewMode === 'list' ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => handleViewMode('list')}
-                  className="rounded-l-none"
-                >
-                  <List className="w-4 h-4" />
+                  Reload Page
                 </Button>
               </div>
-            </div>
+            )}
+            {!isLoading && !isError && !sortedProducts?.length && (
+              <div className=" text-center py-12">
+                <p className=" text-lg font-medium">
+                  No product found matching your criteria.
+                </p>
+                <Button
+                  disabled={isLoading}
+                  className="mt-4"
+                  onClick={clearFilters}
+                >
+                  Clear Filters
+                </Button>
+              </div>
+            )}
           </section>
-          {/* Products Grid/List */}
-          <section>{productView}</section>
-
-          {/*   {/* Pagination */}
-          {sortedProducts && sortedProducts.length >= 1 && totalPages && (
-            <CustomPagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              handlePageChange={handlePageChange}
-            />
-          )}
-
-          {/*fetching product failed */}
-          {!isLoading && isError && (
-            <div className="text-center py-12">
-              <p className="text-lg font-medium">Error fetching products.</p>
-              <Button className="mt-4" onClick={() => window.location.reload()}>
-                Reload Page
-              </Button>
-            </div>
-          )}
-          {!isLoading && !isError && !sortedProducts?.length && (
-            <div className=" text-center py-12">
-              <p className=" text-lg font-medium">
-                No product found matching your criteria.
-              </p>
-              <Button
-                disabled={isLoading}
-                className="mt-4"
-                onClick={clearFilters}
-              >
-                Clear Filters
-              </Button>
-            </div>
-          )}
         </section>
       </div>
     </>

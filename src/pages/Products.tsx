@@ -61,6 +61,7 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   //hooks
+
   const { data: products, isLoading } = useVendorProducts()
   const {
     mutate: deleteProduct,

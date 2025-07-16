@@ -33,10 +33,17 @@ function VendorDetailsForm({ form }: { form: any }) {
       />
       <FormInput
         form={form}
-        label="Your Location"
-        placeholder="Enter City"
+        label="City"
+        placeholder="City of business"
         type="text"
-        name="location"
+        name="city"
+      />
+      <FormInput
+        form={form}
+        label="State"
+        placeholder="State of business"
+        type="text"
+        name="state"
       />
     </>
   )

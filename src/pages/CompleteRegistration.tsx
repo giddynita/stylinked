@@ -92,9 +92,6 @@ function CompleteRegistration() {
     const request = { ...data, setSubmitting, navigate }
     completeRegistrationAction(request)
   }
-  const onError = (errors: any) => {
-    console.log(errors)
-  }
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -151,10 +148,7 @@ function CompleteRegistration() {
         />
         <CardContent>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit, onError)}
-              className="space-y-8"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormRadio
                 form={form}
                 label="Account Type"

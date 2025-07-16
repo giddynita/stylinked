@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient'
-import type { getProductsType, Product, Reviews } from './types'
+import type { Product, Reviews } from './types'
 
 export const getAuthUser = async () => {
   const {
@@ -10,49 +10,6 @@ export const getAuthUser = async () => {
     console.error('No user found or error:', error?.message)
   }
   return user
-}
-
-export const getProducts = async ({
-  currentPage,
-  itemsPerPage,
-  filters,
-}: getProductsType) => {
-  const fromIndex = (currentPage - 1) * itemsPerPage
-  const toIndex = fromIndex + itemsPerPage - 1
-
-  let query = supabase.from('products').select('*', { count: 'exact' })
-
-  if (filters.searchQuery) {
-    query = query.ilike('name', `%${filters.searchQuery.trim()}%`)
-  }
-
-  if (filters.priceRange) {
-    query = query
-      .gte('price', filters.priceRange[0])
-      .lte('price', filters.priceRange[1])
-  }
-
-  if (filters.selectedBrands?.length) {
-    query = query.in('brand', filters.selectedBrands)
-  }
-
-  if (filters.selectedMaterials?.length) {
-    query = query.in('material', filters.selectedMaterials)
-  }
-
-  if (typeof filters.minRating === 'number') {
-    query = query.gte('rating', filters.minRating)
-  }
-
-  if (filters.inStockOnly) {
-    query = query.gte('stock', 1)
-  }
-
-  const { data, error, count } = await query.range(fromIndex, toIndex)
-
-  if (error) throw new Error(error.message)
-
-  return { products: data as Product[], total: count ?? 0 }
 }
 
 export const getSingleProduct = async (productId: string | undefined) => {

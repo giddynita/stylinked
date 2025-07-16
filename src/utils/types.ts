@@ -233,3 +233,41 @@ export interface PaymentMethodOption {
   icon: any
   popular?: boolean
 }
+
+export interface VendorCardProp {
+  rating: number
+  totalReviews: number
+  joinedDate: string
+  totalProducts: number
+  id: string
+  firstname: string
+  lastname: string
+  businessname: string
+  phone: string
+  city: string
+  state: string
+  description: string
+  image: string
+}
+export type VendorFilter = {
+  selectedState?: string
+  selectedCity?: string
+  searchQuery?: string
+}
+export type getVendorsType = {
+  currentPage: number
+  itemsPerPage: number
+  filters: VendorFilter
+}
+
+export type Vendor = {
+  id: string
+  firstname: string
+  lastname: string
+  businessname: string
+  phone: string
+  city: string
+  state: string
+  description: string
+  image: string
+}
