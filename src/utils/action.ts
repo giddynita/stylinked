@@ -5,6 +5,8 @@ import type {
   ForgotPasswordAction,
   LoginAction,
   LogoutAction,
+  Order,
+  OrderItem,
   Product,
   ResetPasswordAction,
   ReviewsForm,
@@ -295,4 +297,39 @@ export const addReviewAction = () => {
   })
 
   return addReviewFunction
+}
+export const addOrdersAction = () => {
+  const addOrder = async (order: Order) => {
+    const { error } = await supabase.from('orders').insert([order])
+    if (error) throw new Error(error.message)
+  }
+
+  const queryClient = useQueryClient()
+
+  const addOrderFunction = useMutation({
+    mutationFn: addOrder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    },
+  })
+
+  return addOrderFunction
+}
+
+export const addOrderItemsAction = () => {
+  const addOrderItem = async (orderItem: OrderItem) => {
+    const { error } = await supabase.from('order_items').insert([orderItem])
+    if (error) throw new Error(error.message)
+  }
+
+  const queryClient = useQueryClient()
+
+  const addOrderItemFunction = useMutation({
+    mutationFn: addOrderItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    },
+  })
+
+  return addOrderItemFunction
 }

@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
 import { Ratings } from '@/components/global'
 import ProductReviews from '@/components/global/ProductReviews'
+import { useUser } from '@supabase/auth-helpers-react'
 
 const ProductDetails = () => {
   const { productid } = useParams()
@@ -48,7 +49,7 @@ const ProductDetails = () => {
 
   //fetch user data
   const { data: userData } = useUserData()
-
+  const user = useUser()
   //fetch reviews and calculate ratings
 
   const rating = product?.averageRating
@@ -294,7 +295,7 @@ const ProductDetails = () => {
         </section>
 
         {/* Write a Review */}
-        {userData && (
+        {user && (
           <section>
             <h2 className="text-xl font-bold mb-4">Write a Review</h2>
             <Card>

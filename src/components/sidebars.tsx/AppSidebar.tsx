@@ -65,7 +65,7 @@ export function AppSidebar() {
             {user ? (
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  className="w-full bg-destructive hover:bg-red-500 cursor-pointer"
+                  className="w-full text-white bg-destructive hover:bg-red-500 cursor-pointer"
                   onClick={() => {
                     logoutAction({ navigate, setLogout })
                   }}

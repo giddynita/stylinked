@@ -239,26 +239,26 @@ export const progress = [
 ]
 export const paymentMethods = [
   {
-    id: 'BankCard',
+    id: 'card',
     title: 'Bank Card',
     description: 'Pay instantly with your debit or credit card',
     icon: CreditCard,
     popular: true,
   },
   {
-    id: 'BankAccount',
+    id: 'bank',
     title: 'Bank Account',
     description: 'Direct payment from your bank account',
     icon: Building2,
   },
   {
-    id: 'BankTransfer',
+    id: 'bank_transfer',
     title: 'Bank Transfer',
     description: 'Transfer funds directly between banks',
     icon: ArrowLeftRight,
   },
   {
-    id: 'BankUssd',
+    id: 'ussd',
     title: 'Bank USSD',
     description: 'Pay using USSD codes from your mobile device',
     icon: Hash,

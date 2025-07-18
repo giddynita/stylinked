@@ -21,7 +21,7 @@ function CartItems() {
         <h1 className="text-xl font-bold text-foreground/80">
           Cart ({numItemsInCart})
         </h1>
-        <Button variant="destructive" size="lg" onClick={clearCartItems}>
+        <Button variant="destructive" size="sm" onClick={clearCartItems}>
           Clear Cart
           <X className="w-6 h-6" />
         </Button>

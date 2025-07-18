@@ -51,6 +51,7 @@ function AddToCart({ product }: ProductCardProps) {
     amount: quantity,
     id: product.id,
     vendor: product.vendor,
+    vendorid: product.vendorid,
   }
   return (
     <Dialog

@@ -193,6 +193,7 @@ export type CartItemType = {
   amount: number
   id: string
   vendor: string
+  vendorid: string
 }
 
 export interface Cart {
@@ -222,11 +223,7 @@ export interface CheckoutType {
   }
 }
 
-export type PaymentMethod =
-  | 'BankAccount'
-  | 'BankTransfer'
-  | 'BankCard'
-  | 'BankUssd'
+export type PaymentMethod = 'card' | 'bank' | 'bank_transfer' | 'ussd'
 
 export interface PaymentMethodOption {
   id: PaymentMethod
@@ -288,4 +285,42 @@ export type SingleProductWithRating = Product & {
   productReviews: Reviews[]
   totalReviews: number
   averageRating: number
+}
+export type Order = {
+  shipping_method: string
+  created_at?: string
+  updates_at?: string
+  shipping_fee: number
+  order_total: number
+  payment_method: string
+  status?: string
+  user_id: string | undefined
+  order_id: string
+  shipping_info: {
+    email: string
+    firstname: string
+    lastname: string
+    address: string
+    zipcode: string
+    city: string
+    state: string
+    country: string
+    phone: string
+  }
+  id?: string
+}
+
+export type OrderItem = {
+  id?: string
+  order_id: string
+  product_id: string
+  images: string[]
+  name: string
+  price: number
+  color: string
+  size: string
+  amount: number
+  vendor: string
+  vendor_id: string
+  status?: string
 }
