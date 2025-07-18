@@ -324,3 +324,18 @@ export type OrderItem = {
   vendor_id: string
   status?: string
 }
+
+export type ProductTrendData = {
+  day: string
+  products_added: number
+}
+
+export type OrdersWithPendingOrderNo = {
+  orders: OrderItem[]
+  pendingOrdersLength: number | undefined
+}
+export type OrdersTrendData = {
+  day: string
+  order_items_added: number
+  order_amount_added: number
+}

@@ -10,17 +10,21 @@ export const parseStringToArray = (
     .filter((item) => item.length)
 }
 
-export const currencyFormatter = (price: number) => {
-  const amount = new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    maximumFractionDigits: 0,
-  }).format(price)
-  return amount
+export const currencyFormatter = (price: number | undefined) => {
+  if (price) {
+    const amount = new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      maximumFractionDigits: 0,
+    }).format(price)
+    return amount
+  }
 }
 
-export const padNumber = (n: number) => {
-  return String(n).padStart(2, '0')
+export const padNumber = (n: number | undefined) => {
+  if (n) {
+    return String(n).padStart(2, '0')
+  }
 }
 
 export const slugify = (name: string) => {

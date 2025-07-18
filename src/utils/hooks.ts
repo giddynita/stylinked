@@ -2,6 +2,10 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from './supabaseClient'
 import type {
   getProductsType,
+  OrdersTrendData,
+  OrdersWithPendingOrderNo,
+  Product,
+  ProductTrendData,
   ProductWithRating,
   UserDataType,
   UserRole,
@@ -54,7 +58,7 @@ export const useVendorProducts = () => {
 
     if (error) throw new Error(error.message)
 
-    return data
+    return data as Product[]
   }
 
   const queryData = useQuery({
@@ -326,5 +330,76 @@ export const useSingleProduct = (id: string | undefined) => {
     queryFn: getSingleProductWithRating,
   })
 
+  return queryData
+}
+
+export const useVendorProductTrend = () => {
+  const getVendorProductTrend = async () => {
+    const user = await getAuthUser()
+    const { data: trendData, error } = await supabase.rpc(
+      'get_daily_product_trend_by_vendor',
+      {
+        vendorid: user?.id,
+      }
+    )
+
+    if (error) throw new Error(error.message)
+
+    return trendData as ProductTrendData[]
+  }
+  const queryData = useQuery({
+    queryKey: ['products'],
+    queryFn: getVendorProductTrend,
+  })
+  return queryData
+}
+
+export const useVendorOrders = () => {
+  const getVendorOrders = async () => {
+    const user = await getAuthUser()
+
+    const { data: orders, error: ordersError } = await supabase
+      .from('order_items')
+      .select('*')
+      .eq('vendor_id', user?.id)
+
+    const pendingOrders = orders?.filter((order) => order.status === 'pending')
+
+    if (ordersError) throw new Error(ordersError.message)
+
+    const ordersWithPendingOrderNo = {
+      orders,
+      pendingOrdersLength: pendingOrders?.length,
+    }
+
+    return ordersWithPendingOrderNo as OrdersWithPendingOrderNo
+  }
+  const queryData = useQuery({
+    queryKey: ['orders'],
+    queryFn: getVendorOrders,
+  })
+
+  return queryData
+}
+
+export const useOrdersTrend = () => {
+  const getOrdersTrend = async () => {
+    const user = await getAuthUser()
+    const { data: trendData, error } = await supabase.rpc(
+      'get_daily_orders_trend_by_vendor',
+      {
+        input_vendor_id: user?.id,
+      }
+    )
+
+    if (error) throw new Error(error.message)
+
+    return trendData as OrdersTrendData[]
+  }
+
+  const queryData = useQuery({
+    queryKey: ['orders', 'stat'],
+    queryFn: getOrdersTrend,
+  })
   return queryData
 }

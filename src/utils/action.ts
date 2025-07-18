@@ -317,11 +317,10 @@ export const addOrdersAction = () => {
 }
 
 export const addOrderItemsAction = () => {
-  const addOrderItem = async (orderItem: OrderItem) => {
-    const { error } = await supabase.from('order_items').insert([orderItem])
+  const addOrderItem = async (orderItem: OrderItem[]) => {
+    const { error } = await supabase.from('order_items').insert([...orderItem])
     if (error) throw new Error(error.message)
   }
-
   const queryClient = useQueryClient()
 
   const addOrderItemFunction = useMutation({

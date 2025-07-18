@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { usePaystackPayment } from 'react-paystack'
 import { clearCart } from '@/features/cart/cartSlice'
+import { resetCheckout } from '@/features/checkout/checkoutSlice'
 
 function PaystackPaymentButton() {
   const { data: userData, isLoading } = useUserData()
@@ -21,14 +22,14 @@ function PaystackPaymentButton() {
     (state: any) => state.cartState
   )
   const dispatch = useDispatch()
-  const clearCartItems = () => {
-    dispatch(clearCart())
-  }
   const navigate = useNavigate()
   const { mutate: addOrders, isPending: addingOrders } = addOrdersAction()
-  const { mutate: addOrderItem, isPending: addingOrderItem } =
+  const { mutate: addOrderItems, isPending: addingOrderItems } =
     addOrderItemsAction()
-
+  const clearCartItemsAndCheckoutHistory = () => {
+    dispatch(resetCheckout())
+    dispatch(clearCart())
+  }
   const config = {
     publicKey: `${import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}`,
     amount: orderTotal * 100,
@@ -59,11 +60,7 @@ function PaystackPaymentButton() {
       order_id: reference,
       shipping_info: shippingForm,
     }
-    if (addingOrderItem || addingOrders) {
-      toast.loading('Please wait...')
-    }
-    addOrders(orderData)
-    cartItems.map((item) => {
+    const orderItems = cartItems.map((item) => {
       const { images, name, price, color, size, amount, vendor, vendorid } =
         item
       const orderItem: OrderItem = {
@@ -78,10 +75,15 @@ function PaystackPaymentButton() {
         amount,
         vendor,
       }
-      return addOrderItem(orderItem)
+      return orderItem
     })
+    if (addingOrderItems || addingOrders) {
+      toast.loading('Please wait...')
+    }
+    addOrders(orderData)
+    addOrderItems(orderItems)
+    clearCartItemsAndCheckoutHistory()
     toast.success('Order placed successfully!')
-    clearCartItems()
     return navigate('/account/orders')
   }
 

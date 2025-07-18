@@ -2,7 +2,6 @@ import { ThemeProvider } from '@/components/theme/theme-provider'
 import {
   AuthLayout,
   CompleteRegistration,
-  DashboardLayout,
   ForgotPassword,
   Home,
   Layout,
@@ -26,6 +25,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute } from './components/global'
 import VendorProfile from './pages/VendorProfile'
+import AccountLayout from './pages/AccountLayout'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -129,7 +129,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'account',
-    element: <DashboardLayout />,
+    element: <AccountLayout />,
     children: [
       {
         index: true,

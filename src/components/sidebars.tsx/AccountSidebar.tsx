@@ -32,7 +32,7 @@ const navigation = [
   { title: 'Settings', url: 'settings', icon: User },
 ]
 
-function DashboardSidebar() {
+function AccountSidebar() {
   const { state, isMobile } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
@@ -156,4 +156,4 @@ function DashboardSidebar() {
     </Sidebar>
   )
 }
-export default DashboardSidebar
+export default AccountSidebar

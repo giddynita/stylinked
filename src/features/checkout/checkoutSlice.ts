@@ -36,6 +36,24 @@ const checkoutSlice = createSlice({
       state.paymentMethod.id = id
       state.paymentMethod.name = name
     },
+    resetCheckout: (state) => {
+      state.paymentMethod = {
+        id: '',
+        name: '',
+      }
+      state.step = 1
+      state.shippingForm = {
+        email: '',
+        firstname: '',
+        lastname: '',
+        address: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        phone: '',
+        country: 'Nigeria',
+      }
+    },
   },
 })
 
@@ -43,6 +61,7 @@ export const {
   handleShippingFormInput,
   handleStepChange,
   handlePaymentMethod,
+  resetCheckout,
 } = checkoutSlice.actions
 
 export default checkoutSlice.reducer
