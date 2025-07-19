@@ -8,6 +8,8 @@ import Trend from './Trend'
 function PendingOrdersCard() {
   const { data: orders, isLoading: ordersLoading } = useVendorOrders()
   const { data: orderTrend, isLoading: trendLoading } = useOrdersTrend()
+  console.log(orderTrend)
+
   const trend = orderTrend?.map((d) => {
     return { value: d.order_items_added }
   })
@@ -22,7 +24,7 @@ function PendingOrdersCard() {
           <Skeleton className="w-1/3 h-8" />
         ) : (
           <div className="text-2xl font-bold">
-            {padNumber(orders?.pendingOrdersLength)}
+            {padNumber(orders?.pendingOrdersLength) ?? 0}
           </div>
         )}
         <Trend trend={trend} isLoading={trendLoading} />

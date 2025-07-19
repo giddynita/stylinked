@@ -1,10 +1,9 @@
-function AccountPagesHeading({
-  pageTitle,
-  pageDesc,
-}: {
+interface AccountPagesHeading {
   pageTitle: string
   pageDesc: string
-}) {
+}
+
+function AccountPagesHeading({ pageTitle, pageDesc }: AccountPagesHeading) {
   return (
     <div>
       <h2 className="text-3xl font-bold tracking-tight">{pageTitle}</h2>

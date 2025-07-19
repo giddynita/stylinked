@@ -26,7 +26,7 @@ function TotalRevenueCard() {
           <Skeleton className="w-1/3 h-8" />
         ) : (
           <div className="text-2xl font-bold">
-            {currencyFormatter(totalAmount)}
+            {currencyFormatter(totalAmount ?? 0)}
           </div>
         )}
         <RevenueTrend trend={trend} isLoading={trendLoading} />

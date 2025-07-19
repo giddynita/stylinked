@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from './supabaseClient'
 import type {
   getProductsType,
+  Grouped,
+  OrderItem,
   OrdersTrendData,
   OrdersWithPendingOrderNo,
   Product,
@@ -14,6 +16,7 @@ import type {
   VendorProfile,
 } from './types'
 import { getAuthUser } from './loader'
+import type { PostgrestError } from '@supabase/supabase-js'
 
 export const useUserData = () => {
   const getAuthUserDetails = async () => {
@@ -358,18 +361,32 @@ export const useVendorOrders = () => {
   const getVendorOrders = async () => {
     const user = await getAuthUser()
 
-    const { data: orders, error: ordersError } = await supabase
-      .from('order_items')
-      .select('*')
-      .eq('vendor_id', user?.id)
-
-    const pendingOrders = orders?.filter((order) => order.status === 'pending')
+    const {
+      data,
+      error: ordersError,
+    }: { data: OrderItem[] | null; error: PostgrestError | null } =
+      await supabase.from('order_items').select('*').eq('vendor_id', user?.id)
+    const pendingOrders = data?.filter((order) => order.status === 'pending')
 
     if (ordersError) throw new Error(ordersError.message)
+    const grouped: Grouped | null =
+      data &&
+      data?.reduce((acc: Grouped, obj) => {
+        ;(acc[obj.order_id] ??= []).push(obj)
+        return acc
+      }, {})
+    const sortedGroupedOrders =
+      grouped &&
+      Object.entries(grouped).sort((a, b) => {
+        const tsA = parseInt(new Date(a[1][0].created_at).toString())
+        const tsB = parseInt(new Date(b[1][0].created_at).toString())
+        return tsB - tsA
+      })
 
     const ordersWithPendingOrderNo = {
-      orders,
+      orders: data,
       pendingOrdersLength: pendingOrders?.length,
+      sortedGroupedOrders,
     }
 
     return ordersWithPendingOrderNo as OrdersWithPendingOrderNo

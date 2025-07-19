@@ -317,7 +317,7 @@ export const addOrdersAction = () => {
 }
 
 export const addOrderItemsAction = () => {
-  const addOrderItem = async (orderItem: OrderItem[]) => {
+  const addOrderItem = async (orderItem: Omit<OrderItem, 'created_at'>[]) => {
     const { error } = await supabase.from('order_items').insert([...orderItem])
     if (error) throw new Error(error.message)
   }

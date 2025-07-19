@@ -24,7 +24,7 @@ function ActiveProductsCard() {
           <Skeleton className="w-1/3 h-8" />
         ) : (
           <div className="text-2xl font-bold">
-            {padNumber(activeProducts?.length)}
+            {padNumber(activeProducts?.length) ?? 0}
           </div>
         )}
         <Trend trend={trend} isLoading={trendLoading} />

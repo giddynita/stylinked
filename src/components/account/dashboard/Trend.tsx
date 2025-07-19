@@ -1,13 +1,12 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import { TrendingUp, TrendingDown, Minus, TrendingUpDown } from 'lucide-react'
 
-function Trend({
-  trend,
-  isLoading,
-}: {
+interface Trend {
   trend: { value: number }[] | undefined
   isLoading: boolean
-}) {
+}
+
+function Trend({ trend, isLoading }: Trend) {
   const trendDiff = () => {
     if (trend) {
       if (trend.length < 2)

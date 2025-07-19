@@ -89,6 +89,7 @@ export type Product = {
   createdat: string
   rating: number
   vendor: string
+  updated_at: string
 }
 
 export type UpdateProduct = {
@@ -308,6 +309,7 @@ export type Order = {
     phone: string
   }
   id?: string
+  reference: string
 }
 
 export type OrderItem = {
@@ -323,8 +325,12 @@ export type OrderItem = {
   vendor: string
   vendor_id: string
   status?: string
+  created_at: string
+  user_name: string
+  email: string | undefined
+  reference: string
 }
-
+export type Grouped = Record<string, OrderItem[]>
 export type ProductTrendData = {
   day: string
   products_added: number
@@ -333,9 +339,19 @@ export type ProductTrendData = {
 export type OrdersWithPendingOrderNo = {
   orders: OrderItem[]
   pendingOrdersLength: number | undefined
+  sortedGroupedOrders: [string, OrderItem[]][] | null
 }
 export type OrdersTrendData = {
   day: string
   order_items_added: number
   order_amount_added: number
+}
+export type PaystackRef = {
+  reference: string
+  trans: string
+  status: string
+  message: string
+  transaction: string
+  trxref: string
+  redirecturl: string
 }

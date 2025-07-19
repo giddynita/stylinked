@@ -12,7 +12,9 @@ function Cart() {
       <Button size="sm" variant="ghost" asChild>
         <NavLink
           className={`${
-            pathname === '/cart' ? 'text-primary' : 'text-muted-foreground'
+            pathname === '/cart'
+              ? 'text-primary bg-primary/10 rounded-lg'
+              : 'text-muted-foreground'
           } `}
           to="/cart"
         >

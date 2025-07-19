@@ -11,7 +11,7 @@ export const parseStringToArray = (
 }
 
 export const currencyFormatter = (price: number | undefined) => {
-  if (price) {
+  if (price || price == 0) {
     const amount = new Intl.NumberFormat('en-NG', {
       style: 'currency',
       currency: 'NGN',

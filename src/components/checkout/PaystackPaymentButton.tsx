@@ -3,7 +3,13 @@ import { Button } from '../ui/button'
 import { useUserData } from '@/utils/hooks'
 import { useUser } from '@supabase/auth-helpers-react'
 import { addOrderItemsAction, addOrdersAction } from '@/utils/action'
-import type { Cart, CheckoutType, Order, OrderItem } from '@/utils/types'
+import type {
+  Cart,
+  CheckoutType,
+  Order,
+  OrderItem,
+  PaystackRef,
+} from '@/utils/types'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { usePaystackPayment } from 'react-paystack'
@@ -50,21 +56,22 @@ function PaystackPaymentButton() {
     },
   }
 
-  const onSuccess = (reference: string) => {
+  const onSuccess = (reference: PaystackRef) => {
     const orderData: Order = {
       shipping_method: '',
       shipping_fee: shipping,
       order_total: orderTotal,
       payment_method: paymentMethod.id,
       user_id: user?.id,
-      order_id: reference,
+      order_id: reference.transaction,
       shipping_info: shippingForm,
+      reference: reference.reference,
     }
     const orderItems = cartItems.map((item) => {
       const { images, name, price, color, size, amount, vendor, vendorid } =
         item
-      const orderItem: OrderItem = {
-        order_id: reference,
+      const orderItem: Omit<OrderItem, 'created_at'> = {
+        order_id: reference.transaction,
         product_id: item.id,
         vendor_id: vendorid,
         images,
@@ -74,6 +81,9 @@ function PaystackPaymentButton() {
         size,
         amount,
         vendor,
+        user_name: `${userData?.firstname} ${userData?.lastname}`,
+        email: user?.email,
+        reference: reference.reference,
       }
       return orderItem
     })
