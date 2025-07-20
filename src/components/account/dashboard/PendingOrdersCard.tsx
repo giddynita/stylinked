@@ -8,8 +8,6 @@ import Trend from './Trend'
 function PendingOrdersCard() {
   const { data: orders, isLoading: ordersLoading } = useVendorOrders()
   const { data: orderTrend, isLoading: trendLoading } = useOrdersTrend()
-  console.log(orderTrend)
-
   const trend = orderTrend?.map((d) => {
     return { value: d.order_items_added }
   })

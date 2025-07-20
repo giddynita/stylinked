@@ -4,6 +4,7 @@ import { RefreshCw, TrendingDown } from 'lucide-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type { Product } from '@/utils/types'
+import { Link } from 'react-router-dom'
 
 interface LowStockProducts {
   lowStockProducts: Product[] | undefined
@@ -14,13 +15,13 @@ function LowStock({ lowStockProducts }: LowStockProducts) {
     if (current <= 3)
       return {
         level: 'critical',
-        className: 'bg-destructive text-destructive-foreground',
+        className: 'bg-destructive text-white',
         label: 'Critical',
       }
     if (current <= 10)
       return {
         level: 'low',
-        className: 'bg-warning text-warning-foreground',
+        className: 'bg-warning text-white ',
         label: 'Low',
       }
     return {
@@ -32,7 +33,7 @@ function LowStock({ lowStockProducts }: LowStockProducts) {
   dayjs.extend(relativeTime)
   return (
     <div className="space-y-4">
-      {lowStockProducts?.map((product) => {
+      {lowStockProducts?.slice(0, 3).map((product) => {
         const urgency = getUrgencyLevel(product.stock)
         const lastUpdated = dayjs(product.updated_at).fromNow()
 
@@ -64,14 +65,11 @@ function LowStock({ lowStockProducts }: LowStockProducts) {
                 </span>
               </div>
 
-              <Button
-                variant="outline"
-                size="sm"
-                /* onClick={() => onRestock(product.id)} */
-                className="text-xs"
-              >
-                <RefreshCw className="h-3 w-3" />
-                Restock
+              <Button asChild variant="outline" size="sm" className="text-xs">
+                <Link to="/account/products">
+                  <RefreshCw className="h-3 w-3" />
+                  Restock
+                </Link>
               </Button>
             </div>
 

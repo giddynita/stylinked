@@ -228,6 +228,9 @@ export const deleteProductAction = () => {
     mutationFn: deleteProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['products-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['vendor-profile'] })
+      queryClient.invalidateQueries({ queryKey: ['vendors-stat'] })
     },
   })
 
@@ -251,6 +254,9 @@ export const addProductAction = () => {
     mutationFn: addProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['products-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['vendor-profile'] })
+      queryClient.invalidateQueries({ queryKey: ['vendors-stat'] })
     },
   })
 
@@ -276,6 +282,10 @@ export const updateProductAction = () => {
     mutationFn: updateProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['single-product'] })
+      queryClient.invalidateQueries({ queryKey: ['products-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['vendor-profile'] })
+      queryClient.invalidateQueries({ queryKey: ['vendors-stat'] })
     },
   })
   return updateProductFunction
@@ -293,15 +303,31 @@ export const addReviewAction = () => {
     mutationFn: addReview,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews'] })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['single product'] })
+      queryClient.invalidateQueries({ queryKey: ['vendor-profile'] })
+      queryClient.invalidateQueries({ queryKey: ['vendors-stat'] })
     },
   })
 
   return addReviewFunction
 }
 export const addOrdersAction = () => {
-  const addOrder = async (order: Order) => {
-    const { error } = await supabase.from('orders').insert([order])
-    if (error) throw new Error(error.message)
+  const addOrder = async ({
+    orderData,
+    orderItems,
+  }: {
+    orderData: Order
+    orderItems: Omit<OrderItem, 'created_at'>[]
+  }) => {
+    const { error: orderError } = await supabase
+      .from('orders')
+      .insert([orderData])
+    if (orderError) throw new Error(orderError.message)
+    const { error: orderItemsError } = await supabase
+      .from('order_items')
+      .insert(orderItems)
+    if (orderItemsError) throw new Error(orderItemsError.message)
   }
 
   const queryClient = useQueryClient()
@@ -310,25 +336,10 @@ export const addOrdersAction = () => {
     mutationFn: addOrder,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['orders-trend'] })
     },
   })
 
   return addOrderFunction
-}
-
-export const addOrderItemsAction = () => {
-  const addOrderItem = async (orderItem: Omit<OrderItem, 'created_at'>[]) => {
-    const { error } = await supabase.from('order_items').insert([...orderItem])
-    if (error) throw new Error(error.message)
-  }
-  const queryClient = useQueryClient()
-
-  const addOrderItemFunction = useMutation({
-    mutationFn: addOrderItem,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
-    },
-  })
-
-  return addOrderItemFunction
 }

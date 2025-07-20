@@ -137,7 +137,7 @@ export const useAllProducts = ({
     }
   }
   const queryData = useQuery({
-    queryKey: ['products', currentPage, filters, 'reviews'],
+    queryKey: ['products', currentPage, filters],
     queryFn: getProducts,
   })
 
@@ -217,7 +217,7 @@ export const useVendorsWithStats = (
   }
 
   const queryData = useQuery({
-    queryKey: ['vendors', currentPage, filters, 'products', 'reviews'],
+    queryKey: [currentPage, filters, 'vendors-stat'],
     queryFn: getVendorsWithStats,
   })
 
@@ -265,7 +265,8 @@ export const useVendorProfile = (vendorId: string | undefined) => {
         const year = new Date(p.createdat).getFullYear().toString()
         const totalReviews = productReviews.length
         const totalRating = productReviews.reduce((sum, r) => sum + r.rating, 0)
-        const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+        const averageRating =
+          totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0
 
         return { ...p, created: year, averageRating, totalReviews }
       })
@@ -274,11 +275,16 @@ export const useVendorProfile = (vendorId: string | undefined) => {
       const totalReviews = reviewsData.length
       const totalRating = reviewsData.reduce((sum, r) => sum + r.rating, 0)
       const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+      const sortedReviews = reviewsData.sort((a, b) => {
+        const tsA = new Date(a.createdat).getTime()
+        const tsB = new Date(b.createdat).getTime()
+        return tsB - tsA
+      })
       const vendorProfile: VendorProfile = {
         ...vendorData,
         joinedDate: year,
         vendorProducts: productsDataWithRating,
-        vendorReviews: reviewsData,
+        vendorReviews: sortedReviews,
         totalProducts: productsData.length,
         totalReviews,
         rating: averageRating,
@@ -289,7 +295,7 @@ export const useVendorProfile = (vendorId: string | undefined) => {
   }
 
   const queryData = useQuery({
-    queryKey: ['vendors', vendorId, 'products', 'reviews'],
+    queryKey: ['vendor-profile'],
     queryFn: getVendorProfile,
   })
 
@@ -313,14 +319,20 @@ export const useSingleProduct = (id: string | undefined) => {
         .eq('productid', id)
 
       if (reviewsError) throw new Error(reviewsError.message)
+      const sortedReviews = reviews.sort((a, b) => {
+        const tsA = new Date(a.createdat).getTime()
+        const tsB = new Date(b.createdat).getTime()
+        return tsB - tsA
+      })
 
-      const totalReviews = reviews.length
-      const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0)
-      const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
+      const totalReviews = sortedReviews.length
+      const totalRating = sortedReviews.reduce((sum, r) => sum + r.rating, 0)
+      const averageRating =
+        totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0
 
       const singleProductWithRating = {
         ...product,
-        productReviews: reviews,
+        productReviews: sortedReviews,
         totalReviews,
         averageRating,
       }
@@ -329,7 +341,7 @@ export const useSingleProduct = (id: string | undefined) => {
   }
 
   const queryData = useQuery({
-    queryKey: [id, 'products', 'reviews'],
+    queryKey: ['single product'],
     queryFn: getSingleProductWithRating,
   })
 
@@ -351,7 +363,7 @@ export const useVendorProductTrend = () => {
     return trendData as ProductTrendData[]
   }
   const queryData = useQuery({
-    queryKey: ['products'],
+    queryKey: ['products-trend'],
     queryFn: getVendorProductTrend,
   })
   return queryData
@@ -378,8 +390,8 @@ export const useVendorOrders = () => {
     const sortedGroupedOrders =
       grouped &&
       Object.entries(grouped).sort((a, b) => {
-        const tsA = parseInt(new Date(a[1][0].created_at).toString())
-        const tsB = parseInt(new Date(b[1][0].created_at).toString())
+        const tsA = new Date(a[1][0].created_at).getTime()
+        const tsB = new Date(b[1][0].created_at).getTime()
         return tsB - tsA
       })
 
@@ -415,7 +427,7 @@ export const useOrdersTrend = () => {
   }
 
   const queryData = useQuery({
-    queryKey: ['orders', 'stat'],
+    queryKey: ['orders-trend'],
     queryFn: getOrdersTrend,
   })
   return queryData

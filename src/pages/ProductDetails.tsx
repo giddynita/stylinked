@@ -77,11 +77,7 @@ const ProductDetails = () => {
   }
 
   // add reviews
-  const {
-    mutate: addReview,
-    isError: addReviewError,
-    isPending,
-  } = addReviewAction()
+  const { mutate: addReview, isPending, isSuccess } = addReviewAction()
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,17 +91,23 @@ const ProductDetails = () => {
     }
     const validatedData = validateWithZodSchema(reviewSchema, reviewData)
     if (validatedData) {
-      if (addReviewError) {
-        return toast.error('Uploading Review failed. Please try again.')
+      if (isSuccess) {
       }
-      addReview(validatedData)
+      addReview(validatedData, {
+        onSuccess: () => {
+          setReviewText('')
+          setReviewRating(5)
+          toast.success(
+            'Review submitted successfully! Thank you for your feedback.'
+          )
+        },
+        onError: () => {
+          toast.error('Uploading Review failed. Please try again.')
+        },
+      })
     } else {
       return
     }
-
-    toast.success('Review submitted successfully! Thank you for your feedback.')
-    setReviewText('')
-    setReviewRating(5)
   }
 
   return (
@@ -148,7 +150,10 @@ const ProductDetails = () => {
             <div className="mb-4">
               <Badge className="mb-2 capitalize">{product?.category}</Badge>
               <h1 className="text-xl font-bold  mb-2">{product?.name}</h1>
-              <Link to={`/vendor/${product?.vendorid}`} className="font-medium">
+              <Link
+                to={`/vendors/${product?.vendor}/${product?.vendorid}`}
+                className="font-medium"
+              >
                 Sold by{' '}
                 <span className="text-primary hover:underline">
                   {' '}
@@ -157,7 +162,7 @@ const ProductDetails = () => {
               </Link>
             </div>
 
-            <div className="flex items-center space-x-4 mb-6">
+            <div className="flex items-center space-x-2 mb-6">
               <Ratings rating={rating} />
               {!rating || <span className="text-sm font-medium">{rating}</span>}
               <span className="text-muted-foreground">

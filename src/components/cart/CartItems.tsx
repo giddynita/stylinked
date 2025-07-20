@@ -5,6 +5,7 @@ import VariantSelection from './VariantSelection'
 import { Button } from '../ui/button'
 import { X } from 'lucide-react'
 import { clearCart } from '@/features/cart/cartSlice'
+import { toast } from 'sonner'
 
 function CartItems() {
   const { numItemsInCart, cartItems } = useSelector(
@@ -13,6 +14,7 @@ function CartItems() {
   const dispatch = useDispatch()
   const clearCartItems = () => {
     dispatch(clearCart())
+    toast.success('Cart Cleared')
   }
 
   return (

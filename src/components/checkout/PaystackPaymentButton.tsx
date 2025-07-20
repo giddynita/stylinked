@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../ui/button'
 import { useUserData } from '@/utils/hooks'
 import { useUser } from '@supabase/auth-helpers-react'
-import { addOrderItemsAction, addOrdersAction } from '@/utils/action'
+import { addOrdersAction } from '@/utils/action'
 import type {
   Cart,
   CheckoutType,
@@ -30,8 +30,6 @@ function PaystackPaymentButton() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { mutate: addOrders, isPending: addingOrders } = addOrdersAction()
-  const { mutate: addOrderItems, isPending: addingOrderItems } =
-    addOrderItemsAction()
   const clearCartItemsAndCheckoutHistory = () => {
     dispatch(resetCheckout())
     dispatch(clearCart())
@@ -57,6 +55,9 @@ function PaystackPaymentButton() {
   }
 
   const onSuccess = (reference: PaystackRef) => {
+    if (addingOrders) {
+      toast.loading('Please wait...')
+    }
     const orderData: Order = {
       shipping_method: '',
       shipping_fee: shipping,
@@ -87,11 +88,7 @@ function PaystackPaymentButton() {
       }
       return orderItem
     })
-    if (addingOrderItems || addingOrders) {
-      toast.loading('Please wait...')
-    }
-    addOrders(orderData)
-    addOrderItems(orderItems)
+    addOrders({ orderData, orderItems })
     clearCartItemsAndCheckoutHistory()
     toast.success('Order placed successfully!')
     return navigate('/account/orders')

@@ -10,7 +10,7 @@ interface Orders {
 function Orders({ data }: Orders) {
   return (
     <div className="space-y-4">
-      {data?.slice(0, 5).map(([_, order_items], index) => {
+      {data?.slice(0, 3).map(([_, order_items], index) => {
         const total = order_items.reduce(
           (acc, item) => acc + item.price * item.amount,
           0

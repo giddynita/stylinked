@@ -52,7 +52,6 @@ const cartSlice = createSlice({
       state.shipping = 1200
       state.orderTotal = 0
       localStorage.setItem('cart', JSON.stringify(defaultState))
-      toast.success('Cart Cleared')
     },
     removeItem: (state, action) => {
       const { id, size, color, name } = action.payload

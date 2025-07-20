@@ -17,8 +17,7 @@ function ProductReviews({
     reviews.length > 0 && (
       <>
         <h2 className="text-xl font-bold mb-4">
-          {`Customer Review ${reviews.length > 1 ? 's' : ''}`} ({reviews.length}
-          )
+          {`Customer Review${reviews.length > 1 ? 's' : ''}`} ({reviews.length})
         </h2>
         <div className="space-y-6">
           {reviews.map((review) => (
