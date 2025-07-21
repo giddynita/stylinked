@@ -27,21 +27,8 @@ function AddToCart({ product }: ProductCardProps) {
   const sizeCheck = product.variants.find((p) => p.size === selectedSize)
   const colorsOfSizeSelected = sizeCheck?.colors.map((p) => p.color)
   const colorCheck = sizeCheck?.colors.find((p) => p.color === selectedColor)
-  console.log(colorCheck)
 
   const dispatch = useDispatch()
-  /* const handleQuantity = (quantity: string) => {
-    const parseQuantity = Number(quantity)
-    if (colorCheck?.quantity) {
-      if (parseQuantity > colorCheck.quantity) {
-        toast.warning(
-          `Quantity exceed available amount (${colorCheck?.quantity})`
-        )
-      } else {
-        setQuantity(parseQuantity)
-      }
-    }
-  } */
   const addItemToCart = (item: CartItemType) => {
     if (!item.size) {
       return toast.warning('Please select a size')

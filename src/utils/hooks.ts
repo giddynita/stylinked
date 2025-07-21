@@ -352,9 +352,9 @@ export const useVendorProductTrend = () => {
   const getVendorProductTrend = async () => {
     const user = await getAuthUser()
     const { data: trendData, error } = await supabase.rpc(
-      'get_daily_product_trend_by_vendor',
+      'get_daily_product_trend_for_vendor',
       {
-        vendorid: user?.id,
+        vendor_id: user?.id,
       }
     )
 
