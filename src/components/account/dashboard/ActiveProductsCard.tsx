@@ -7,6 +7,8 @@ import Trend from './Trend'
 
 function ActiveProductsCard() {
   const { data: products, isLoading: productsLoading } = useVendorProducts()
+  console.log(products)
+
   const { data: productTrend, isLoading: trendLoading } =
     useVendorProductTrend()
   const activeProducts = products?.filter((product) => product.stock !== 0)

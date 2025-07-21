@@ -12,11 +12,11 @@ import { Carousel } from '../global'
 import { currencyFormatter } from '@/utils/format'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
-import { Input } from '../ui/input'
 import { Separator } from '../ui/separator'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
 import { addItem } from '@/features/cart/cartSlice'
+import { Minus, Plus } from 'lucide-react'
 
 function AddToCart({ product }: ProductCardProps) {
   const { isAddToCartDialogOpen, setIsAddToCartDialogOpen } =
@@ -24,7 +24,24 @@ function AddToCart({ product }: ProductCardProps) {
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedColor, setSelectedColor] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const sizeCheck = product.variants.find((p) => p.size === selectedSize)
+  const colorsOfSizeSelected = sizeCheck?.colors.map((p) => p.color)
+  const colorCheck = sizeCheck?.colors.find((p) => p.color === selectedColor)
+  console.log(colorCheck)
+
   const dispatch = useDispatch()
+  /* const handleQuantity = (quantity: string) => {
+    const parseQuantity = Number(quantity)
+    if (colorCheck?.quantity) {
+      if (parseQuantity > colorCheck.quantity) {
+        toast.warning(
+          `Quantity exceed available amount (${colorCheck?.quantity})`
+        )
+      } else {
+        setQuantity(parseQuantity)
+      }
+    }
+  } */
   const addItemToCart = (item: CartItemType) => {
     if (!item.size) {
       return toast.warning('Please select a size')
@@ -86,7 +103,10 @@ function AddToCart({ product }: ProductCardProps) {
                     key={size}
                     variant={selectedSize === size ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setSelectedSize(size)}
+                    onClick={() => {
+                      setSelectedSize(size)
+                      setSelectedColor('')
+                    }}
                   >
                     {size}
                   </Button>
@@ -96,30 +116,54 @@ function AddToCart({ product }: ProductCardProps) {
             <div className="space-y-2">
               <Label>Color</Label>
               <div className="flex flex-wrap gap-2">
-                {product?.variants.map(({ colors }) =>
-                  colors.map(({ color }) => (
-                    <Button
-                      key={color}
-                      variant={selectedColor === color ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setSelectedColor(color)}
-                    >
-                      {color}
-                    </Button>
-                  ))
-                )}
+                {product?.variants.map(({ colors }) => {
+                  return colors.map(({ color }) => {
+                    const colorCheck = colorsOfSizeSelected?.includes(color)
+                    return (
+                      <Button
+                        key={color}
+                        variant={
+                          selectedColor === color ? 'default' : 'outline'
+                        }
+                        size="sm"
+                        disabled={!colorCheck}
+                        onClick={() => {
+                          setSelectedColor(color)
+                          setQuantity(1)
+                        }}
+                      >
+                        {color}
+                      </Button>
+                    )
+                  })
+                })}
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="quantity">Quantity</Label>
-              <Input
-                id="quantity"
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
-                className="max-w-20 h-10"
-              />
+              <div className="flex items-center border rounded-md w-max">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuantity(quantity - 1)}
+                  disabled={quantity <= 1}
+                  className="h-8 w-8 p-0 rounded-r-none hover:bg-muted"
+                >
+                  <Minus className="w-3 h-3" />
+                </Button>
+                <div className="h-8 w-12 flex items-center justify-center border-x text-sm font-medium">
+                  {quantity}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuantity(quantity + 1)}
+                  disabled={quantity == colorCheck?.quantity}
+                  className="h-8 w-8 p-0 rounded-l-none hover:bg-muted"
+                >
+                  <Plus className="w-3 h-3" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
