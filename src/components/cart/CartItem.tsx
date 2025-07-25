@@ -45,6 +45,10 @@ function CartItem({ cartItem }: { cartItem: CartItemType }) {
       })
     )
   }
+  const sizeCheck = cartItem.availableVariants.find(
+    (p) => p.size === cartItem.size
+  )
+  const colorCheck = sizeCheck?.colors.find((p) => p.color === cartItem.color)
   return (
     <section>
       <Card className="overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-200 p-0">
@@ -136,6 +140,7 @@ function CartItem({ cartItem }: { cartItem: CartItemType }) {
                       variant="ghost"
                       size="sm"
                       onClick={() => updateCartItem(cartItem.amount + 1)}
+                      disabled={cartItem.amount == colorCheck?.quantity}
                       className="h-8 w-8 p-0 rounded-l-none hover:bg-muted"
                     >
                       <Plus className="w-3 h-3" />

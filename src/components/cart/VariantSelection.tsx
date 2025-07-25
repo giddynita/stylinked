@@ -5,8 +5,8 @@ import { GlobalContext } from '@/utils/globalContext'
 import { Carousel } from '../global'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
-import { Minus, Plus } from 'lucide-react'
-import type { CartItemType, ColorQuantity } from '@/utils/types'
+import { Ban, Minus, Plus } from 'lucide-react'
+import type { CartItemType, ColorQuantity, Variant } from '@/utils/types'
 import { useDispatch } from 'react-redux'
 import { addItem, editItem } from '@/features/cart/cartSlice'
 
@@ -34,7 +34,15 @@ function VariantSelection() {
     )
     setVariantDialogOpen(false)
   }
-
+  const sizeCheck = selectedItem.availableVariants.find(
+    (p: Variant) => p.size === editSize
+  )
+  const colorsOfSizeSelected = sizeCheck?.colors.map(
+    (p: ColorQuantity) => p.color
+  )
+  const colorCheck = sizeCheck?.colors.find(
+    (p: ColorQuantity) => p.color === editColor
+  )
   const product: CartItemType = {
     ...selectedItem,
     size: editSize,
@@ -77,7 +85,10 @@ function VariantSelection() {
                         key={size}
                         variant={editSize === size ? 'default' : 'outline'}
                         size="sm"
-                        onClick={() => setEditSize(size)}
+                        onClick={() => {
+                          setEditSize(size)
+                          setEditColor('')
+                        }}
                       >
                         {size}
                       </Button>
@@ -91,16 +102,31 @@ function VariantSelection() {
                 <div className="flex flex-wrap gap-2">
                   {selectedItem.availableVariants?.map(
                     ({ colors }: { colors: ColorQuantity[] }) =>
-                      colors.map(({ color }) => (
-                        <Button
-                          key={color}
-                          variant={editColor === color ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setEditColor(color)}
-                        >
-                          {color}
-                        </Button>
-                      ))
+                      colors.map(({ color, quantity }) => {
+                        const colorCheck =
+                          !colorsOfSizeSelected?.includes(color) ||
+                          quantity === 0
+                        return (
+                          <Button
+                            key={color}
+                            variant={
+                              editColor === color ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            disabled={colorCheck}
+                            onClick={() => {
+                              setEditColor(color)
+                              setEditQuantity(1)
+                            }}
+                            className="relative"
+                          >
+                            {color}
+                            {quantity === 0 && (
+                              <Ban className="w-4 h-4 absolute -top-2 -right-2 text-destructive font-bold bg-destructive/30 rounded-full " />
+                            )}
+                          </Button>
+                        )
+                      })
                   )}
                 </div>
               </div>
@@ -129,6 +155,7 @@ function VariantSelection() {
                     variant="outline"
                     size="sm"
                     onClick={() => setEditQuantity(editQuantity + 1)}
+                    disabled={editQuantity == colorCheck?.quantity}
                     className="h-8 w-8 p-0"
                   >
                     <Plus className="w-3 h-3" />

@@ -16,7 +16,7 @@ import { Separator } from '../ui/separator'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
 import { addItem } from '@/features/cart/cartSlice'
-import { Minus, Plus } from 'lucide-react'
+import { Ban, Minus, Plus } from 'lucide-react'
 
 function AddToCart({ product }: ProductCardProps) {
   const { isAddToCartDialogOpen, setIsAddToCartDialogOpen } =
@@ -102,25 +102,34 @@ function AddToCart({ product }: ProductCardProps) {
             </div>
             <div className="space-y-2">
               <Label>Color</Label>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {product?.variants.map(({ colors }) => {
-                  return colors.map(({ color }) => {
-                    const colorCheck = colorsOfSizeSelected?.includes(color)
+                  return colors.map(({ color, quantity }) => {
+                    const colorCheck =
+                      !colorsOfSizeSelected?.includes(color) || quantity === 0
+
                     return (
-                      <Button
-                        key={color}
-                        variant={
-                          selectedColor === color ? 'default' : 'outline'
-                        }
-                        size="sm"
-                        disabled={!colorCheck}
-                        onClick={() => {
-                          setSelectedColor(color)
-                          setQuantity(1)
-                        }}
-                      >
-                        {color}
-                      </Button>
+                      <>
+                        <Button
+                          key={color}
+                          variant={
+                            selectedColor === color ? 'default' : 'outline'
+                          }
+                          size="sm"
+                          disabled={colorCheck}
+                          onClick={() => {
+                            setSelectedColor(color)
+                            setQuantity(1)
+                          }}
+                          className="relative"
+                        >
+                          {color}
+
+                          {quantity === 0 && (
+                            <Ban className="w-4 h-4 absolute -top-2 -right-2 text-destructive font-bold bg-destructive/30 rounded-full " />
+                          )}
+                        </Button>
+                      </>
                     )
                   })
                 })}
