@@ -3,7 +3,7 @@ import { AppSidebar } from '@/components/sidebars.tsx/AppSidebar'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { Outlet } from 'react-router-dom'
 
-function Layout() {
+function AppLayout() {
   return (
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
@@ -14,4 +14,4 @@ function Layout() {
     </SidebarProvider>
   )
 }
-export default Layout
+export default AppLayout

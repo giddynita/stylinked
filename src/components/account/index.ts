@@ -1,2 +1,6 @@
 export { default as DashboardStats } from './dashboard/DashboardStats'
 export { default as RecentOrdersCard } from './dashboard/RecentOrdersCard'
+export { default as LowStockCard } from './dashboard/LowStockCard'
+export { default as SearchBar } from './SearchBar'
+export { default as OrderTabsList } from './orders/OrderTabsList'
+export { default as OrdersTabsContent } from './orders/OrdersTabsContent'

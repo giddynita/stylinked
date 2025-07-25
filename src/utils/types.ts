@@ -327,8 +327,10 @@ export type OrderItem = {
   status?: string
   created_at: string
   user_name: string
-  email: string | undefined
+  email: string
   reference: string
+  shipping_address: string
+  phone: string
 }
 export type Grouped = Record<string, OrderItem[]>
 export type ProductTrendData = {
@@ -354,4 +356,18 @@ export type PaystackRef = {
   transaction: string
   trxref: string
   redirecturl: string
+}
+
+export type CustomerOrder = {
+  order_id: string
+  order_items: OrderItem[]
+  customer_email: string
+  customer_name: string
+  date: string | undefined
+  order_amount: number
+  status: string | undefined
+  /* shipping_method: string */
+  shipping_address: string
+  tracking_number: string
+  phone: string
 }

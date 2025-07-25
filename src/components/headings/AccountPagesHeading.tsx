@@ -1,3 +1,5 @@
+import { Helmet } from 'react-helmet-async'
+
 interface AccountPagesHeading {
   pageTitle: string
   pageDesc: string
@@ -5,10 +7,14 @@ interface AccountPagesHeading {
 
 function AccountPagesHeading({ pageTitle, pageDesc }: AccountPagesHeading) {
   return (
-    <div>
-      <h2 className="text-3xl font-bold tracking-tight">{pageTitle}</h2>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDesc} />
+      </Helmet>
+      <h1 className="text-3xl font-bold tracking-tight">{pageTitle}</h1>
       <p className="text-muted-foreground">{pageDesc}</p>
-    </div>
+    </>
   )
 }
 export default AccountPagesHeading

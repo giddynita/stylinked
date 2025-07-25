@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useVendorProducts } from '@/utils/hooks'
 import { AlertTriangle } from 'lucide-react'
 import LowStock from './LowStock'
-import NoResult from './NoResult'
+import { NoResult } from '@/components/global'
 
 function LowStockCard() {
   const { data: products, isLoading } = useVendorProducts()

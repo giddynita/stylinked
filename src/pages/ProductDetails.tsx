@@ -18,8 +18,7 @@ import type { CartItemType, ColorQuantity } from '@/utils/types'
 import { addItem } from '@/features/cart/cartSlice'
 import { useDispatch } from 'react-redux'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
-import { Ratings } from '@/components/global'
-import ProductReviews from '@/components/global/ProductReviews'
+import { ProductReviews, Ratings } from '@/components/global'
 import { useUser } from '@supabase/auth-helpers-react'
 
 const ProductDetails = () => {
@@ -77,7 +76,7 @@ const ProductDetails = () => {
   }
 
   // add reviews
-  const { mutate: addReview, isPending, isSuccess } = addReviewAction()
+  const { mutate: addReview, isPending } = addReviewAction()
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -91,8 +90,6 @@ const ProductDetails = () => {
     }
     const validatedData = validateWithZodSchema(reviewSchema, reviewData)
     if (validatedData) {
-      if (isSuccess) {
-      }
       addReview(validatedData, {
         onSuccess: () => {
           setReviewText('')

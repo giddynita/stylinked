@@ -1,5 +1,4 @@
-import { ViewModeToggle } from '@/components/global'
-import ProductReviews from '@/components/global/ProductReviews'
+import { ProductReviews, ViewModeToggle } from '@/components/global'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
 import { ProductGrid, ProductList } from '@/components/marketplace'
 import {

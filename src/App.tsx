@@ -1,10 +1,8 @@
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import {
-  AuthLayout,
   CompleteRegistration,
   ForgotPassword,
   Home,
-  Layout,
   Login,
   Dashboard,
   ResetPassword,
@@ -13,19 +11,23 @@ import {
   Products,
   Marketplace,
   ProductDetails,
-  MarketplaceLayout,
   Cart,
   Checkout,
-  CartLayout,
   Orders,
   Vendors,
-  VendorsLayout,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute } from './components/global'
 import VendorProfile from './pages/VendorProfile'
-import AccountLayout from './pages/AccountLayout'
+import {
+  AccountLayout,
+  AppLayout,
+  AuthLayout,
+  CartLayout,
+  MarketplaceLayout,
+  VendorsLayout,
+} from './components/layouts'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -72,7 +74,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Layout />,
+    element: <AppLayout />,
     children: [
       {
         index: true,

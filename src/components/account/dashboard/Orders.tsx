@@ -23,8 +23,8 @@ function Orders({ data }: Orders) {
             key={index}
             className="bg-background/50 rounded-lg border border-border/50 hover:bg-background/80 transition-colors duration-200 p-4"
           >
-            <div className="space-y-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 items-start">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <p className="font-semibold text-sm">{user_name}</p>
@@ -34,7 +34,7 @@ function Orders({ data }: Orders) {
                     Order #{order_id}
                   </p>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-start sm:justify-end">
                   <Badge
                     variant={
                       status == 'pending'
@@ -50,8 +50,8 @@ function Orders({ data }: Orders) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between text-sm gap-4">
+                <div className="flex items-center gap-x-4 gap-y-1 flex-wrap">
                   <p className="flex items-center gap-1 text-muted-foreground">
                     <Calendar className="h-3 w-3" />
                     <span>{formatCreatedAt(created_at)}</span>
@@ -59,7 +59,7 @@ function Orders({ data }: Orders) {
                   <p className="flex items-center gap-1 text-muted-foreground">
                     <Package className="h-3 w-3" />
                     <span>
-                      {quantity} item{quantity !== 1 ? 's' : ''}
+                      {quantity} product{quantity !== 1 ? 's' : ''}
                     </span>
                   </p>
                 </div>

@@ -7,13 +7,17 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react'
 import { supabase } from './utils/supabaseClient.ts'
 import { Provider } from 'react-redux'
 import { store } from './store.ts'
+import { HelmetProvider } from 'react-helmet-async'
+
 createRoot(document.getElementById('root')!).render(
-  <SessionContextProvider supabaseClient={supabase}>
-    <AppContext>
-      <Provider store={store}>
-        <Toaster position="top-center" />
-        <App />
-      </Provider>
-    </AppContext>
-  </SessionContextProvider>
+  <HelmetProvider>
+    <SessionContextProvider supabaseClient={supabase}>
+      <AppContext>
+        <Provider store={store}>
+          <Toaster position="top-center" />
+          <App />
+        </Provider>
+      </AppContext>
+    </SessionContextProvider>
+  </HelmetProvider>
 )

@@ -22,19 +22,19 @@ function RevenueTrend({ trend, isLoading }: RevenueTrend) {
       const pct = (diff / previous) * 100
       if (diff > 0)
         return {
-          icon: <TrendingUp className="text-green-600" />,
+          icon: <TrendingUp className="text-green-600 w-4 h-4" />,
           text: `+${pct.toFixed(1)}%`,
           color: 'text-green-600',
         }
       if (diff < 0)
         return {
-          icon: <TrendingDown className="text-red-600" />,
+          icon: <TrendingDown className="text-red-600 w-4 h-4" />,
           text: `${pct.toFixed(1)}%`,
           color: 'text-red-600',
         }
     }
     return {
-      icon: <TrendingUpDown className="text-muted-foreground" />,
+      icon: <Minus className="text-muted-foreground" />,
       text: '',
       color: 'text-muted-foreground',
     }
@@ -47,7 +47,7 @@ function RevenueTrend({ trend, isLoading }: RevenueTrend) {
       {isLoading ? (
         <Skeleton className="w-2/3 h-4" />
       ) : (
-        <div className="text-sm flex items-center gap-1">
+        <div className="text-xs flex items-center gap-1.5">
           Daily trend
           <TrendingUpDown className="w-4 h-4 text-muted-foreground" />:{icon}
           <span className={`font-medium ${color} `}>{text}</span>

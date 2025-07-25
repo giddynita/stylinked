@@ -71,6 +71,17 @@ function PaystackPaymentButton() {
     const orderItems = cartItems.map((item) => {
       const { images, name, price, color, size, amount, vendor, vendorid } =
         item
+      const {
+        email,
+        phone,
+        firstname,
+        lastname,
+        address,
+        city,
+        state,
+        zipcode,
+        country,
+      } = shippingForm
       const orderItem: Omit<OrderItem, 'created_at'> = {
         order_id: reference.transaction,
         product_id: item.id,
@@ -82,16 +93,28 @@ function PaystackPaymentButton() {
         size,
         amount,
         vendor,
-        user_name: `${userData?.firstname} ${userData?.lastname}`,
-        email: user?.email,
+        user_name: `${firstname} ${lastname}`,
+        email: email,
         reference: reference.reference,
+        shipping_address: `${address}, ${city}, ${state}, ${zipcode}, ${country}`,
+        phone,
       }
       return orderItem
     })
-    addOrders({ orderData, orderItems })
-    clearCartItemsAndCheckoutHistory()
-    toast.success('Order placed successfully!')
-    return navigate('/account/orders')
+    addOrders(
+      { orderData, orderItems },
+      {
+        onSuccess: () => {
+          clearCartItemsAndCheckoutHistory()
+          toast.success('Order placed successfully!')
+          return navigate('/account/orders')
+        },
+        onError: () => {
+          toast.error('Error fetching orders. Contact support for assistance.')
+          return navigate('/account/orders')
+        },
+      }
+    )
   }
 
   /* const onError = (error:any) => {

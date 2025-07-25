@@ -1,10 +1,10 @@
-interface NoResult {
+interface NoResultProp {
   text: string
   length: number | undefined
   icon: any
 }
 
-function NoResult({ text, length, icon }: NoResult) {
+function NoResult({ text, length, icon }: NoResultProp) {
   const Icon = icon
   return (
     <>

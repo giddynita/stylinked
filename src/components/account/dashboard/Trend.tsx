@@ -23,13 +23,13 @@ function Trend({ trend, isLoading }: Trend) {
 
       if (diff > 0)
         return {
-          icon: <TrendingUp className="text-green-600" />,
+          icon: <TrendingUp className="text-green-600 w-4 h-4" />,
           diff: `+${diff}`,
           color: 'text-green-600',
         }
       if (diff < 0)
         return {
-          icon: <TrendingDown className="text-red-600" />,
+          icon: <TrendingDown className="text-red-600 w-4 h-4" />,
           diff,
           color: 'text-red-600',
         }
@@ -48,7 +48,7 @@ function Trend({ trend, isLoading }: Trend) {
       {isLoading ? (
         <Skeleton className="w-2/3 h-4" />
       ) : (
-        <div className="text-sm flex items-center gap-1">
+        <div className="text-xs flex items-center gap-1.5">
           Daily trend
           <TrendingUpDown className="w-4 h-4 text-muted-foreground" />:{icon}
           <span className={` font-medium  ${color} `}>{diff}</span>
