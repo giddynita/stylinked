@@ -34,7 +34,7 @@ function VariantSelection() {
     )
     setVariantDialogOpen(false)
   }
-  const sizeCheck = selectedItem.availableVariants.find(
+  const sizeCheck = selectedItem?.availableVariants?.find(
     (p: Variant) => p.size === editSize
   )
   const colorsOfSizeSelected = sizeCheck?.colors.map(
