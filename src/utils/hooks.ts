@@ -9,6 +9,7 @@ import type {
   Product,
   ProductTrendData,
   ProductWithRating,
+  SingleProduct,
   UserDataType,
   UserRole,
   VendorCardProp,
@@ -328,10 +329,10 @@ export const useSingleProduct = (id: string | undefined) => {
       const totalReviews = sortedReviews.length
       const totalRating = sortedReviews.reduce((sum, r) => sum + r.rating, 0)
       const averageRating =
-        totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0
+        totalReviews > 0 ? (parseInt((totalRating / totalReviews).toFixed(1))) : 0
 
-      const singleProductWithRating = {
-        ...product,
+      const singleProductWithRating:SingleProduct = {
+        ...product, 
         productReviews: sortedReviews,
         totalReviews,
         averageRating,

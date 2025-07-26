@@ -2,10 +2,16 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Star, ShoppingCart, MessageCircle, Minus } from 'lucide-react'
+import {
+  Star,
+  ShoppingCart,
+  MessageCircle,
+  Minus,
+  Ban,
+  Plus,
+} from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { currencyFormatter } from '@/utils/format'
 import { Cart } from '@/components/marketplace'
@@ -14,7 +20,7 @@ import { reviewSchema, validateWithZodSchema } from '@/utils/schema'
 import { addReviewAction } from '@/utils/action'
 import { toast } from 'sonner'
 import { ProductInfoSkeleton } from '@/components/skeletons'
-import type { CartItemType, ColorQuantity } from '@/utils/types'
+import type { CartItemType } from '@/utils/types'
 import { addItem } from '@/features/cart/cartSlice'
 import { useDispatch } from 'react-redux'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
@@ -44,8 +50,11 @@ const ProductDetails = () => {
     id: product.id,
     vendor: product.vendor,
     availableVariants: product.variants,
+    vendorid: product.vendorid,
   }
-
+  const sizeCheck = product?.variants.find((p) => p.size === selectedSize)
+  const colorsOfSizeSelected = sizeCheck?.colors.map((p) => p.color)
+  const colorCheck = sizeCheck?.colors.find((p) => p.color === selectedColor)
   //fetch user data
   const { data: userData } = useUserData()
   const user = useUser()
@@ -210,7 +219,10 @@ const ProductDetails = () => {
                     key={size}
                     variant={selectedSize === size ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setSelectedSize(size)}
+                    onClick={() => {
+                      setSelectedSize(size)
+                      setSelectedColor('')
+                    }}
                   >
                     {size}
                   </Button>
@@ -221,10 +233,13 @@ const ProductDetails = () => {
             {/* Color Selection */}
             <div className="mb-6">
               <Label className="block mb-2">Choose a Color</Label>
-              <div className="flex flex-wrap gap-2">
-                {product?.variants.map(
-                  ({ colors }: { colors: ColorQuantity[] }) =>
-                    colors.map(({ color }: { color: string }) => (
+              <div className="flex flex-wrap gap-3">
+                {product?.variants.map(({ colors }) =>
+                  colors.map(({ color, quantity }) => {
+                    const colorCheck =
+                      !colorsOfSizeSelected?.includes(color) || quantity === 0
+
+                    return (
                       <Button
                         key={color}
                         variant={
@@ -232,10 +247,16 @@ const ProductDetails = () => {
                         }
                         size="sm"
                         onClick={() => setSelectedColor(color)}
+                        disabled={colorCheck}
+                        className="relative"
                       >
                         {color}
+                        {quantity === 0 && (
+                          <Ban className="w-4 h-4 absolute -top-2 -right-2 text-destructive font-bold bg-destructive/30 rounded-full " />
+                        )}
                       </Button>
-                    ))
+                    )
+                  })
                 )}
               </div>
             </div>
@@ -245,14 +266,29 @@ const ProductDetails = () => {
               <Label htmlFor="quantity" className="block mb-2">
                 Quantity
               </Label>
-              <Input
-                id="quantity"
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
-                className="w-20"
-              />
+              <div className="flex items-center border rounded-md w-max">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuantity(quantity - 1)}
+                  disabled={quantity <= 1}
+                  className="h-8 w-8 p-0 rounded-r-none hover:bg-muted"
+                >
+                  <Minus className="w-3 h-3" />
+                </Button>
+                <div className="h-8 w-12 flex items-center justify-center border-x text-sm font-medium">
+                  {quantity}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuantity(quantity + 1)}
+                  disabled={quantity == colorCheck?.quantity}
+                  className="h-8 w-8 p-0 rounded-l-none hover:bg-muted"
+                >
+                  <Plus className="w-3 h-3" />
+                </Button>
+              </div>
             </div>
 
             {/* Action Buttons */}

@@ -371,3 +371,9 @@ export type CustomerOrder = {
   tracking_number: string
   phone: string
 }
+
+export type SingleProduct = Product & {
+  productReviews: Reviews[]
+  totalReviews: number
+  averageRating: number
+}
