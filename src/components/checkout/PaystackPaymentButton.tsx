@@ -17,7 +17,7 @@ import { clearCart } from '@/features/cart/cartSlice'
 import { resetCheckout } from '@/features/checkout/checkoutSlice'
 
 function PaystackPaymentButton() {
-  const { data: userData, isLoading } = useUserData()
+  const { data: userInfo, isLoading } = useUserData()
   const user = useUser()
   const time = new Date().getTime().toString()
   const reference = `${user?.id}-${time}`
@@ -39,15 +39,15 @@ function PaystackPaymentButton() {
     amount: orderTotal * 100,
     email: user?.email,
     currency: 'NGN',
-    firstname: userData?.firstname,
-    lastname: userData?.lastname,
+    firstname: userInfo?.userData?.firstname,
+    lastname: userInfo?.userData?.lastname,
     channels: [paymentMethod.id],
     reference: reference,
     metadata: {
       custom_fields: [
         {
-          display_name: `${userData?.firstname} ${userData?.lastname}`,
-          variable_name: `${userData?.firstname} ${userData?.lastname}`,
+          display_name: `${userInfo?.userData?.firstname} ${userInfo?.userData?.lastname}`,
+          variable_name: `${userInfo?.userData?.firstname} ${userInfo?.userData?.lastname}`,
           value: 'Order confirmed!',
         },
       ],
@@ -58,7 +58,7 @@ function PaystackPaymentButton() {
     if (addingOrders) {
       toast.loading('Please wait...')
     }
-    const orderData: Order = {
+    const orderData: Omit<Order, 'created_at'> = {
       shipping_method: '',
       shipping_fee: shipping,
       order_total: orderTotal,

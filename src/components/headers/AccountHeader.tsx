@@ -5,7 +5,7 @@ import { ProfileImage } from '../global'
 import { useUserData } from '@/utils/hooks'
 
 function AccountHeader() {
-  const { data: userData, isLoading } = useUserData()
+  const { data: userInfo, isLoading } = useUserData()
   return (
     <header className="h-16 border-b bg-card  flex items-center justify-between px-4 bg-navbarbg/80">
       <div className="flex items-center gap-4">
@@ -14,7 +14,7 @@ function AccountHeader() {
           <UserSkeleton />
         ) : (
           <h1 className="text-2xl font-semibold text-foreground">
-            Hi, {userData?.firstname}{' '}
+            Hi, {userInfo?.userData?.firstname}{' '}
           </h1>
         )}
       </div>

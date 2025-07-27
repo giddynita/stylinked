@@ -56,7 +56,7 @@ const ProductDetails = () => {
   const colorsOfSizeSelected = sizeCheck?.colors.map((p) => p.color)
   const colorCheck = sizeCheck?.colors.find((p) => p.color === selectedColor)
   //fetch user data
-  const { data: userData } = useUserData()
+  const { data: userInfo } = useUserData()
   const user = useUser()
   //fetch reviews and calculate ratings
 
@@ -89,7 +89,7 @@ const ProductDetails = () => {
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const name = `${userData?.firstname} ${userData?.lastname}`
+    const name = `${userInfo?.userData?.firstname} ${userInfo?.userData?.lastname}`
     const reviewData = {
       productid,
       rating: reviewRating,

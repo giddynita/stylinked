@@ -3,7 +3,9 @@ import { supabase } from './supabaseClient'
 import type {
   getProductsType,
   Grouped,
+  Order,
   OrderItem,
+  OrdersByBuyer,
   OrdersTrendData,
   OrdersWithPendingOrderNo,
   Product,
@@ -42,7 +44,7 @@ export const useUserData = () => {
       .single()
     if (dataError) throw new Error(dataError.message)
 
-    return userData
+    return { userData, userRole }
   }
   const queryData = useQuery({
     queryKey: ['userData'],
@@ -329,10 +331,10 @@ export const useSingleProduct = (id: string | undefined) => {
       const totalReviews = sortedReviews.length
       const totalRating = sortedReviews.reduce((sum, r) => sum + r.rating, 0)
       const averageRating =
-        totalReviews > 0 ? (parseInt((totalRating / totalReviews).toFixed(1))) : 0
+        totalReviews > 0 ? parseInt((totalRating / totalReviews).toFixed(1)) : 0
 
-      const singleProductWithRating:SingleProduct = {
-        ...product, 
+      const singleProductWithRating: SingleProduct = {
+        ...product,
         productReviews: sortedReviews,
         totalReviews,
         averageRating,
@@ -412,7 +414,7 @@ export const useVendorOrders = () => {
   return queryData
 }
 
-export const useOrdersTrend = () => {
+export const useVendorOrdersTrend = () => {
   const getOrdersTrend = async () => {
     const user = await getAuthUser()
     const { data: trendData, error } = await supabase.rpc(
@@ -431,5 +433,45 @@ export const useOrdersTrend = () => {
     queryKey: ['orders-trend'],
     queryFn: getOrdersTrend,
   })
+  return queryData
+}
+
+export const useBuyerOrders = () => {
+  const getBuyerOrders = async () => {
+    const user = await getAuthUser()
+
+    const {
+      data,
+      error: ordersError,
+    }: { data: Order[] | null; error: PostgrestError | null } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('user_id', user?.id)
+
+    if (ordersError) throw new Error(ordersError.message)
+
+    const pendingOrders = data?.filter((order) => order.status === 'pending')
+    const completedOrders = data?.filter(
+      (order) => order.status === 'delivered'
+    )
+    const sortedOrders = data?.sort((a, b) => {
+      const tsA = new Date(a.created_at).getTime()
+      const tsB = new Date(b.created_at).getTime()
+      return tsB - tsA
+    })
+
+    const ordersByBuyer: OrdersByBuyer = {
+      pendingOrdersLength: pendingOrders?.length,
+      completedOrdersLength: completedOrders?.length,
+      sortedOrders,
+    }
+
+    return ordersByBuyer
+  }
+  const queryData = useQuery({
+    queryKey: ['orders'],
+    queryFn: getBuyerOrders,
+  })
+
   return queryData
 }

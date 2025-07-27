@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 import type { FormEvent } from 'react'
 
 function ShippingInformationForm() {
-  const { data: userData } = useUserData()
+  const { data: userInfo } = useUserData()
   const user = useUser()
 
   const { shippingForm } = useSelector((state: any) => state.checkoutState)
@@ -93,7 +93,7 @@ function ShippingInformationForm() {
             type="tel"
             value={phone}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={userData?.phone}
+            placeholder={userInfo?.userData?.phone}
             required
           />
         </div>
@@ -107,7 +107,7 @@ function ShippingInformationForm() {
             name="firstname"
             value={firstname}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={userData?.firstname}
+            placeholder={userInfo?.userData?.firstname}
             required
           />
         </div>
@@ -118,7 +118,7 @@ function ShippingInformationForm() {
             name="lastname"
             value={lastname}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={userData?.lastname}
+            placeholder={userInfo?.userData?.lastname}
             required
           />
         </div>

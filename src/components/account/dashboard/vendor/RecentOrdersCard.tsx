@@ -1,15 +1,21 @@
 import { RecentOrdersSkeleton } from '@/components/skeletons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useVendorOrders } from '@/utils/hooks'
 import { ShoppingBag } from 'lucide-react'
 import Orders from './Orders'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import { NoResult } from '@/components/global'
+import type { OrdersWithPendingOrderNo } from '@/utils/types'
 
-function RecentOrdersCard() {
-  const { data, isLoading } = useVendorOrders()
+interface RecentOrdersCardProp {
+  ordersData: OrdersWithPendingOrderNo | undefined
+  ordersDataLoading: boolean
+}
 
+function RecentOrdersCard({
+  ordersData,
+  ordersDataLoading,
+}: RecentOrdersCardProp) {
   return (
     <Card>
       <CardHeader className="">
@@ -26,13 +32,13 @@ function RecentOrdersCard() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {isLoading ? (
+        {ordersDataLoading ? (
           <RecentOrdersSkeleton />
         ) : (
           <>
-            <Orders data={data?.sortedGroupedOrders} />
+            <Orders data={ordersData?.sortedGroupedOrders} />
             <NoResult
-              length={data?.orders.length}
+              length={ordersData?.orders.length}
               icon={ShoppingBag}
               text="No recent orders found"
             />

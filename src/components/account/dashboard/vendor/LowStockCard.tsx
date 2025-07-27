@@ -1,13 +1,17 @@
 import { StockAlertSkeleton } from '@/components/skeletons'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useVendorProducts } from '@/utils/hooks'
 import { AlertTriangle } from 'lucide-react'
 import LowStock from './LowStock'
 import { NoResult } from '@/components/global'
+import type { Product } from '@/utils/types'
 
-function LowStockCard() {
-  const { data: products, isLoading } = useVendorProducts()
+interface LowStockProp {
+  products: Product[] | undefined
+  productsLoading: boolean
+}
+
+function LowStockCard({ products, productsLoading }: LowStockProp) {
   const lowStockProducts = products?.filter((p) => p.stock <= 10)
   const criticalProducts = products?.filter((p) => p.stock <= 3)
 
@@ -29,7 +33,7 @@ function LowStockCard() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {isLoading ? (
+        {productsLoading ? (
           <StockAlertSkeleton />
         ) : (
           <>

@@ -1,5 +1,5 @@
 import type { OrderItem } from '@/utils/types'
-import { Badge } from '../../ui/badge'
+import { Badge } from '../../../ui/badge'
 import { Calendar, Package } from 'lucide-react'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 

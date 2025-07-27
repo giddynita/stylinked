@@ -289,7 +289,7 @@ export type SingleProductWithRating = Product & {
 }
 export type Order = {
   shipping_method: string
-  created_at?: string
+  created_at: string
   updates_at?: string
   shipping_fee: number
   order_total: number
@@ -376,4 +376,9 @@ export type SingleProduct = Product & {
   productReviews: Reviews[]
   totalReviews: number
   averageRating: number
+}
+export type OrdersByBuyer = {
+  pendingOrdersLength: number | undefined
+  completedOrdersLength: number | undefined
+  sortedOrders: Order[] | undefined
 }

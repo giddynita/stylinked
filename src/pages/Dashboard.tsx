@@ -1,27 +1,20 @@
 import { AccountPagesHeading } from '@/components/headings'
-import {
-  DashboardStats,
-  LowStockCard,
-  RecentOrdersCard,
-} from '@/components/account'
+import { VendorDashboard } from '@/components/account'
+import { useUserData } from '@/utils/hooks'
 
 const Dashboard = () => {
+  const { data: userInfo } = useUserData()
+  const pageDesc =
+    userInfo?.userRole.role == 'buyer'
+      ? "Here's what's happening with your orders"
+      : userInfo?.userRole.role == 'vendor'
+      ? 'Your business metrics at a glance'
+      : ''
+
   return (
     <>
-      <AccountPagesHeading
-        pageTitle="Dashboard"
-        pageDesc="Your business metrics at a glance"
-      />
-      <div className="space-y-6 my-6">
-        {/* Stats Grid */}
-        <DashboardStats />
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* Recent Orders */}
-          <RecentOrdersCard />
-          {/* Low Stock Alert */}
-          <LowStockCard />
-        </div>
-      </div>
+      <AccountPagesHeading pageTitle="Dashboard" pageDesc={pageDesc} />
+      <VendorDashboard />
     </>
   )
 }

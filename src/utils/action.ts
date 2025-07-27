@@ -317,7 +317,7 @@ export const addOrdersAction = () => {
     orderData,
     orderItems,
   }: {
-    orderData: Order
+    orderData: Omit<Order, 'created_at'>
     orderItems: Omit<OrderItem, 'created_at'>[]
   }) => {
     const { error: orderError } = await supabase

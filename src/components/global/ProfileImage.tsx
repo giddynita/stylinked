@@ -4,7 +4,7 @@ import { useUserData } from '@/utils/hooks'
 import { Link } from 'react-router-dom'
 
 function ProfileImage() {
-  const { data: userData, isLoading } = useUserData()
+  const { data: userInfo, isLoading } = useUserData()
 
   return (
     <Avatar>
@@ -13,8 +13,8 @@ function ProfileImage() {
           <User className="h-4 w-4" />
         ) : (
           <Link to="/account">
-            {userData?.firstname.charAt(0)}
-            {userData?.lastname.charAt(0)}
+            {userInfo?.userData?.firstname.charAt(0)}
+            {userInfo?.userData?.lastname.charAt(0)}
           </Link>
         )}
       </AvatarFallback>

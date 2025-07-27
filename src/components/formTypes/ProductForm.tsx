@@ -136,7 +136,7 @@ const ProductForm = ({
 
     setValidImages(removedImage)
   }
-  const { data: userData } = useUserData()
+  const { data: userInfo } = useUserData()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -168,7 +168,7 @@ const ProductForm = ({
       variants,
       images: validImages,
       vendorid: user?.id,
-      vendor: userData?.businessname,
+      vendor: userInfo?.userData?.businessname,
     }
     onSubmit(allData)
   }
