@@ -1,14 +1,14 @@
-import { VendorRecentOrdersSkeleton } from '@/components/skeletons'
+import { BuyerRecentOrdersSkeleton } from '@/components/skeletons'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ShoppingBag } from 'lucide-react'
-import Orders from './Orders'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import { NoResult } from '@/components/global'
-import type { OrdersWithPendingOrderNo } from '@/utils/types'
+import type { OrdersByBuyer } from '@/utils/types'
+import Orders from './Orders'
 
 interface RecentOrdersCardProp {
-  ordersData: OrdersWithPendingOrderNo | undefined
+  ordersData: OrdersByBuyer | undefined
   ordersDataLoading: boolean
 }
 
@@ -24,7 +24,7 @@ function RecentOrdersCard({
             <div className="p-2 bg-primary/10 rounded-lg w-max">
               <ShoppingBag className="h-5 w-5 text-primary" />
             </div>
-            Recent Orders from Your Store
+            Recent Orders
           </div>
           <Button asChild size="sm" className="cursor-pointer">
             <Link to="/account/orders">View all</Link>
@@ -33,12 +33,12 @@ function RecentOrdersCard({
       </CardHeader>
       <CardContent className="space-y-4">
         {ordersDataLoading ? (
-          <VendorRecentOrdersSkeleton />
+          <BuyerRecentOrdersSkeleton />
         ) : (
           <>
-            <Orders data={ordersData?.sortedGroupedOrders} />
+            <Orders sortedOrders={ordersData?.sortedOrders} />
             <NoResult
-              length={ordersData?.orders.length}
+              length={ordersData?.sortedOrders?.length}
               icon={ShoppingBag}
               text="No recent orders found"
             />

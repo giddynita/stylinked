@@ -381,4 +381,5 @@ export type OrdersByBuyer = {
   pendingOrdersLength: number | undefined
   completedOrdersLength: number | undefined
   sortedOrders: Order[] | undefined
+  orderItems: OrderItem[] | null
 }

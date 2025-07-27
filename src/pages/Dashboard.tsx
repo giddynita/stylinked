@@ -1,5 +1,5 @@
 import { AccountPagesHeading } from '@/components/headings'
-import { VendorDashboard } from '@/components/account'
+import { BuyerDashboard, VendorDashboard } from '@/components/account'
 import { useUserData } from '@/utils/hooks'
 
 const Dashboard = () => {
@@ -14,7 +14,11 @@ const Dashboard = () => {
   return (
     <>
       <AccountPagesHeading pageTitle="Dashboard" pageDesc={pageDesc} />
-      <VendorDashboard />
+      {userInfo?.userRole.role == 'vendor' ? (
+        <VendorDashboard />
+      ) : (
+        <BuyerDashboard />
+      )}
     </>
   )
 }

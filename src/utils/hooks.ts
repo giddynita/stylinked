@@ -441,20 +441,30 @@ export const useBuyerOrders = () => {
     const user = await getAuthUser()
 
     const {
-      data,
+      data: order,
       error: ordersError,
     }: { data: Order[] | null; error: PostgrestError | null } = await supabase
       .from('orders')
       .select('*')
       .eq('user_id', user?.id)
+    const orderIds = order?.map((o) => o.order_id)
+    const {
+      data: orderItems,
+      error: orderItemsError,
+    }: { data: OrderItem[] | null; error: PostgrestError | null } =
+      await supabase
+        .from('order_items')
+        .select('*')
+        .in('order_id', orderIds as string[])
 
-    if (ordersError) throw new Error(ordersError.message)
+    if (ordersError || orderItemsError)
+      throw new Error(ordersError?.message || orderItemsError?.message)
 
-    const pendingOrders = data?.filter((order) => order.status === 'pending')
-    const completedOrders = data?.filter(
+    const pendingOrders = order?.filter((order) => order.status === 'pending')
+    const completedOrders = order?.filter(
       (order) => order.status === 'delivered'
     )
-    const sortedOrders = data?.sort((a, b) => {
+    const sortedOrders = order?.sort((a, b) => {
       const tsA = new Date(a.created_at).getTime()
       const tsB = new Date(b.created_at).getTime()
       return tsB - tsA
@@ -464,6 +474,7 @@ export const useBuyerOrders = () => {
       pendingOrdersLength: pendingOrders?.length,
       completedOrdersLength: completedOrders?.length,
       sortedOrders,
+      orderItems,
     }
 
     return ordersByBuyer

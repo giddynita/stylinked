@@ -1,9 +1,9 @@
 import { Skeleton } from '../ui/skeleton'
 
-function RecentOrdersSkeleton() {
+function VendorRecentOrdersSkeleton() {
   return (
     <div className="space-y-4">
-      {Array(1)
+      {Array(2)
         .fill(null)
         .map((_, index) => {
           return (
@@ -30,4 +30,4 @@ function RecentOrdersSkeleton() {
     </div>
   )
 }
-export default RecentOrdersSkeleton
+export default VendorRecentOrdersSkeleton

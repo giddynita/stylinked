@@ -8,6 +8,18 @@ interface Orders {
 }
 
 function Orders({ data }: Orders) {
+  const getStatusColor = (status: string | undefined) => {
+    switch (status) {
+      case 'delivered':
+        return 'success'
+      case 'shipped':
+        return 'primary'
+      case 'processing':
+        return 'warning'
+      default:
+        return 'secondary'
+    }
+  }
   return (
     <div className="space-y-4">
       {data?.slice(0, 3).map(([_, order_items], index) => {
@@ -36,14 +48,8 @@ function Orders({ data }: Orders) {
                 </div>
                 <div className="flex justify-start sm:justify-end">
                   <Badge
-                    variant={
-                      status == 'pending'
-                        ? 'outline'
-                        : status == 'cancelled'
-                        ? 'destructive'
-                        : 'secondary'
-                    }
-                    className="capitalize"
+                    variant="outline"
+                    className={`text-${getStatusColor(status)} capitalize`}
                   >
                     {status}
                   </Badge>
@@ -59,7 +65,7 @@ function Orders({ data }: Orders) {
                   <p className="flex items-center gap-1 text-muted-foreground">
                     <Package className="h-3 w-3" />
                     <span>
-                      {quantity} product{quantity !== 1 ? 's' : ''}
+                      {quantity} unit{quantity !== 1 ? 's' : ''}
                     </span>
                   </p>
                 </div>

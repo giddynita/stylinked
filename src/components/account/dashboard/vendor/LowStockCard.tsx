@@ -17,7 +17,7 @@ function LowStockCard({ products, productsLoading }: LowStockProp) {
 
   return (
     <Card>
-      <CardHeader className="">
+      <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-semibold">
             <div className=" p-2 bg-warning/10 rounded-lg">
@@ -37,12 +37,18 @@ function LowStockCard({ products, productsLoading }: LowStockProp) {
           <StockAlertSkeleton />
         ) : (
           <>
-            <LowStock lowStockProducts={lowStockProducts} />
-            <NoResult
-              length={lowStockProducts?.length}
-              text="All items are well stocked"
-              icon={AlertTriangle}
-            />
+            <>
+              <LowStock lowStockProducts={lowStockProducts} />
+              <NoResult
+                length={lowStockProducts?.length}
+                text={`${
+                  products && products.length > 0
+                    ? 'All products are well stocked'
+                    : 'You have no product'
+                }`}
+                icon={AlertTriangle}
+              />
+            </>
           </>
         )}
       </CardContent>

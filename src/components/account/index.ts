@@ -1,4 +1,5 @@
 export { default as VendorDashboard } from './dashboard/vendor/VendorDashboard'
+export { default as BuyerDashboard } from './dashboard/buyer/BuyerDashboard'
 export { default as RecentOrdersCard } from './dashboard/vendor/RecentOrdersCard'
 export { default as LowStockCard } from './dashboard/vendor/LowStockCard'
 export { default as SearchBar } from './SearchBar'

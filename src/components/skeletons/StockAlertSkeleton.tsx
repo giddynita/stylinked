@@ -3,7 +3,7 @@ import { Skeleton } from '../ui/skeleton'
 function StockAlertSkeleton() {
   return (
     <div className="space-y-4">
-      {Array(1)
+      {Array(2)
         .fill(null)
         .map((_, index) => {
           return (

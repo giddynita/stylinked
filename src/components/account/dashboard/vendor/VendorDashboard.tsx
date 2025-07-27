@@ -36,7 +36,7 @@ function VendorDashboard() {
           ordersDataLoading={ordersDataLoading}
         />
         {/* Low Stock Alert */}
-        <LowStockCard products={products} productsLoading={productsLoading} />
+        {<LowStockCard products={products} productsLoading={productsLoading} />}
       </div>
     </div>
   )

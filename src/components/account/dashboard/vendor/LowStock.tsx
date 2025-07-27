@@ -65,7 +65,12 @@ function LowStock({ lowStockProducts }: LowStockProducts) {
                 </span>
               </div>
 
-              <Button asChild variant="outline" size="sm" className="text-xs">
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="text-xs cursor-pointer"
+              >
                 <Link to="/account/products">
                   <RefreshCw className="h-3 w-3" />
                   Restock
