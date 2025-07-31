@@ -10,6 +10,10 @@ import {
   Building2,
   ArrowLeftRight,
   Hash,
+  LayoutDashboardIcon,
+  PackageIcon,
+  List,
+  User,
 } from 'lucide-react'
 import type { Testimonials } from './types'
 
@@ -273,3 +277,15 @@ export const southwestStates = {
   Ondo: ['Akure', 'Owo', 'Ondo', 'Okitipupa', 'Ikare'],
   Ekiti: ['Ado-Ekiti', 'Ikere', 'Ise', 'Oye', 'Ijero'],
 }
+
+export const vendorNavigation = [
+  { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
+  { title: 'Products', url: 'products', icon: PackageIcon },
+  { title: 'Orders', url: 'orders', icon: List },
+  { title: 'Settings', url: 'settings', icon: User },
+]
+export const buyerNavigation = [
+  { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
+  { title: 'Orders', url: 'orders', icon: List },
+  { title: 'Settings', url: 'settings', icon: User },
+]

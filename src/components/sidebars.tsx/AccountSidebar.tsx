@@ -12,11 +12,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import {
-  Package as PackageIcon,
-  List,
-  User,
-  LinkIcon,
-  LayoutDashboardIcon,
+  Package as LinkIcon,
   LogOutIcon,
   Home,
   Loader2Icon,
@@ -25,35 +21,23 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useState } from 'react'
 import { logoutAction } from '@/utils/action'
 import { useUserData } from '@/utils/hooks'
-
-const vendorNavigation = [
-  { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
-  { title: 'Products', url: 'products', icon: PackageIcon },
-  { title: 'Orders', url: 'orders', icon: List },
-  { title: 'Settings', url: 'settings', icon: User },
-]
-const buyerNavigation = [
-  { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
-  { title: 'Orders', url: 'orders', icon: List },
-  { title: 'Settings', url: 'settings', icon: User },
-]
-const { data: userInfo } = useUserData()
-const navigation =
-  userInfo?.userRole.role == 'buyer'
-    ? buyerNavigation
-    : userInfo?.userRole.role == 'vendor'
-    ? vendorNavigation
-    : []
+import { buyerNavigation, vendorNavigation } from '@/utils/data'
 
 function AccountSidebar() {
   const { state, isMobile } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
-
   const [logout, setLogout] = useState<boolean>(false)
   const navigate = useNavigate()
-
   const tooltip = state == 'collapsed' && !isMobile
+  const { data: userInfo } = useUserData()
+  const navigation =
+    userInfo?.userRole.role == 'buyer'
+      ? buyerNavigation
+      : userInfo?.userRole.role == 'vendor'
+      ? vendorNavigation
+      : []
+
   return (
     <Sidebar
       className="bg-gradient-to-b from-primary/10 to-accent/50"
