@@ -24,13 +24,26 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useState } from 'react'
 import { logoutAction } from '@/utils/action'
+import { useUserData } from '@/utils/hooks'
 
-const navigation = [
+const vendorNavigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Products', url: 'products', icon: PackageIcon },
   { title: 'Orders', url: 'orders', icon: List },
   { title: 'Settings', url: 'settings', icon: User },
 ]
+const buyerNavigation = [
+  { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
+  { title: 'Orders', url: 'orders', icon: List },
+  { title: 'Settings', url: 'settings', icon: User },
+]
+const { data: userInfo } = useUserData()
+const navigation =
+  userInfo?.userRole.role == 'buyer'
+    ? buyerNavigation
+    : userInfo?.userRole.role == 'vendor'
+    ? vendorNavigation
+    : []
 
 function AccountSidebar() {
   const { state, isMobile } = useSidebar()

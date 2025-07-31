@@ -14,11 +14,8 @@ const Dashboard = () => {
   return (
     <>
       <AccountPagesHeading pageTitle="Dashboard" pageDesc={pageDesc} />
-      {userInfo?.userRole.role == 'vendor' ? (
-        <VendorDashboard />
-      ) : (
-        <BuyerDashboard />
-      )}
+      {userInfo?.userRole.role == 'vendor' && <VendorDashboard />}
+      {userInfo?.userRole.role == 'buyer' && <BuyerDashboard />}
     </>
   )
 }

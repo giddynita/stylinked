@@ -1,6 +1,6 @@
 import { Skeleton } from '../ui/skeleton'
 
-function OrdersSkeleton() {
+function VendorOrdersSkeleton() {
   return (
     <div className="space-y-8">
       <Skeleton className="w-full h-10" />
@@ -27,4 +27,4 @@ function OrdersSkeleton() {
     </div>
   )
 }
-export default OrdersSkeleton
+export default VendorOrdersSkeleton
