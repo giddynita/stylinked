@@ -12,8 +12,8 @@ import {
   Hash,
   LayoutDashboardIcon,
   PackageIcon,
-  List,
   User,
+  ShoppingBag,
 } from 'lucide-react'
 import type { Testimonials } from './types'
 
@@ -281,11 +281,26 @@ export const southwestStates = {
 export const vendorNavigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Products', url: 'products', icon: PackageIcon },
-  { title: 'Orders', url: 'orders', icon: List },
+  { title: 'Orders', url: 'orders', icon: ShoppingBag },
   { title: 'Settings', url: 'settings', icon: User },
 ]
 export const buyerNavigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
-  { title: 'Orders', url: 'orders', icon: List },
+  { title: 'Orders', url: 'orders', icon: ShoppingBag },
   { title: 'Settings', url: 'settings', icon: User },
 ]
+
+export const getStatusColor = (status: string | undefined) => {
+  switch (status) {
+    case 'delivered':
+      return 'success'
+    case 'shipped':
+      return 'primary'
+    case 'processing':
+      return 'warning'
+    case 'cancelled':
+      return 'destructive'
+    default:
+      return 'secondary'
+  }
+}

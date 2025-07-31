@@ -9,7 +9,7 @@ function NoResult({ text, length, icon }: NoResultProp) {
   return (
     <>
       {length === 0 && (
-        <div className="text-center text-muted-foreground">
+        <div className="text-center text-muted-foreground my-8">
           <Icon className="h-12 w-12 mx-auto mb-3 opacity-50" />
           <p className="text-sm">{text}</p>
         </div>

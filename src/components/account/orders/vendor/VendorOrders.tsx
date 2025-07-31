@@ -1,19 +1,12 @@
 import { VendorOrdersSkeleton } from '@/components/skeletons'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs } from '@/components/ui/tabs'
-import { ShoppingBag } from 'lucide-react'
-import OrderTabsList from './OrderTabsList'
-import OrdersTabsContent from './OrdersTabsContent'
+import OrdersTabsContent from '../OrdersTabsContent'
 import { formatCreatedAt } from '@/utils/format'
 import { useState } from 'react'
 import { useVendorOrders } from '@/utils/hooks'
 import SearchBar from '../../SearchBar'
+import OrderTabsList from '../OrderTabsList'
 
 function VendorOrders() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -41,20 +34,15 @@ function VendorOrders() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShoppingBag className="h-5 w-5" />
-          Order Management
+        <CardTitle>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            placeholder="Search by order ID or customer name..."
+          />
         </CardTitle>
-        <CardDescription>
-          View and manage customer orders with detailed tracking
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8">
-        <SearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          placeholder="Search by order ID or customer name..."
-        />
+      <CardContent>
         {isLoading ? (
           <VendorOrdersSkeleton />
         ) : (

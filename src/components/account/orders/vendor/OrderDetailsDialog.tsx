@@ -1,13 +1,15 @@
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
-import { Calendar, MapPin, Package, Truck } from 'lucide-react'
+import { Calendar, Eye, MapPin, Package, Truck } from 'lucide-react'
 
 interface OrderDetailsDialogProps {
   order: CustomerOrder
@@ -24,6 +26,12 @@ function OrderDetailsDialog({
 }: OrderDetailsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          <Eye className="w-4 h-4 mr-2" />
+          View Details
+        </Button>
+      </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">

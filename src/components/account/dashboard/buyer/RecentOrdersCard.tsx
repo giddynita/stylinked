@@ -16,6 +16,16 @@ function RecentOrdersCard({
   ordersData,
   ordersDataLoading,
 }: RecentOrdersCardProp) {
+  const buyerOrdersDetails = ordersData?.sortedOrders?.map((order) => {
+    const orderItems = ordersData?.orderItems?.filter(
+      (item) => item.order_id === order.order_id
+    )
+    return {
+      orderItems,
+      ...order,
+    }
+  })
+
   return (
     <Card>
       <CardHeader className="">
@@ -36,7 +46,7 @@ function RecentOrdersCard({
           <BuyerRecentOrdersSkeleton />
         ) : (
           <>
-            <Orders sortedOrders={ordersData?.sortedOrders} />
+            <Orders sortedOrders={buyerOrdersDetails} />
             <NoResult
               length={ordersData?.sortedOrders?.length}
               icon={ShoppingBag}

@@ -1,10 +1,8 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
-import { Eye } from 'lucide-react'
 import { useState } from 'react'
 import OrderDetailsDialog from './OrderDetailsDialog'
 import OrderStatus from './OrderStatus'
@@ -13,7 +11,7 @@ interface OrderCardProp {
   order: CustomerOrder
 }
 
-function OrderCard({ order }: OrderCardProp) {
+function VendorOrderCard({ order }: OrderCardProp) {
   const [showDetails, setShowDetails] = useState(false)
 
   const getStatusBadge = (status: string | undefined) => {
@@ -169,31 +167,22 @@ function OrderCard({ order }: OrderCardProp) {
           </section>
           <Separator className="my-4" />
           <div className="flex justify-between gap-4 items-center flex-wrap">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowDetails(true)}
-              className="h-8"
-            >
-              <Eye className="h-4 w-4 mr-1" />
-              View Details
-            </Button>
+            <OrderDetailsDialog
+              open={showDetails}
+              onOpenChange={setShowDetails}
+              order={order}
+              getStatusBadge={getStatusBadge}
+            />
             {(order.status === 'pending' || order.status === 'processing') && (
               <OrderStatus order={order} />
             )}
           </div>
         </CardContent>
       </Card>
-      <OrderDetailsDialog
-        open={showDetails}
-        onOpenChange={setShowDetails}
-        order={order}
-        getStatusBadge={getStatusBadge}
-      />
     </div>
   )
 }
-export default OrderCard
+export default VendorOrderCard
 
 {
   /* {order.status === 'Delivered' && (

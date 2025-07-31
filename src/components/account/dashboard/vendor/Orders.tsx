@@ -16,6 +16,8 @@ function Orders({ data }: Orders) {
         return 'primary'
       case 'processing':
         return 'warning'
+      case 'cancelled':
+        return 'destructive'
       default:
         return 'secondary'
     }

@@ -350,7 +350,7 @@ const Products = () => {
 
         {/* Edit Product Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Product</DialogTitle>
               <DialogDescription>
@@ -373,7 +373,7 @@ const Products = () => {
 
         {/* View Product Dialog */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Product Details</DialogTitle>
               <DialogDescription>View product information.</DialogDescription>

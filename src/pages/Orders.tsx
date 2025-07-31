@@ -1,4 +1,4 @@
-import { VendorOrders } from '@/components/account'
+import { BuyerOrders, VendorOrders } from '@/components/account'
 import { AccountPagesHeading } from '@/components/headings'
 import { useUserData } from '@/utils/hooks'
 
@@ -16,6 +16,7 @@ function Orders() {
       <AccountPagesHeading pageTitle="Orders" pageDesc={pageDesc} />
       <div className="my-6">
         {userInfo?.userRole.role == 'vendor' && <VendorOrders />}
+        {userInfo?.userRole.role == 'buyer' && <BuyerOrders />}
       </div>
     </>
   )

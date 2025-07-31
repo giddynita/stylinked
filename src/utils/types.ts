@@ -383,3 +383,31 @@ export type OrdersByBuyer = {
   sortedOrders: Order[] | undefined
   orderItems: OrderItem[] | null
 }
+
+export type OrderAndOrderItems = {
+  shipping_method: string
+  created_at: string
+  updates_at?: string
+  shipping_fee: number
+  order_total: number
+  payment_method: string
+  status?: string
+  user_id: string | undefined
+  order_id: string
+  shipping_info: {
+    email: string
+    firstname: string
+    lastname: string
+    address: string
+    zipcode: string
+    city: string
+    state: string
+    country: string
+    phone: string
+  }
+  id?: string
+  reference: string
+  orderItems: OrderItem[] | undefined
+  tracking_number?: string
+  estimated_delivery?: string
+}

@@ -29,7 +29,7 @@ function VendorDashboard() {
         productsTrend={productsTrend}
         productsTrendLoading={productsTrendLoading}
       />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         {/* Recent Orders */}
         <RecentOrdersCard
           ordersData={ordersData}

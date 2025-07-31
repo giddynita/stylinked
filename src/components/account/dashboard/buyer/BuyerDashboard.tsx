@@ -10,7 +10,7 @@ function BuyerDashboard() {
         ordersData={ordersData}
         ordersDataLoading={ordersDataLoading}
       />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <RecentOrdersCard
           ordersData={ordersData}
           ordersDataLoading={ordersDataLoading}

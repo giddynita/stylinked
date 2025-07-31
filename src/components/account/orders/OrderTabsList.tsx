@@ -1,8 +1,8 @@
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type { CustomerOrder } from '@/utils/types'
+import type { CustomerOrder, Order } from '@/utils/types'
 
 interface OrderTabsListProp {
-  orders: CustomerOrder[] | undefined
+  orders: CustomerOrder[] | Order[] | undefined
 }
 
 function OrderTabsList({ orders }: OrderTabsListProp) {
@@ -13,11 +13,12 @@ function OrderTabsList({ orders }: OrderTabsListProp) {
       processing: orders?.filter((o) => o.status === 'processing').length,
       shipped: orders?.filter((o) => o.status === 'shipped').length,
       delivered: orders?.filter((o) => o.status === 'delivered').length,
+      cancelled: orders?.filter((o) => o.status === 'cancelled').length,
     }
   }
   const counts = getOrderCounts()
   return (
-    <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-2 h-full ">
+    <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-2 h-full ">
       <TabsTrigger
         value="all"
         className="text-[10px] sm:text-xs cursor-pointer"
@@ -47,6 +48,12 @@ function OrderTabsList({ orders }: OrderTabsListProp) {
         className="text-[10px] sm:text-xs cursor-pointer"
       >
         Delivered ({counts.delivered})
+      </TabsTrigger>
+      <TabsTrigger
+        value="cancelled"
+        className="text-[10px] sm:text-xs cursor-pointer"
+      >
+        Cancelled ({counts.cancelled})
       </TabsTrigger>
     </TabsList>
   )
