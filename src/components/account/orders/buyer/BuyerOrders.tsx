@@ -5,11 +5,11 @@ import { Tabs } from '@/components/ui/tabs'
 import OrderTabsList from '../OrderTabsList'
 import { useBuyerOrders } from '@/utils/hooks'
 import OrdersTabsContent from '../OrdersTabsContent'
+import { BuyerOrdersSkeleton } from '@/components/skeletons'
 
 function BuyerOrders() {
   const [searchQuery, setSearchQuery] = useState('')
-  const { data: ordersData /* isLoading: ordersDataLoading */ } =
-    useBuyerOrders()
+  const { data: ordersData, isLoading: ordersDataLoading } = useBuyerOrders()
   const buyerOrdersDetails = ordersData?.sortedOrders?.map((order) => {
     const orderItems = ordersData?.orderItems?.filter(
       (item) => item.order_id === order.order_id
@@ -34,10 +34,14 @@ function BuyerOrders() {
       <CardContent>
         <Tabs defaultValue="all" className="w-full">
           <OrderTabsList orders={ordersData?.sortedOrders} />
-          <OrdersTabsContent
-            orders={buyerOrdersDetails}
-            searchQuery={searchQuery}
-          />
+          {ordersDataLoading ? (
+            <BuyerOrdersSkeleton />
+          ) : (
+            <OrdersTabsContent
+              orders={buyerOrdersDetails}
+              searchQuery={searchQuery}
+            />
+          )}
         </Tabs>
       </CardContent>
     </Card>

@@ -7,9 +7,9 @@ function BuyerRecentOrdersSkeleton() {
         .fill(null)
         .map((_, index) => {
           return (
-            <Skeleton
+            <div
               key={index}
-              className=" bg-background border w-full p-4 space-y-4"
+              className=" border rounded-lg w-full p-4 space-y-4"
             >
               <div className="flex items-center justify-between gap-6">
                 <div className="space-y-2 flex-1">
@@ -28,7 +28,7 @@ function BuyerRecentOrdersSkeleton() {
                   <Skeleton className="h-6 w-full  " />
                 </div>
               </div>
-            </Skeleton>
+            </div>
           )
         })}
     </div>

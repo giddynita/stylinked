@@ -43,17 +43,17 @@ function VendorOrders() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <VendorOrdersSkeleton />
-        ) : (
-          <Tabs defaultValue="all" className="w-full">
-            <OrderTabsList orders={ordersDetails} />
+        <Tabs defaultValue="all" className="w-full">
+          <OrderTabsList orders={ordersDetails} />
+          {isLoading ? (
+            <VendorOrdersSkeleton />
+          ) : (
             <OrdersTabsContent
               orders={ordersDetails}
               searchQuery={searchQuery}
             />
-          </Tabs>
-        )}
+          )}
+        </Tabs>
       </CardContent>
     </Card>
   )
