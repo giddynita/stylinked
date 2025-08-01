@@ -42,13 +42,13 @@ function LowStock({ lowStockProducts }: LowStockProducts) {
             key={product.id}
             className="p-4 bg-background/50 rounded-lg border border-border/50 hover:bg-background/80 transition-colors space-y-2 duration-200"
           >
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
               <p className="font-medium text-sm">{product.name}</p>
 
               <Badge className={urgency.className}>{urgency.label}</Badge>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <TrendingDown className="h-3 w-3 text-muted-foreground" />
                 <span className="text-muted-foreground">Stock:</span>

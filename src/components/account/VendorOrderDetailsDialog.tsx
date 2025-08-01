@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -7,44 +8,47 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { getStatusColor } from '@/utils/data'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
 import { Calendar, Eye, MapPin, Package, Truck } from 'lucide-react'
 
-interface OrderDetailsDialogProps {
+interface VendorOrderDetailsDialogProps {
   order: CustomerOrder
   open: boolean
   onOpenChange: (open: boolean) => void
-  getStatusBadge: (status: string | undefined) => any
 }
 
-function OrderDetailsDialog({
+function VendorOrderDetailsDialog({
   order,
   open,
   onOpenChange,
-  getStatusBadge,
-}: OrderDetailsDialogProps) {
+}: VendorOrderDetailsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <Eye className="w-4 h-4 mr-2" />
+          <Eye className="w-4 h-4" />
           View Details
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            Order Details - {order.order_id}
+          <DialogTitle className="flex flex-col sm:flex-row items-start sm:items-center gap-x-4 gap-y-2">
+            Order ID - {order.order_id}
+            <Badge
+              variant="outline"
+              className={`text-${getStatusColor(order?.status)} capitalize`}
+            >
+              {order?.status}
+            </Badge>
           </DialogTitle>
-          <DialogDescription className="capitalize">
-            {getStatusBadge(order?.status)}
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Customer Info */}
-          <section className="flex items-center space-x-4 p-4 bg-muted/30 rounded-lg">
+          <section className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-2 p-4 bg-muted/30 rounded-lg">
             <div className="flex-1">
               <h3 className="font-semibold text-foreground">
                 {order.customer_name}
@@ -77,7 +81,7 @@ function OrderDetailsDialog({
               {order.order_items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center space-x-4 p-4 border rounded-lg"
+                  className="flex items-start gap-x-4 gap-y-2 p-4 border rounded-lg"
                 >
                   <img
                     src={item.images[0]}
@@ -85,22 +89,26 @@ function OrderDetailsDialog({
                     className="w-16 h-16 rounded-md object-cover bg-muted"
                     loading="lazy"
                   />
-                  <div className="flex-1">
-                    <h5 className="font-medium text-foreground">{item.name}</h5>
-                    <p className="text-sm text-muted-foreground">
-                      Color: {item.color} | Size: {item.size}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Quantity: {item.amount}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-foreground">
-                      {currencyFormatter(item.price * item.amount)}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {currencyFormatter(item.price)} each
-                    </p>
+                  <div className="sm:flex flex-1 items-center justify-between gap-x-4 space-y-2">
+                    <div className=" space-y-1">
+                      <h4 className="font-medium text-foreground">
+                        {item.name}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Color: {item.color} | Size: {item.size}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Quantity: {item.amount}
+                      </p>
+                    </div>
+                    <div className="sm:text-right">
+                      <p className="font-semibold text-foreground">
+                        {currencyFormatter(item.price * item.amount)}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {currencyFormatter(item.price)} each
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -137,4 +145,4 @@ function OrderDetailsDialog({
     </Dialog>
   )
 }
-export default OrderDetailsDialog
+export default VendorOrderDetailsDialog

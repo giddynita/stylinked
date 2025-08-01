@@ -3,11 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getStatusColor } from '@/utils/data'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
-import { CheckCircle, Clock, Package, Truck, XCircle } from 'lucide-react'
-
 import { useState } from 'react'
 import CancelOrder from './CancelOrder'
 import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
+import { Calendar } from 'lucide-react'
 
 interface BuyerOrderCardProp {
   order: OrderAndOrderItems
@@ -15,20 +14,6 @@ interface BuyerOrderCardProp {
 
 function BuyerOrderCard({ order }: BuyerOrderCardProp) {
   const [showDetails, setShowDetails] = useState(false)
-  const getStatusIcon = (status: string | undefined) => {
-    switch (status) {
-      case 'delivered':
-        return <CheckCircle className="w-4 h-4" />
-      case 'shipped':
-        return <Truck className="w-4 h-4" />
-      case 'processing':
-        return <Package className="w-4 h-4" />
-      case 'cancelled':
-        return <XCircle className="w-4 h-4" />
-      default:
-        return <Clock className="w-4 h-4" />
-    }
-  }
 
   return (
     <div>
@@ -42,15 +27,17 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
               </CardTitle>
               <Badge
                 variant="outline"
-                className={`text-${getStatusColor(order.status)}`}
+                className={`text-${getStatusColor(order.status)} capitalize`}
               >
-                {getStatusIcon(order.status)}
-                <span className="ml-1 capitalize">{order.status}</span>
+                {order.status}
               </Badge>
             </div>
             <div className="">
               <p className="flex  gap-1 text-sm text-muted-foreground">
-                <span>{formatCreatedAt(order.created_at)} •</span>
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  {formatCreatedAt(order.created_at)} •
+                </span>
                 <span>
                   {order?.orderItems && order?.orderItems.length} item
                   {order?.orderItems && order?.orderItems?.length > 1
@@ -108,7 +95,6 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
               open={showDetails}
               onOpenChange={setShowDetails}
               order={order}
-              getStatusIcon={getStatusIcon}
             />
             <CancelOrder order_id={order.order_id} />
           </div>

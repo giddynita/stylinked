@@ -4,8 +4,10 @@ import { Separator } from '@/components/ui/separator'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
 import { useState } from 'react'
-import OrderDetailsDialog from './OrderDetailsDialog'
+import VendorOrderDetailsDialog from '../../VendorOrderDetailsDialog'
 import OrderStatus from './OrderStatus'
+import { getStatusColor } from '@/utils/data'
+import { Calendar, Package } from 'lucide-react'
 
 interface OrderCardProp {
   order: CustomerOrder
@@ -13,67 +15,6 @@ interface OrderCardProp {
 
 function VendorOrderCard({ order }: OrderCardProp) {
   const [showDetails, setShowDetails] = useState(false)
-
-  const getStatusBadge = (status: string | undefined) => {
-    switch (status) {
-      case 'Delivered':
-        return (
-          <Badge
-            variant="default"
-            className="bg-green-100 text-green-800 hover:bg-green-100"
-          >
-            Delivered
-          </Badge>
-        )
-      case 'Shipped':
-        return (
-          <Badge
-            variant="secondary"
-            className="bg-blue-100 text-blue-800 hover:bg-blue-100"
-          >
-            Shipped
-          </Badge>
-        )
-      case 'Processing':
-        return (
-          <Badge
-            variant="outline"
-            className="border-orange-200 text-orange-700"
-          >
-            Processing
-          </Badge>
-        )
-      case 'Pending':
-        return (
-          <Badge
-            variant="outline"
-            className="border-yellow-200 text-yellow-700"
-          >
-            Pending
-          </Badge>
-        )
-      case 'Cancelled':
-        return <Badge variant="destructive">Cancelled</Badge>
-      default:
-        return <Badge variant="outline">{status}</Badge>
-    }
-  }
-  const getStatusColor = (status: string | undefined) => {
-    switch (status) {
-      case 'Delivered':
-        return 'border-l-green-500'
-      case 'Shipped':
-        return 'border-l-blue-500'
-      case 'Processing':
-        return 'border-l-orange-500'
-      case 'Pending':
-        return 'border-l-yellow-500'
-      case 'Cancelled':
-        return 'border-l-red-500'
-      default:
-        return 'border-l-gray-300'
-    }
-  }
 
   const totalItems = order.order_items.reduce(
     (sum, item) => sum + item.amount,
@@ -83,7 +24,7 @@ function VendorOrderCard({ order }: OrderCardProp) {
   return (
     <div>
       <Card
-        className={`hover:shadow-md transition-shadow border-l-4 ${getStatusColor(
+        className={`hover:shadow-md transition-shadow border-l-4 border-l-${getStatusColor(
           order?.status
         )}`}
       >
@@ -104,18 +45,26 @@ function VendorOrderCard({ order }: OrderCardProp) {
                   <span className="text-muted-foreground mr-1">Order ID:</span>
                   {order.order_id}
                 </p>
-                <p className="text-sm text-muted-foreground sm:text-right">
+                <p className="flex items-center gap-1 text-sm text-muted-foreground w-max sm:ml-auto">
+                  <Calendar className="w-4 h-4" />
                   {order.date}
                 </p>
               </div>
             </div>
             <div className="flex justify-between items-center gap-4 flex-wrap">
               <div className="flex items-center space-x-4 capitalize">
-                {getStatusBadge(order?.status)}
-                <span className="text-sm text-muted-foreground flex gap-1">
-                  Total Qty:
-                  <span>{totalItems}</span>
-                </span>
+                <Badge
+                  variant="outline"
+                  className={`text-${getStatusColor(order?.status)} capitalize`}
+                >
+                  {order?.status}
+                </Badge>
+                <p className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Package className="h-4 w-4" />
+                  <span>
+                    {totalItems} unit{totalItems !== 1 ? 's' : ''}
+                  </span>
+                </p>
                 {/* shipping method */}
                 {/* <span className="text-sm text-muted-foreground">
                   {order.shipping_method} shipping
@@ -167,11 +116,10 @@ function VendorOrderCard({ order }: OrderCardProp) {
           </section>
           <Separator className="my-4" />
           <div className="flex justify-between gap-4 items-center flex-wrap">
-            <OrderDetailsDialog
+            <VendorOrderDetailsDialog
               open={showDetails}
               onOpenChange={setShowDetails}
               order={order}
-              getStatusBadge={getStatusBadge}
             />
             {(order.status === 'pending' || order.status === 'processing') && (
               <OrderStatus order={order} />

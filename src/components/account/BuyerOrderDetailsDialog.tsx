@@ -16,20 +16,18 @@ interface BuyerOrderDetailsDialogProps {
   order: OrderAndOrderItems
   open: boolean
   onOpenChange: (open: boolean) => void
-  getStatusIcon?: (status: string | undefined) => any
 }
 
 function BuyerOrderDetailsDialog({
   order,
   open,
   onOpenChange,
-  getStatusIcon,
 }: BuyerOrderDetailsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <Eye className="w-4 h-4 mr-2" />
+          <Eye className="w-4 h-4" />
           View Details
         </Button>
       </DialogTrigger>
@@ -49,7 +47,7 @@ function BuyerOrderDetailsDialog({
                 variant="outline"
                 className={`text-${getStatusColor(order.status)}`}
               >
-                {getStatusIcon && getStatusIcon(order.status)}
+                {order.status}
                 <span className="ml-1 capitalize">{order.status}</span>
               </Badge>
             </div>
