@@ -3,7 +3,6 @@ import { Badge } from '../../../ui/badge'
 import { Calendar, Package } from 'lucide-react'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import { getStatusColor } from '@/utils/data'
-import { useState } from 'react'
 import VendorOrderDetailsDialog from '../../VendorOrderDetailsDialog'
 
 interface Orders {
@@ -11,8 +10,6 @@ interface Orders {
 }
 
 function Orders({ data }: Orders) {
-  const [showDetails, setShowDetails] = useState(false)
-
   const ordersDetails = data?.map(([order_id, order_items]) => {
     const amount = order_items.reduce((acc, item) => {
       const sum = acc + item.price * item.amount
@@ -73,11 +70,7 @@ function Orders({ data }: Orders) {
                   >
                     {status}
                   </Badge>
-                  <VendorOrderDetailsDialog
-                    open={showDetails}
-                    onOpenChange={setShowDetails}
-                    order={order}
-                  />
+                  <VendorOrderDetailsDialog order={order} />
                 </div>
               </div>
 

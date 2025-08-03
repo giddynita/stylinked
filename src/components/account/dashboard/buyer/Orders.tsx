@@ -5,15 +5,11 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { getStatusColor } from '@/utils/data'
 import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
-import { useState } from 'react'
-
 interface Orders {
   sortedOrders: OrderAndOrderItems[] | undefined
 }
 
 function Orders({ sortedOrders }: Orders) {
-  const [showDetails, setShowDetails] = useState(false)
-
   dayjs.extend(relativeTime)
 
   return (
@@ -55,11 +51,7 @@ function Orders({ sortedOrders }: Orders) {
                   View Details
                 </Link>
               </Button> */}
-              <BuyerOrderDetailsDialog
-                open={showDetails}
-                onOpenChange={setShowDetails}
-                order={order}
-              />
+              <BuyerOrderDetailsDialog order={order} />
             </div>
           </div>
         )
