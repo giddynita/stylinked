@@ -1,17 +1,19 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { RefreshCw, TrendingDown } from 'lucide-react'
+import { TrendingDown } from 'lucide-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type { Product } from '@/utils/types'
-import { Link } from 'react-router-dom'
 import { getUrgencyLevel } from '@/utils/data'
+import { useState } from 'react'
+import RestockDialog from './RestockDialog'
 
 interface LowStockProducts {
   lowStockProducts: Product[] | undefined
 }
 
 function LowStock({ lowStockProducts }: LowStockProducts) {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+
   dayjs.extend(relativeTime)
   return (
     <div className="space-y-4">
@@ -47,17 +49,11 @@ function LowStock({ lowStockProducts }: LowStockProducts) {
                 </span>
               </div>
 
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="text-xs cursor-pointer"
-              >
-                <Link to="/account/products">
-                  <RefreshCw className="h-3 w-3" />
-                  Restock
-                </Link>
-              </Button>
+              <RestockDialog
+                selectedProduct={selectedProduct}
+                setSelectedProduct={setSelectedProduct}
+                product={product}
+              />
             </div>
 
             <div className=" flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

@@ -38,6 +38,12 @@ function ViewProductDialog({
     setIsViewDialogOpen(true)
   }
   const urgency = selectedProduct && getUrgencyLevel(selectedProduct.stock)
+  const variants = selectedProduct?.variants
+    .map((variant) => ({
+      ...variant,
+      colors: variant.colors.filter((c) => c.quantity !== 0),
+    }))
+    .filter((variant) => variant.colors.length > 0)
   return (
     <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
       <Tooltip>
@@ -93,7 +99,7 @@ function ViewProductDialog({
                 <Label className="font-semibold text-sm text-muted-foreground">
                   Category
                 </Label>
-                <p>{selectedProduct.category}</p>
+                <p className="capitalize">{selectedProduct.category}</p>
               </div>
             </div>
 
@@ -120,39 +126,38 @@ function ViewProductDialog({
                 </p>
               </div>
             </div>
-            {selectedProduct.variants && (
-              <div className="space-y-4 grid sm:grid-cols-2">
-                {selectedProduct.variants.map((variant) => (
-                  <div key={variant.size}>
-                    <div className="flex gap-1 text-sm items-center">
-                      <Label className="font-semibold  text-muted-foreground">
-                        Size:
-                      </Label>
-                      <p>{variant.size} </p>
-                    </div>
 
-                    <ul className="space-y-2">
-                      {variant.colors.map((c) => (
-                        <li key={c.color} className="space-x-4 pl-2 flex">
-                          <span className="flex gap-1 text-sm items-center">
-                            <Label className="font-semibold text-muted-foreground">
-                              Color:
-                            </Label>
-                            {c.color}
-                          </span>
-                          <span className="flex gap-1 text-sm items-center">
-                            <Label className="font-semibold  text-muted-foreground">
-                              Quantity:
-                            </Label>{' '}
-                            {c.quantity}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+            <div className="space-y-4 grid sm:grid-cols-2">
+              {variants?.map((variant) => (
+                <div key={variant.size}>
+                  <div className="flex gap-1 text-sm items-center">
+                    <Label className="font-semibold  text-muted-foreground">
+                      Size:
+                    </Label>
+                    <p>{variant.size} </p>
                   </div>
-                ))}
-              </div>
-            )}
+
+                  <ul className="space-y-2">
+                    {variant.colors.map((c) => (
+                      <li key={c.color} className="space-x-4 pl-2 flex">
+                        <span className="flex gap-1 text-sm items-center">
+                          <Label className="font-semibold text-muted-foreground">
+                            Color:
+                          </Label>
+                          {c.color}
+                        </span>
+                        <span className="flex gap-1 text-sm items-center">
+                          <Label className="font-semibold  text-muted-foreground">
+                            Quantity:
+                          </Label>{' '}
+                          {c.quantity}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
 
             <div className="mb-6">
               <Label className="font-semibold text-sm text-muted-foreground mb-2">
@@ -163,7 +168,7 @@ function ViewProductDialog({
                   return (
                     <figure
                       key={index}
-                      className="w-[200px] h-[200px] shadow-lg p-4 "
+                      className="w-[200px] border-2 h-[200px] shadow-lg p-4 "
                     >
                       <img
                         src={image}

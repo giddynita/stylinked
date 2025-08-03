@@ -7,8 +7,8 @@ import { uploadImage } from '@/utils/action'
 interface ImageInputProp {
   label: string
   name: string
-  setValidImages: (files: (string | undefined)[]) => void
-  validImages: (string | undefined)[]
+  setValidImages: (files: string[]) => void
+  validImages: string[]
   setLoadingImagesStatus: (status: boolean) => void
 }
 

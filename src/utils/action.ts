@@ -181,7 +181,7 @@ export const logoutAction = async (props: LogoutAction) => {
 export const uploadImage = async (images: File[]) => {
   const timestamp = Date.now()
   try {
-    const uploadedImageUrls = await Promise.all(
+    const uploadedImageUrls: string[] = await Promise.all(
       images.map(async (file) => {
         const newFileName = `${timestamp}-${file.name}`
         const { error } = await supabase.storage
@@ -190,7 +190,7 @@ export const uploadImage = async (images: File[]) => {
         if (error) {
           console.log(`Upload error: ${error.message}`)
           toast.error('Images upload failed!')
-          return
+          return ''
         }
         const { data: publicUrlData } = supabase.storage
           .from(bucket)

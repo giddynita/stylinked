@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '../ui/separator'
 import { toast } from 'sonner'
-import type { ColorQuantity, ProductFormProps, Variant } from '@/utils/types'
+import type { ColorQuantity, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
 import { useUserData } from '@/utils/hooks'
 import { getAuthUser } from '@/utils/loader'
@@ -13,11 +13,19 @@ import FormTextArea from '../form/FormTextArea'
 import FormSelectField from '../form/FormSelectField'
 import ImageInput from '../form/ImageInput'
 
+interface ProductFormProps {
+  product?: any
+  onSubmit: (data: any) => void
+  onCancel: () => void
+  onSubmitting: boolean
+  restock?: boolean
+}
 const ProductForm = ({
   product,
   onSubmit,
   onCancel,
   onSubmitting,
+  restock,
 }: ProductFormProps) => {
   const [formData, setFormData] = useState({
     name: product?.name || '',
@@ -30,12 +38,10 @@ const ProductForm = ({
   //others
   const [variants, setVariants] = useState<Variant[]>(product?.variants || [])
   //images
-  const [validImages, setValidImages] = useState<(string | undefined)[]>(
+  const [validImages, setValidImages] = useState<string[]>(
     product?.images || []
   )
   const [loadingImagesStatus, setLoadingImagesStatus] = useState<boolean>(false)
-  console.log(variants)
-
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
@@ -78,25 +84,28 @@ const ProductForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <FormInputField
-        name="name"
-        label="Product Name"
-        value={formData.name}
-        handleInputChange={handleInputChange}
-        placeholder="Cotton T-Shirt"
-        type="text"
-        required
-      />
-      <FormTextArea
-        name="description"
-        label="Description"
-        value={formData.description}
-        handleInputChange={handleInputChange}
-        placeholder="Describe the product..."
-        rows={3}
-        required
-      />
-      <div className="grid grid-cols-2 gap-4">
+      <div className={`space-y-4 ${restock && 'hidden'} `}>
+        <FormInputField
+          name="name"
+          label="Product Name"
+          value={formData.name}
+          handleInputChange={handleInputChange}
+          placeholder="Cotton T-Shirt"
+          type="text"
+          required
+        />
+        <FormTextArea
+          name="description"
+          label="Description"
+          value={formData.description}
+          handleInputChange={handleInputChange}
+          placeholder="Describe the product..."
+          rows={3}
+          required
+        />
+      </div>
+
+      <div className={`grid grid-cols-2 gap-4 ${restock && 'hidden'}`}>
         <FormInputField
           name="price"
           label="Price (&#8358;)"
@@ -117,7 +126,11 @@ const ProductForm = ({
           placeholder="Select Category"
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${
+          restock && 'hidden'
+        }`}
+      >
         <FormInputField
           name="material"
           label="Material"
@@ -136,7 +149,7 @@ const ProductForm = ({
         />
       </div>
 
-      <Separator className="mt-8" />
+      <Separator className={`mt-8 ${restock && 'hidden'}`} />
 
       <ProductVariants
         category={formData.category}
@@ -144,20 +157,22 @@ const ProductForm = ({
         setVariants={setVariants}
       />
 
-      <Separator className="mt-8" />
+      <Separator className={`mt-8 ${restock && 'hidden'}`} />
+      <div className={`space-y-4 ${restock && 'hidden'} `}>
+        <ImageInput
+          label="Product Image(s)"
+          setValidImages={setValidImages}
+          name="images"
+          validImages={validImages}
+          setLoadingImagesStatus={setLoadingImagesStatus}
+        />
+        <ProductImages
+          setValidImages={setValidImages}
+          validImages={validImages}
+          loadingImagesStatus={loadingImagesStatus}
+        />
+      </div>
 
-      <ImageInput
-        label="Product Image(s)"
-        setValidImages={setValidImages}
-        name="images"
-        validImages={validImages}
-        setLoadingImagesStatus={setLoadingImagesStatus}
-      />
-      <ProductImages
-        setValidImages={setValidImages}
-        validImages={validImages}
-        loadingImagesStatus={loadingImagesStatus}
-      />
       <div className="flex gap-2 pt-4">
         <Button type="submit">
           {product

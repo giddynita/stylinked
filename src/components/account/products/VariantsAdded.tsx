@@ -19,7 +19,7 @@ function VariantsAdded({ variants, setVariants }: VariantAddedProp) {
           colors: variant.colors.filter((c) => c.color !== color),
         }
       })
-      .filter((variant) => variant.colors.length > 0) // remove size if no colors left
+      .filter((variant) => variant.colors.length > 0)
     setVariants(updated)
   }
   const handleEditVariant = (size: string, color: string, quantity: number) => {
@@ -36,10 +36,16 @@ function VariantsAdded({ variants, setVariants }: VariantAddedProp) {
     })
     setVariants(updated)
   }
+  const filteredVariants = variants
+    .map((variant) => ({
+      ...variant,
+      colors: variant.colors.filter((c) => c.quantity !== 0),
+    }))
+    .filter((variant) => variant.colors.length > 0)
   return (
     <Card className="mt-4">
       <CardHeader>
-        <CardTitle className="font-bold text-lg">
+        <CardTitle className="font-bold text-lg text-center">
           {variants.length == 0
             ? 'No variant added'
             : variants.length > 1
@@ -48,7 +54,7 @@ function VariantsAdded({ variants, setVariants }: VariantAddedProp) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {variants.map((variant) => (
+        {filteredVariants.map((variant) => (
           <div
             key={variant.size}
             className="font-medium border py-4 px-2 rounded-lg mb-4  "

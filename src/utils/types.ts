@@ -64,13 +64,6 @@ export type Testimonials = {
   rating: number
 }
 
-export interface ProductFormProps {
-  product?: any
-  onSubmit: (data: any) => void
-  onCancel: () => void
-  onSubmitting: boolean
-}
-
 export type ColorQuantity = { color: string; quantity: number }
 export type Variant = { size: string; colors: ColorQuantity[] }
 
