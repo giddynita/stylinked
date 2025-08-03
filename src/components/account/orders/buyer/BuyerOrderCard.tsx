@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getStatusColor } from '@/utils/data'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
-import { useState } from 'react'
 import CancelOrder from './CancelOrder'
 import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
 import { Calendar } from 'lucide-react'
@@ -13,8 +12,6 @@ interface BuyerOrderCardProp {
 }
 
 function BuyerOrderCard({ order }: BuyerOrderCardProp) {
-  const [showDetails, setShowDetails] = useState(false)
-
   return (
     <div>
       <Card className="shadow-sm border-border/50 hover:shadow-md transition-shadow">
@@ -91,11 +88,7 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
             </div>
           )}
           <div className="flex justify-between gap-4 items-center flex-wrap">
-            <BuyerOrderDetailsDialog
-              open={showDetails}
-              onOpenChange={setShowDetails}
-              order={order}
-            />
+            <BuyerOrderDetailsDialog order={order} />
             <CancelOrder order_id={order.order_id} />
           </div>
         </CardContent>

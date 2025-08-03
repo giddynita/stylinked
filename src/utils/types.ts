@@ -411,3 +411,8 @@ export type OrderAndOrderItems = {
   tracking_number?: string
   estimated_delivery?: string
 }
+
+export type SelectItems = {
+  value: string
+  label: string
+}

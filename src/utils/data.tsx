@@ -304,3 +304,206 @@ export const getStatusColor = (status: string | undefined) => {
       return 'secondary'
   }
 }
+
+export const getUrgencyLevel = (current: number) => {
+  if (current == 0)
+    return {
+      level: 'out of stock',
+      className: 'bg-destructive text-white',
+      label: 'Out of Stock',
+    }
+  if (current <= 3)
+    return {
+      level: 'critical',
+      className: 'bg-destructive text-white',
+      label: 'Critical',
+    }
+  if (current <= 10)
+    return {
+      level: 'low',
+      className: 'bg-warning text-white ',
+      label: 'Low',
+    }
+  return {
+    level: 'active',
+    className: 'bg-success text-white',
+    label: 'Active',
+  }
+}
+
+export const productCategories = [
+  {
+    value: 'dresses',
+    label: 'Dresses',
+  },
+  {
+    value: 'suits',
+    label: 'Suits',
+  },
+  {
+    value: 'shirts',
+    label: 'Shirts',
+  },
+  {
+    value: 'pants',
+    label: 'Pants',
+  },
+  {
+    value: 'accessories',
+    label: 'Accessories',
+  },
+  {
+    value: 'sneakers',
+    label: 'Sneakers',
+  },
+]
+
+export const productSizesList = {
+  dresses: [
+    {
+      value: 'S',
+      label: 'S',
+    },
+    {
+      value: 'M',
+      label: 'M',
+    },
+    {
+      value: 'L',
+      label: 'L',
+    },
+    {
+      value: 'XL',
+      label: 'XL',
+    },
+  ],
+  suits: [
+    {
+      value: 'S',
+      label: 'S',
+    },
+    {
+      value: 'M',
+      label: 'M',
+    },
+    {
+      value: 'L',
+      label: 'L',
+    },
+    {
+      value: 'XL',
+      label: 'XL',
+    },
+  ],
+  shirts: [
+    {
+      value: 'S',
+      label: 'S',
+    },
+    {
+      value: 'M',
+      label: 'M',
+    },
+    {
+      value: 'L',
+      label: 'L',
+    },
+    {
+      value: 'XL',
+      label: 'XL',
+    },
+  ],
+  pants: [
+    {
+      value: 'S',
+      label: 'S',
+    },
+    {
+      value: 'M',
+      label: 'M',
+    },
+    {
+      value: 'L',
+      label: 'L',
+    },
+    {
+      value: 'XL',
+      label: 'XL',
+    },
+  ],
+  accessories: [
+    {
+      value: 'N/A',
+      label: 'Not applicable',
+    },
+    {
+      value: 'S',
+      label: 'S',
+    },
+    {
+      value: 'M',
+      label: 'M',
+    },
+    {
+      value: 'L',
+      label: 'L',
+    },
+    {
+      value: 'XL',
+      label: 'XL',
+    },
+  ],
+  sneakers: [
+    {
+      value: '36',
+      label: '36',
+    },
+    {
+      value: '37',
+      label: '37',
+    },
+    {
+      value: '38',
+      label: '38',
+    },
+    {
+      value: '39',
+      label: '39',
+    },
+    {
+      value: '40',
+      label: '40',
+    },
+    {
+      value: '41',
+      label: '41',
+    },
+    {
+      value: '42',
+      label: '42',
+    },
+  ],
+}
+
+export const colorsList = [
+  {
+    value: 'red',
+    label: 'Red',
+  },
+  {
+    value: 'blue',
+    label: 'Blue',
+  },
+  {
+    value: 'black',
+    label: 'Black',
+  },
+  {
+    value: 'white',
+    label: 'White',
+  },
+  {
+    value: 'multicolor',
+    label: 'Multicolor',
+  },
+]

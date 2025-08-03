@@ -3,7 +3,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
-import { useState } from 'react'
 import VendorOrderDetailsDialog from '../../VendorOrderDetailsDialog'
 import OrderStatus from './OrderStatus'
 import { getStatusColor } from '@/utils/data'
@@ -14,8 +13,6 @@ interface OrderCardProp {
 }
 
 function VendorOrderCard({ order }: OrderCardProp) {
-  const [showDetails, setShowDetails] = useState(false)
-
   const totalItems = order.order_items.reduce(
     (sum, item) => sum + item.amount,
     0
@@ -116,11 +113,7 @@ function VendorOrderCard({ order }: OrderCardProp) {
           </section>
           <Separator className="my-4" />
           <div className="flex justify-between gap-4 items-center flex-wrap">
-            <VendorOrderDetailsDialog
-              open={showDetails}
-              onOpenChange={setShowDetails}
-              order={order}
-            />
+            <VendorOrderDetailsDialog order={order} />
             {(order.status === 'pending' || order.status === 'processing') && (
               <OrderStatus order={order} />
             )}

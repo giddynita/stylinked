@@ -11,20 +11,16 @@ import { getStatusColor } from '@/utils/data'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import { Eye } from 'lucide-react'
+import { useState } from 'react'
 
 interface BuyerOrderDetailsDialogProps {
   order: OrderAndOrderItems
-  open: boolean
-  onOpenChange: (open: boolean) => void
 }
 
-function BuyerOrderDetailsDialog({
-  order,
-  open,
-  onOpenChange,
-}: BuyerOrderDetailsDialogProps) {
+function BuyerOrderDetailsDialog({ order }: BuyerOrderDetailsDialogProps) {
+  const [showDetails, setShowDetails] = useState(false)
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={showDetails} onOpenChange={setShowDetails}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Eye className="w-4 h-4" />

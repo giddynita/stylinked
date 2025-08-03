@@ -4,11 +4,11 @@ import { Input } from '../ui/input'
 import { toast } from 'sonner'
 import { uploadImage } from '@/utils/action'
 
-interface ImageInputType {
+interface ImageInputProp {
   label: string
   name: string
-  setValidImages: (files: string[]) => void
-  validImages: string[]
+  setValidImages: (files: (string | undefined)[]) => void
+  validImages: (string | undefined)[]
   setLoadingImagesStatus: (status: boolean) => void
 }
 
@@ -20,7 +20,7 @@ const ImageInput = ({
   name,
   validImages,
   setLoadingImagesStatus,
-}: ImageInputType) => {
+}: ImageInputProp) => {
   const maxFiles = 4
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files || []
@@ -52,11 +52,13 @@ const ImageInput = ({
         accepted.push(newFile)
       })
     }
+
     if (!navigator.onLine) {
       toast.error('Image Upload failed! Check your internet connection.')
       return
     }
     setLoadingImagesStatus(true)
+
     const uploadedFiles = await uploadImage(accepted)
     if (uploadedFiles) {
       const allImages = [...validImages, ...uploadedFiles]

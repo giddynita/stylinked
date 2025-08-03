@@ -11,12 +11,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import {
-  Package as LinkIcon,
-  LogOutIcon,
-  Home,
-  Loader2Icon,
-} from 'lucide-react'
+import { LogOutIcon, Home, Loader2Icon, LinkIcon } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useState } from 'react'
 import { logoutAction } from '@/utils/action'

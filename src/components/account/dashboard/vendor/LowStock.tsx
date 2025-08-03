@@ -5,31 +5,13 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type { Product } from '@/utils/types'
 import { Link } from 'react-router-dom'
+import { getUrgencyLevel } from '@/utils/data'
 
 interface LowStockProducts {
   lowStockProducts: Product[] | undefined
 }
 
 function LowStock({ lowStockProducts }: LowStockProducts) {
-  const getUrgencyLevel = (current: number) => {
-    if (current <= 3)
-      return {
-        level: 'critical',
-        className: 'bg-destructive text-white',
-        label: 'Critical',
-      }
-    if (current <= 10)
-      return {
-        level: 'low',
-        className: 'bg-warning text-white ',
-        label: 'Low',
-      }
-    return {
-      level: '',
-      className: '',
-      label: '',
-    }
-  }
   dayjs.extend(relativeTime)
   return (
     <div className="space-y-4">

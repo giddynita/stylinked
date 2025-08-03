@@ -12,20 +12,16 @@ import { getStatusColor } from '@/utils/data'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
 import { Calendar, Eye, MapPin, Package, Truck } from 'lucide-react'
+import { useState } from 'react'
 
 interface VendorOrderDetailsDialogProps {
   order: CustomerOrder
-  open: boolean
-  onOpenChange: (open: boolean) => void
 }
 
-function VendorOrderDetailsDialog({
-  order,
-  open,
-  onOpenChange,
-}: VendorOrderDetailsDialogProps) {
+function VendorOrderDetailsDialog({ order }: VendorOrderDetailsDialogProps) {
+  const [showDetails, setShowDetails] = useState(false)
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={showDetails} onOpenChange={setShowDetails}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Eye className="w-4 h-4" />

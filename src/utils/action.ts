@@ -180,27 +180,24 @@ export const logoutAction = async (props: LogoutAction) => {
 
 export const uploadImage = async (images: File[]) => {
   const timestamp = Date.now()
-  const uploadedImageUrls = []
   try {
-    for (let i = 0; i < images.length; i++) {
-      const file = images[i]
-      const newFileName = `${timestamp}-${file.name}`
-
-      const { error } = await supabase.storage
-        .from(bucket)
-        .upload(newFileName, file)
-
-      if (error) {
-        console.log(`Upload error: ${error.message}`)
-        toast.error('Images upload failed!')
-        return
-      }
-      const { data: publicUrlData } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(newFileName)
-
-      uploadedImageUrls.push(publicUrlData.publicUrl)
-    }
+    const uploadedImageUrls = await Promise.all(
+      images.map(async (file) => {
+        const newFileName = `${timestamp}-${file.name}`
+        const { error } = await supabase.storage
+          .from(bucket)
+          .upload(newFileName, file)
+        if (error) {
+          console.log(`Upload error: ${error.message}`)
+          toast.error('Images upload failed!')
+          return
+        }
+        const { data: publicUrlData } = supabase.storage
+          .from(bucket)
+          .getPublicUrl(newFileName)
+        return publicUrlData.publicUrl
+      })
+    )
 
     return uploadedImageUrls
   } catch (error) {
