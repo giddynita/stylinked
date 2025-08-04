@@ -305,42 +305,40 @@ export const useVendorProfile = (vendorId: string | undefined) => {
   return queryData
 }
 
-export const useSingleProduct = (id: string | undefined) => {
+export const useSingleProduct = (id: string) => {
   const getSingleProductWithRating = async () => {
-    if (id) {
-      const { data: product, error: productError } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single()
+    const { data: product, error: productError } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single()
 
-      if (productError) throw new Error(productError.message)
+    if (productError) throw new Error(productError.message)
 
-      const { data: reviews, error: reviewsError } = await supabase
-        .from('reviews')
-        .select('*')
-        .eq('productid', id)
+    const { data: reviews, error: reviewsError } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('productid', id)
 
-      if (reviewsError) throw new Error(reviewsError.message)
-      const sortedReviews = reviews.sort((a, b) => {
-        const tsA = new Date(a.createdat).getTime()
-        const tsB = new Date(b.createdat).getTime()
-        return tsB - tsA
-      })
+    if (reviewsError) throw new Error(reviewsError.message)
+    const sortedReviews = reviews.sort((a, b) => {
+      const tsA = new Date(a.createdat).getTime()
+      const tsB = new Date(b.createdat).getTime()
+      return tsB - tsA
+    })
 
-      const totalReviews = sortedReviews.length
-      const totalRating = sortedReviews.reduce((sum, r) => sum + r.rating, 0)
-      const averageRating =
-        totalReviews > 0 ? parseInt((totalRating / totalReviews).toFixed(1)) : 0
+    const totalReviews = sortedReviews.length
+    const totalRating = sortedReviews.reduce((sum, r) => sum + r.rating, 0)
+    const averageRating =
+      totalReviews > 0 ? parseInt((totalRating / totalReviews).toFixed(1)) : 0
 
-      const singleProductWithRating: SingleProduct = {
-        ...product,
-        productReviews: sortedReviews,
-        totalReviews,
-        averageRating,
-      }
-      return singleProductWithRating
+    const singleProductWithRating: SingleProduct = {
+      ...product,
+      productReviews: sortedReviews,
+      totalReviews,
+      averageRating,
     }
+    return singleProductWithRating
   }
 
   const queryData = useQuery({

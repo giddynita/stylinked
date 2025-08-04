@@ -2,7 +2,7 @@ import { DialogDescription } from '@radix-ui/react-dialog'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { useContext } from 'react'
 import { GlobalContext } from '@/utils/globalContext'
-import { Carousel } from '../global'
+import { ImageCarousel } from '../global'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 import { Ban, Minus, Plus } from 'lucide-react'
@@ -68,7 +68,7 @@ function VariantSelection() {
         </DialogHeader>
         {selectedItem && (
           <section className="space-y-4">
-            <Carousel carouselItems={selectedItem.images} />
+            <ImageCarousel carouselItems={selectedItem.images} />
             <div className="space-y-2">
               <h3 className="font-medium">{selectedItem.name}</h3>
               <p className="text-sm text-muted-foreground">

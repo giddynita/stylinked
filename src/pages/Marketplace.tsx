@@ -1,12 +1,5 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { SlidersHorizontal } from 'lucide-react'
 import {
   AdvancedFilters,
@@ -14,11 +7,11 @@ import {
   ProductGrid,
   ProductList,
 } from '@/components/marketplace'
-import { Label } from '@/components/ui/label'
 import type { ProductFilter } from '@/utils/types'
 import {
   CustomPagination,
   SearchBar,
+  Sorting,
   ViewModeToggle,
 } from '@/components/global'
 import AppHeader from '@/components/headers/AppHeader'
@@ -27,7 +20,8 @@ import {
   ProductListCardSkeleton,
 } from '@/components/skeletons'
 import { useAllProducts } from '@/utils/hooks'
-import { QueryHeading } from '@/components/headings'
+import { PageHeading, QueryHeading } from '@/components/headings'
+import { marketplaceSorting } from '@/utils/data'
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
@@ -152,150 +146,147 @@ const Marketplace = () => {
   return (
     <>
       <AppHeader />
-      <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
-        <section className="hidden lg:block col-span-3 py-8">
-          <AdvancedFilters
-            priceRange={priceRange}
-            selectedMaterials={selectedMaterials}
-            selectedBrands={selectedBrands}
-            inStockOnly={inStockOnly}
-            minRating={minRating}
-            searchQuery={searchQuery}
-            setPriceRange={setPriceRange}
-            setSelectedMaterials={setSelectedMaterials}
-            setSelectedBrands={setSelectedBrands}
-            setInStockOnly={setInStockOnly}
-            setMinRating={setMinRating}
-            setFilters={setFilters}
-            isLoading={isLoading}
-            maxPrice={maxPrice}
+      <main>
+        <div className="sr-only">
+          <PageHeading
+            pageTitle="Marketplace"
+            pageDesc="Discover exclusive fashion collections from verified sellers worldwide."
           />
-        </section>
-        <section className="py-8 col-span-5">
-          {/* Enhanced Search and Filters */}
-          <div className="mb-8">
-            {/* search */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <SearchBar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearchQuery={handleSearchQuery}
-                placeholder="Search products by name..."
-              />
-              <Button
-                variant="outline"
-                className="lg:w-auto lg:hidden"
-                onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              >
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
-                Advanced Filters
-              </Button>
-            </div>
-            {/* Advanced Filters */}
-            {showAdvancedFilters && (
-              <div className="lg:hidden">
-                <AdvancedFilters
-                  onClose={() => setShowAdvancedFilters(false)}
-                  priceRange={priceRange}
-                  selectedMaterials={selectedMaterials}
-                  selectedBrands={selectedBrands}
-                  inStockOnly={inStockOnly}
-                  minRating={minRating}
-                  searchQuery={searchQuery}
-                  setPriceRange={setPriceRange}
-                  setSelectedMaterials={setSelectedMaterials}
-                  setSelectedBrands={setSelectedBrands}
-                  setInStockOnly={setInStockOnly}
-                  setMinRating={setMinRating}
-                  setFilters={setFilters}
-                  isLoading={isLoading}
-                  maxPrice={maxPrice}
-                />
-              </div>
-            )}
-            {/* Category Filters */}
-            <CategoriesCarousel
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
+        </div>
+        <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
+          <div className="hidden lg:block col-span-3 py-8">
+            <AdvancedFilters
+              priceRange={priceRange}
+              selectedMaterials={selectedMaterials}
+              selectedBrands={selectedBrands}
+              inStockOnly={inStockOnly}
+              minRating={minRating}
+              searchQuery={searchQuery}
+              setPriceRange={setPriceRange}
+              setSelectedMaterials={setSelectedMaterials}
+              setSelectedBrands={setSelectedBrands}
+              setInStockOnly={setInStockOnly}
+              setMinRating={setMinRating}
+              setFilters={setFilters}
+              isLoading={isLoading}
+              maxPrice={maxPrice}
             />
           </div>
-          <section>
-            {/* Results Header */}
-            <QueryHeading
-              query={filters.searchQuery}
-              queryResult={sortedProducts}
-              type="product"
-            />
-            {/*  Sorting &  View Toggle */}
-            <div className="flex items-center justify-between gap-2 mb-8">
-              {/* Sort Dropdown */}
-              <div className="flex items-center space-x-2">
-                <Label className="text-muted-foreground">Sort by:</Label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="max-w-35 sm:max-w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="relevance">Relevance</SelectItem>
-                    <SelectItem value="price-low">
-                      Price: Low to High
-                    </SelectItem>
-                    <SelectItem value="price-high">
-                      Price: High to Low
-                    </SelectItem>
-                    <SelectItem value="rating">Average Rating</SelectItem>
-                  </SelectContent>
-                </Select>
+          <div className="py-8 col-span-5">
+            {/* Enhanced Search and Filters */}
+            <div className="mb-8">
+              {/* search */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  handleSearchQuery={handleSearchQuery}
+                  placeholder="Search products by name..."
+                />
+                <Button
+                  variant="outline"
+                  className="lg:w-auto lg:hidden"
+                  onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                >
+                  <SlidersHorizontal className="w-4 h-4 mr-2" />
+                  Advanced Filters
+                </Button>
               </div>
-
-              {/* View Mode Toggle */}
-              <ViewModeToggle
-                viewMode={viewMode}
-                handleViewMode={handleViewMode}
+              {/* Advanced Filters */}
+              {showAdvancedFilters && (
+                <div className="lg:hidden">
+                  <AdvancedFilters
+                    onClose={() => setShowAdvancedFilters(false)}
+                    priceRange={priceRange}
+                    selectedMaterials={selectedMaterials}
+                    selectedBrands={selectedBrands}
+                    inStockOnly={inStockOnly}
+                    minRating={minRating}
+                    searchQuery={searchQuery}
+                    setPriceRange={setPriceRange}
+                    setSelectedMaterials={setSelectedMaterials}
+                    setSelectedBrands={setSelectedBrands}
+                    setInStockOnly={setInStockOnly}
+                    setMinRating={setMinRating}
+                    setFilters={setFilters}
+                    isLoading={isLoading}
+                    maxPrice={maxPrice}
+                  />
+                </div>
+              )}
+              {/* Category Filters */}
+              <CategoriesCarousel
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
               />
             </div>
-
-            {/* Products Grid/List */}
-            {productView}
-
-            {/* Pagination */}
-            {sortedProducts && sortedProducts.length >= 1 && totalPages && (
-              <CustomPagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                handlePageChange={handlePageChange}
+            <section>
+              {/* Results Header */}
+              <QueryHeading
+                query={filters.searchQuery}
+                queryResult={sortedProducts}
+                type="product"
               />
-            )}
+              {/*  Sorting &  View Toggle */}
+              <div className="flex items-center justify-between gap-2 mb-8">
+                {/* Sort Dropdown */}
+                <Sorting
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  options={marketplaceSorting}
+                />
 
-            {/*fetching product failed */}
-            {!isLoading && isError && (
-              <div className="text-center py-12">
-                <p className="text-lg font-medium">Error fetching products.</p>
-                <Button
-                  className="mt-4"
-                  onClick={() => window.location.reload()}
-                >
-                  Reload Page
-                </Button>
+                {/* View Mode Toggle */}
+                <ViewModeToggle
+                  viewMode={viewMode}
+                  handleViewMode={handleViewMode}
+                />
               </div>
-            )}
-            {!isLoading && !isError && !sortedProducts?.length && (
-              <div className=" text-center py-12">
-                <p className=" text-lg font-medium">
-                  No product found matching your criteria.
-                </p>
-                <Button
-                  disabled={isLoading}
-                  className="mt-4"
-                  onClick={clearFilters}
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            )}
-          </section>
-        </section>
-      </div>
+
+              {/* Products Grid/List */}
+              {productView}
+
+              {/* Pagination */}
+              {sortedProducts && sortedProducts.length >= 1 && totalPages && (
+                <CustomPagination
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  handlePageChange={handlePageChange}
+                />
+              )}
+
+              {/*fetching product failed */}
+              {isError && (
+                <div className="text-center py-12">
+                  <p className="text-lg font-medium">
+                    Error fetching products.
+                  </p>
+                  <Button
+                    className="mt-4"
+                    onClick={() => window.location.reload()}
+                  >
+                    Reload Page
+                  </Button>
+                </div>
+              )}
+              {sortedProducts?.length == 0 && (
+                <div className=" text-center py-12">
+                  <p className=" text-lg font-medium">
+                    No product found matching your criteria.
+                  </p>
+                  <Button
+                    disabled={isLoading}
+                    className="mt-4"
+                    onClick={clearFilters}
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              )}
+            </section>
+          </div>
+        </div>
+      </main>
     </>
   )
 }

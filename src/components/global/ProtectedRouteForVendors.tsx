@@ -1,11 +1,13 @@
 import { useUserData } from '@/utils/hooks'
 import LoadingIcon from './LoadingIcon'
 import { Navigate } from 'react-router-dom'
+import { useUser } from '@supabase/auth-helpers-react'
 
 function ProtectedRouteForVendors({ children }: { children: any }) {
-  const { data: userInfo, isLoading: userRoleLoading } = useUserData()
+  const { data: userInfo, isLoading } = useUserData()
+  const user = useUser()
 
-  if (userRoleLoading) {
+  if (user && isLoading) {
     return <LoadingIcon />
   }
 

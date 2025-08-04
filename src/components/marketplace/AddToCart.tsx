@@ -8,7 +8,7 @@ import {
 } from '../ui/dialog'
 import { GlobalContext } from '@/utils/globalContext'
 import type { CartItemType, ProductCardProps } from '@/utils/types'
-import { Carousel } from '../global'
+import { ImageCarousel } from '../global'
 import { currencyFormatter } from '@/utils/format'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
@@ -69,7 +69,7 @@ function AddToCart({ product }: ProductCardProps) {
             Add product to Cart
           </DialogDescription>
         </DialogHeader>
-        <Carousel carouselItems={product.images} />
+        <ImageCarousel carouselItems={product.images} />
         <div className="space-y-4">
           <div className="space-y-2">
             <h1 className="text-base text-muted-foreground">{product.name}</h1>

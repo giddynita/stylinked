@@ -1,4 +1,4 @@
-function Carousel({ carouselItems }: { carouselItems: string[] }) {
+function ImageCarousel({ carouselItems }: { carouselItems: string[] }) {
   return (
     <div className="carousel rounded-box h-[40vh] w-full">
       {carouselItems.map((item: string, index) => {
@@ -16,4 +16,4 @@ function Carousel({ carouselItems }: { carouselItems: string[] }) {
     </div>
   )
 }
-export default Carousel
+export default ImageCarousel
