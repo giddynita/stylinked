@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async'
 
-interface AccountPagesHeading {
+interface AccountPagesHeadingProp {
   pageTitle: string
   pageDesc: string
 }
 
-function AccountPagesHeading({ pageTitle, pageDesc }: AccountPagesHeading) {
+function AccountPagesHeading({ pageTitle, pageDesc }: AccountPagesHeadingProp) {
   return (
     <>
       <Helmet>

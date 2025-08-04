@@ -1,10 +1,11 @@
 import type { Testimonials } from '@/utils/types'
 import { Star } from 'lucide-react'
-function TestimonialCarousel({
-  testimonials,
-}: {
+
+interface TestimonialCarouselProp {
   testimonials: Testimonials[]
-}) {
+}
+
+function TestimonialCarousel({ testimonials }: TestimonialCarouselProp) {
   return (
     <>
       <div className="carousel w-full carousel-center rounded-box md:grid md:grid-cols-3 gap-8  ">

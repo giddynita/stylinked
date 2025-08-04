@@ -15,7 +15,6 @@ import {
   User,
   ShoppingBag,
 } from 'lucide-react'
-import type { Testimonials } from './types'
 
 export const signUp = {
   title: 'Verify your email address',
@@ -61,27 +60,30 @@ export const vehicleTypeSelect = [
 export const features = [
   {
     icon: ShoppingCart,
-    title: 'Shop Fashion',
+    title: 'Shop Premium Fashion',
     description:
-      'Discover unique, custom-tailored fashion items from skilled artisans',
+      'Discover exclusive fashion collections from verified sellers worldwide. Browse curated styles, trending designs, and unique pieces.',
     link: '/marketplace',
   },
   {
     icon: Store,
-    title: 'Sell Your Creations',
-    description: 'Join our vendor community and showcase your fashion designs',
+    title: 'Sell Products Online',
+    description:
+      'Launch your fashion business and reach thousands of buyers. Showcase your designs with powerful seller tools and analytics.',
     link: '/signup',
   },
   {
     icon: Truck,
-    title: 'Deliver Orders',
-    description: 'Partner with us for reliable fashion item delivery services',
+    title: 'Fast Delivery',
+    description:
+      'Join our logistics network for reliable fashion item delivery. Earn competitive rates with flexible scheduling.',
     link: '/signup',
   },
   {
     icon: Shield,
     title: 'Secure Platform',
-    description: 'Safe transactions and quality assurance for all users',
+    description:
+      'Shop with confidence using our secure payment system, buyer protection, and verified seller guarantee program.',
     link: '/auth/login',
   },
 ]
@@ -92,28 +94,28 @@ export const stats = [
   { number: '50K+', label: 'Products Sold' },
   { number: '4.9', label: 'Average Rating' },
 ]
-export const testimonials: Testimonials[] = [
+export const testimonials = [
   {
     name: 'Sarah Johnson',
     role: 'Fashion Enthusiast',
-    text: 'Found the perfect wedding dress through TailorHub. The quality and service exceeded all expectations!',
+    text: 'Found the perfect wedding dress through Stylinked. The quality and service exceeded all expectations!',
     rating: 5,
   },
   {
     name: 'Michael Chen',
-    role: 'Tailor & Vendor',
-    text: 'TailorHub helped me grow my business from local to nationwide. Amazing platform for artisans!',
+    role: 'Vendor',
+    text: 'Stylinked helped me grow my business from local to nationwide. Amazing platform for artisans!',
     rating: 5,
   },
   {
     name: 'Emma Davis',
-    role: 'Delivery Partner',
-    text: 'Flexible schedule and great earnings. Love being part of the TailorHub logistics network.',
+    role: 'Logistics Partner',
+    text: 'Flexible schedule and great earnings. Love being part of the Stylinked logistics network.',
     rating: 5,
   },
 ]
 
-export const nonUserNavLinks = [
+export const defaultNavlinks = [
   {
     title: 'Home',
     url: '/',
@@ -127,25 +129,14 @@ export const nonUserNavLinks = [
     url: '/vendors',
   },
 ]
-/* export const userNavLinks = [
+export const vendorNavlinks = [
   {
     title: 'Home',
     url: '/',
   },
-  {
-    title: 'Marketplace',
-    url: '/marketplace',
-  },
-  {
-    title: 'Find Vendors',
-    url: '/vendors',
-  },
-  {
-    title: 'Orders',
-    url: '/orders',
-  },
-] */
-export const nonUserSidebarNavLinks = [
+]
+
+export const defaultSidebarNavlinks = [
   {
     title: 'Home',
     url: '/',
@@ -160,6 +151,13 @@ export const nonUserSidebarNavLinks = [
     title: 'Find Vendors',
     url: '/vendors',
     icon: Users,
+  },
+]
+export const vendorSidebarNavlinks = [
+  {
+    title: 'Home',
+    url: '/',
+    icon: Home,
   },
 ]
 export const nonUserFooterLinks = [

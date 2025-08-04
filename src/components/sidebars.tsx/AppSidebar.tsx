@@ -9,81 +9,60 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Button } from '../ui/button'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Loader2Icon, LogIn, LogOutIcon, X } from 'lucide-react'
-import { nonUserSidebarNavLinks } from '@/utils/data'
+import { Link, useLocation } from 'react-router-dom'
+import { LogIn } from 'lucide-react'
+import { defaultSidebarNavlinks, vendorSidebarNavlinks } from '@/utils/data'
 import { ProfileImage } from '../global'
-import { logoutAction } from '@/utils/action'
-import { useState } from 'react'
 import { useUser } from '@supabase/auth-helpers-react'
+import { useUserData } from '@/utils/hooks'
+import { Skeleton } from '../ui/skeleton'
 
 export function AppSidebar() {
-  const { isMobile, open, setOpen, toggleSidebar } = useSidebar()
+  const { isMobile, open, setOpen } = useSidebar()
   if (!isMobile && open) {
     setOpen(false)
   }
   const location = useLocation()
   const pathname = location.pathname
   const user = useUser()
-  const [logout, setLogout] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const { data: userInfo, isLoading } = useUserData()
+
+  const navlinks =
+    userInfo?.userRole?.role == 'vendor'
+      ? vendorSidebarNavlinks
+      : defaultSidebarNavlinks
 
   return (
     <Sidebar side="right" variant="sidebar">
-      <SidebarHeader className="pr-4 pl-1 mb-2">
-        <SidebarMenu className="flex flex-row justify-between">
-          <SidebarMenuItem>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-foreground"
-              onClick={toggleSidebar}
-            >
-              <X />
-            </Button>
+      <SidebarHeader className=" pl-1 mb-2">
+        <SidebarMenu>
+          <SidebarMenuItem className="mx-auto my-2">
+            {user && <ProfileImage />}
           </SidebarMenuItem>
-          <SidebarMenuItem>{user && <ProfileImage />}</SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="px-3">
         <SidebarMenu>
-          {nonUserSidebarNavLinks.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild isActive={item.url === pathname}>
-                <Link to={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {isLoading ? (
+            <Skeleton className="w-full h-10" />
+          ) : (
+            navlinks.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild isActive={item.url === pathname}>
+                  <Link to={item.url}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))
+          )}
         </SidebarMenu>
       </SidebarContent>
       {
         <SidebarFooter className="px-3">
           <SidebarMenu>
-            {user ? (
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  className="w-full text-white bg-destructive hover:bg-red-500 cursor-pointer"
-                  onClick={() => {
-                    logoutAction({ navigate, setLogout })
-                  }}
-                >
-                  {logout ? (
-                    <>
-                      <span>Logging out</span>
-                      <Loader2Icon className="animate-spin" />
-                    </>
-                  ) : (
-                    <>
-                      <LogOutIcon className="rotate-180" />
-                      <span>Log out</span>
-                    </>
-                  )}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ) : (
+            {!user && (
               <>
                 <SidebarMenuItem>
                   <Button

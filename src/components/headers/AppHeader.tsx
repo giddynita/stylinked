@@ -1,16 +1,18 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Logo, ProfileImage } from '../global'
 import { Button } from '../ui/button'
 import ModeToggle from '../theme/mode-toggle'
 import { SidebarTrigger } from '../ui/sidebar'
-import { nonUserNavLinks } from '@/utils/data'
 import { useEffect, useState } from 'react'
 import Cart from './Cart'
 import { useUser } from '@supabase/auth-helpers-react'
+import Navbar from './Navbar'
+import { useUserData } from '@/utils/hooks'
 function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const user = useUser()
+  const { data: userInfo } = useUserData()
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
@@ -33,26 +35,13 @@ function AppHeader() {
         showHeader ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="container flex items-center justify-between">
+      <div className="container flex items-center justify-between gap-10">
         <Logo icon="w-5 h-5" text="text-sm" />
-        <div className="hidden md:flex items-center gap-x-8">
-          <nav className="hidden md:flex items-center space-x-1 font-medium text-sm px-2">
-            {nonUserNavLinks.map((item, index) => (
-              <Button variant="ghost" size="sm" key={index}>
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? 'text-primary' : 'text-muted-foreground'
-                  }
-                  to={item.url}
-                >
-                  {item.title}
-                </NavLink>
-              </Button>
-            ))}
-          </nav>
+        <div className="hidden md:flex md:flex-1 items-center gap-x-8">
+          <Navbar />
           <div className="flex flex-row gap-x-2 items-center">
             <ModeToggle align="end" />
-            <Cart />
+            {userInfo?.userRole.role == 'buyer' && <Cart />}
             {user ? (
               <ProfileImage />
             ) : (
@@ -65,7 +54,6 @@ function AppHeader() {
                     Login
                   </Link>
                 </Button>
-
                 <Button size="sm">
                   <Link to="/auth/sign-up">Sign Up</Link>
                 </Button>
@@ -75,7 +63,7 @@ function AppHeader() {
         </div>
         <div className="md:hidden flex flex-row gap-x-2 items-center">
           <ModeToggle align="end" />
-          <Cart />
+          {userInfo?.userRole.role == 'buyer' && <Cart />}
           <SidebarTrigger />
         </div>
       </div>
