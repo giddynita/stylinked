@@ -17,6 +17,7 @@ import {
   Vendors,
   RestrictedAccess,
   Error,
+  Settings,
 } from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -182,7 +183,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: <CompleteRegistration />,
+        element: <Settings />,
       },
     ],
   },
