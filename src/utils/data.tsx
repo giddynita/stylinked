@@ -36,10 +36,10 @@ export const accountTypeOptions = [
     label: 'Vendor',
     value: 'vendor',
   },
-  {
+  /* {
     label: 'Logistics Partner',
     value: 'logistics',
-  },
+  }, */
 ]
 
 export const vehicleTypeSelect = [
