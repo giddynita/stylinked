@@ -8,15 +8,17 @@ import {
 } from '../ui/select'
 import { Filter } from 'lucide-react'
 
+interface CityFilterProp {
+  selectedState: string
+  selectedCity: string
+  handleCityChange: (city: string) => void
+}
+
 function CityFilter({
   selectedState,
   handleCityChange,
   selectedCity,
-}: {
-  selectedState: string
-  selectedCity: string
-  handleCityChange: (city: string) => void
-}) {
+}: CityFilterProp) {
   return (
     <Select
       value={selectedCity}

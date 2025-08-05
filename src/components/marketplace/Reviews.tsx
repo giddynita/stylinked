@@ -1,12 +1,11 @@
 import { Star } from 'lucide-react'
 
-function Reviews({
-  totalReviews,
-  averageRating,
-}: {
+interface ReviewsProp {
   totalReviews: number
   averageRating: number
-}) {
+}
+
+function Reviews({ totalReviews, averageRating }: ReviewsProp) {
   return (
     <div className="flex items-center space-x-1 h-6">
       <>

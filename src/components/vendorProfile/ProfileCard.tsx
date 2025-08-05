@@ -1,16 +1,16 @@
 import { Card, CardContent } from '@/components/ui/card'
 import type { VendorProfile } from '@/utils/types'
-import VendorAvatar from '../VendorAvatar'
+import VendorAvatar from '../vendors/VendorAvatar'
 import { Calendar, MapPin, MessageCircle, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import ContactVendorDialog from './ContactSellerDialog'
+import ContactVendorDialog from './ContactVendorDialog'
 
-function ProfileCard({
-  vendorProfile,
-}: {
+interface ProfileCardProp {
   vendorProfile: VendorProfile | undefined
-}) {
+}
+
+function ProfileCard({ vendorProfile }: ProfileCardProp) {
   const [contactSellerDialogOpen, setContactSellerDialogOpen] = useState(false)
 
   const handleDialogClose = () => {

@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '../ui/dialog'
 import { GlobalContext } from '@/utils/globalContext'
-import type { CartItemType, ProductCardProps } from '@/utils/types'
+import type { CartItemType, Product } from '@/utils/types'
 import { ImageCarousel } from '../global'
 import { currencyFormatter } from '@/utils/format'
 import { Label } from '../ui/label'
@@ -18,7 +18,11 @@ import { toast } from 'sonner'
 import { addItem } from '@/features/cart/cartSlice'
 import { Ban, Minus, Plus } from 'lucide-react'
 
-function AddToCart({ product }: ProductCardProps) {
+interface AddToCartProp {
+  product: Product
+}
+
+function AddToCart({ product }: AddToCartProp) {
   const { isAddToCartDialogOpen, setIsAddToCartDialogOpen } =
     useContext(GlobalContext)
   const [selectedSize, setSelectedSize] = useState('')

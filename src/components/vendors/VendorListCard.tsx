@@ -1,4 +1,4 @@
-import type { VendorCardProp } from '@/utils/types'
+import type { VendorCard } from '@/utils/types'
 import { Card, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { Link } from 'react-router-dom'
@@ -17,7 +17,7 @@ function VendorListCard({
   state,
   joinedDate,
   totalProducts,
-}: VendorCardProp) {
+}: VendorCard) {
   return (
     <Card className="hover:shadow-lg transition-shadow p-0">
       <CardContent className="p-4">

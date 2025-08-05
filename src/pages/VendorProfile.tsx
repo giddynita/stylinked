@@ -1,12 +1,19 @@
-import { ProductReviews, ViewModeToggle } from '@/components/global'
+import {
+  FetchingError,
+  ProductReviews,
+  Sorting,
+  ViewModeToggle,
+} from '@/components/global'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
+import { PageHeading } from '@/components/headings'
 import { ProductGrid, ProductList } from '@/components/marketplace'
 import {
   ProductGridCardSkeleton,
   ProductListCardSkeleton,
 } from '@/components/skeletons'
 import VendorProfileCardSkeleton from '@/components/skeletons/VendorProfileCardSkeleton'
-import { ProfileCard, SortingProfileProducts } from '@/components/vendors'
+import { ProfileCard } from '@/components/vendorProfile'
+import { vendorProfileProductSorting } from '@/utils/data'
 import { useVendorProfile } from '@/utils/hooks'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -26,7 +33,7 @@ const VendorProfile = () => {
   }
 
   //fetch vendor data
-  const { data: vendorProfile, isLoading } = useVendorProfile(vendorid)
+  const { data: vendorProfile, isLoading, isError } = useVendorProfile(vendorid)
 
   // products by this vendor
   const sortedProducts =
@@ -72,7 +79,10 @@ const VendorProfile = () => {
         previousPage="vendors"
         currentPage={vendorProfile?.businessname}
       />
-
+      <PageHeading
+        pageTitle={`Vendor - ${vendorProfile?.businessname}`}
+        pageDesc={vendorProfile?.description}
+      />
       <div className="space-y-8 pb-12">
         {/* Vendor Header */}
         <section>
@@ -92,7 +102,11 @@ const VendorProfile = () => {
             </h2>
           )}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-            <SortingProfileProducts sortBy={sortBy} setSortBy={setSortBy} />
+            <Sorting
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              options={vendorProfileProductSorting}
+            />
             <ViewModeToggle
               viewMode={viewMode}
               handleViewMode={handleViewMode}
@@ -105,6 +119,8 @@ const VendorProfile = () => {
         <section>
           <ProductReviews reviews={reviews} displayProductName />
         </section>
+
+        <FetchingError isError={isError} text="vendor products" />
       </div>
     </div>
   )

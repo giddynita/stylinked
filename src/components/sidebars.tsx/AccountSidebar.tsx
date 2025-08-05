@@ -13,16 +13,15 @@ import {
 } from '@/components/ui/sidebar'
 import { LogOutIcon, Home, Loader2Icon, LinkIcon } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { useState } from 'react'
-import { logoutAction } from '@/utils/action'
 import { useUserData } from '@/utils/hooks'
 import { buyerNavigation, vendorNavigation } from '@/utils/data'
+import { logoutAction } from '@/utils/action'
+import { toast } from 'sonner'
 
 function AccountSidebar() {
   const { state, isMobile } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
-  const [logout, setLogout] = useState<boolean>(false)
   const navigate = useNavigate()
   const tooltip = state == 'collapsed' && !isMobile
   const { data: userInfo } = useUserData()
@@ -32,6 +31,21 @@ function AccountSidebar() {
       : userInfo?.userRole.role == 'vendor'
       ? vendorNavigation
       : []
+  const { mutate: logout, isPending } = logoutAction()
+
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        navigate('/')
+        toast.success("You're logged out successfully.")
+
+        window.location.reload()
+      },
+      onError: () => {
+        toast.error('Failed to logout')
+      },
+    })
+  }
 
   return (
     <Sidebar
@@ -113,15 +127,13 @@ function AccountSidebar() {
             <Tooltip>
               <TooltipTrigger
                 className=" w-max  text-white flex items-center text-xs gap-2 rounded-sm"
-                onClick={() => {
-                  logoutAction({ navigate, setLogout })
-                }}
+                onClick={handleLogout}
               >
                 <SidebarMenuButton
                   asChild
                   className="bg-destructive hover:bg-red-500 cursor-pointer"
                 >
-                  {logout ? (
+                  {isPending ? (
                     <div className="py-2 pl-2 pr-4">
                       <Loader2Icon className="animate-spin" />
                       <span>Logging out</span>

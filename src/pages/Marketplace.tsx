@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { SlidersHorizontal } from 'lucide-react'
+import { Package, SlidersHorizontal } from 'lucide-react'
 import {
   AdvancedFilters,
   CategoriesCarousel,
@@ -10,6 +10,8 @@ import {
 import type { ProductFilter } from '@/utils/types'
 import {
   CustomPagination,
+  FetchingError,
+  NoResult,
   SearchBar,
   Sorting,
   ViewModeToggle,
@@ -31,18 +33,13 @@ const Marketplace = () => {
   //filters
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [priceRange, setPriceRange] = useState([0, 1000000])
-  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [inStockOnly, setInStockOnly] = useState(false)
-  const [minRating, setMinRating] = useState(0)
   const [filters, setFilters] = useState<ProductFilter>({
-    priceRange,
-    selectedMaterials,
-    selectedBrands,
-    inStockOnly,
-    minRating,
-    searchQuery,
+    priceRange: [0, 1000000],
+    selectedMaterials: [],
+    selectedBrands: [],
+    inStockOnly: false,
+    minRating: 0,
+    searchQuery: '',
   })
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false)
 
@@ -62,6 +59,7 @@ const Marketplace = () => {
 
   const handleSearchQuery: (searchQuery: string) => void = (searchQuery) => {
     setFilters({ ...filters, searchQuery })
+    setCurrentPage(1)
   }
 
   const itemsPerPage = 3
@@ -73,26 +71,6 @@ const Marketplace = () => {
   })
   const maxPrice =
     data && Math.max(...data?.products?.map((product) => product?.price))
-
-  //clear filter
-  const clearFilters = () => {
-    setSearchQuery('')
-    setSelectedCategory('all')
-    setPriceRange([0, 1000000])
-    setSelectedMaterials([])
-    setSelectedBrands([])
-    setInStockOnly(false)
-    setMinRating(0)
-    setCurrentPage(1)
-    setFilters({
-      priceRange: [0, 1000000],
-      selectedMaterials: [],
-      selectedBrands: [],
-      inStockOnly: false,
-      minRating: 0,
-    })
-  }
-  //constants
 
   const products = data?.products
 
@@ -146,30 +124,26 @@ const Marketplace = () => {
   return (
     <>
       <AppHeader />
-      <main>
-        <div className="sr-only">
-          <PageHeading
-            pageTitle="Marketplace"
-            pageDesc="Discover exclusive fashion collections from verified sellers worldwide."
-          />
-        </div>
-        <div className="min-h-screen container lg:grid lg:grid-cols-8 gap-10">
+      <main className="container min-h-screen container space-y-2 my-12">
+        <PageHeading
+          pageTitle="Marketplace"
+          pageDesc="Discover exclusive fashion collections from verified sellers worldwide."
+        />
+        <section className="space-y-2">
+          <h1 className="text-3xl font-bold text-foreground">Shop Now</h1>
+          <p className="text-muted-foreground">
+            Browse our marketplace to find what you need.
+          </p>
+        </section>
+
+        <div className=" lg:grid lg:grid-cols-8 gap-10">
           <div className="hidden lg:block col-span-3 py-8">
             <AdvancedFilters
-              priceRange={priceRange}
-              selectedMaterials={selectedMaterials}
-              selectedBrands={selectedBrands}
-              inStockOnly={inStockOnly}
-              minRating={minRating}
               searchQuery={searchQuery}
-              setPriceRange={setPriceRange}
-              setSelectedMaterials={setSelectedMaterials}
-              setSelectedBrands={setSelectedBrands}
-              setInStockOnly={setInStockOnly}
-              setMinRating={setMinRating}
               setFilters={setFilters}
               isLoading={isLoading}
               maxPrice={maxPrice}
+              setCurrentPage={setCurrentPage}
             />
           </div>
           <div className="py-8 col-span-5">
@@ -197,20 +171,11 @@ const Marketplace = () => {
                 <div className="lg:hidden">
                   <AdvancedFilters
                     onClose={() => setShowAdvancedFilters(false)}
-                    priceRange={priceRange}
-                    selectedMaterials={selectedMaterials}
-                    selectedBrands={selectedBrands}
-                    inStockOnly={inStockOnly}
-                    minRating={minRating}
                     searchQuery={searchQuery}
-                    setPriceRange={setPriceRange}
-                    setSelectedMaterials={setSelectedMaterials}
-                    setSelectedBrands={setSelectedBrands}
-                    setInStockOnly={setInStockOnly}
-                    setMinRating={setMinRating}
                     setFilters={setFilters}
                     isLoading={isLoading}
                     maxPrice={maxPrice}
+                    setCurrentPage={setCurrentPage}
                   />
                 </div>
               )}
@@ -256,33 +221,14 @@ const Marketplace = () => {
               )}
 
               {/*fetching product failed */}
-              {isError && (
-                <div className="text-center py-12">
-                  <p className="text-lg font-medium">
-                    Error fetching products.
-                  </p>
-                  <Button
-                    className="mt-4"
-                    onClick={() => window.location.reload()}
-                  >
-                    Reload Page
-                  </Button>
-                </div>
-              )}
-              {sortedProducts?.length == 0 && (
-                <div className=" text-center py-12">
-                  <p className=" text-lg font-medium">
-                    No product found matching your criteria.
-                  </p>
-                  <Button
-                    disabled={isLoading}
-                    className="mt-4"
-                    onClick={clearFilters}
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
-              )}
+              <FetchingError isError={isError} text="products" />
+
+              {/* No result */}
+              <NoResult
+                length={sortedProducts?.length}
+                icon={Package}
+                text="No products found. Try adjusting your search and filter criteria."
+              />
             </section>
           </div>
         </div>

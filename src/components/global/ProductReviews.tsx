@@ -4,13 +4,12 @@ import { formatCreatedAt } from '@/utils/format'
 import type { Reviews } from '@/utils/types'
 import { ExistingReviewsSkeleton } from '../skeletons'
 
-function ProductReviews({
-  reviews,
-  displayProductName,
-}: {
+interface ProductReviewsProp {
   reviews: Reviews[] | undefined
   displayProductName?: boolean
-}) {
+}
+
+function ProductReviews({ reviews, displayProductName }: ProductReviewsProp) {
   return !reviews ? (
     <ExistingReviewsSkeleton />
   ) : (

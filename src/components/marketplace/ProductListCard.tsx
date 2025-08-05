@@ -17,7 +17,11 @@ import { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '@/utils/globalContext'
 import Reviews from './Reviews'
 
-function ProductListCard({ product }: { product: ProductWithRating }) {
+interface ProductListCardProp {
+  product: ProductWithRating
+}
+
+function ProductListCard({ product }: ProductListCardProp) {
   const { cartItems, numItemsInCart } = useSelector(
     (state: any) => state.cartState
   )

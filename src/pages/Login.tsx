@@ -8,12 +8,13 @@ import { FormInput, FormPassword, SubmitButton } from '@/components/form'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { AuthFormsHeading } from '@/components/headings'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { loginAction } from '@/utils/action'
 import { AuthContainer } from '@/components/auth'
 import { GlobalContext } from '@/utils/globalContext'
+import { toast } from 'sonner'
+
 function Login() {
-  const [submitting, setSubmitting] = useState<boolean>(false)
   const navigate = useNavigate()
   const { pathname, setPathname } = useContext(GlobalContext)
   const form = useForm<LoginFormSchema>({
@@ -23,9 +24,21 @@ function Login() {
       password: '',
     },
   })
+  const { mutate: login, isPending } = loginAction()
+
+  const handleLogin = (data: LoginFormSchema) => {
+    login(data, {
+      onSuccess: () => {
+        navigate(pathname)
+        toast.success("Welcome! You're logged in.")
+      },
+      onError: () => {
+        toast.error('Failed to login')
+      },
+    })
+  }
   const onSubmit = async (data: LoginFormSchema) => {
-    const request = { ...data, setSubmitting, navigate, pathname }
-    loginAction(request)
+    handleLogin(data)
     return setPathname('/')
   }
 
@@ -53,7 +66,7 @@ function Login() {
                 placeholder="Enter your password"
               />
               <SubmitButton
-                submitting={submitting}
+                submitting={isPending}
                 text="Login"
                 texting="Logging in"
               />

@@ -1,12 +1,11 @@
 import { AvatarImage, Avatar, AvatarFallback } from '../ui/avatar'
 
-function VendorAvatar({
-  image,
-  businessname,
-}: {
+interface VendorAvatarProp {
   image: string | undefined
   businessname: string | undefined
-}) {
+}
+
+function VendorAvatar({ image, businessname }: VendorAvatarProp) {
   return (
     <Avatar className="w-full h-full">
       <AvatarImage src={image} alt={businessname} />

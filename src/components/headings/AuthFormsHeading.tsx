@@ -1,13 +1,25 @@
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Helmet } from 'react-helmet-async'
 
-function AuthFormsHeading({ title, desc }: { title: string; desc: string }) {
+interface AuthFormsHeadingProp {
+  title: string
+  desc: string
+}
+
+function AuthFormsHeading({ title, desc }: AuthFormsHeadingProp) {
   return (
-    <CardHeader className="my-1">
-      <CardTitle className="text-2xl text-center mb-0.5 font-bold">
-        {title}
-      </CardTitle>
-      <CardDescription className="text-center">{desc}</CardDescription>
-    </CardHeader>
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={desc} />
+      </Helmet>
+      <CardHeader className="my-1">
+        <CardTitle className="text-2xl text-center mb-0.5 font-bold">
+          {title}
+        </CardTitle>
+        <CardDescription className="text-center">{desc}</CardDescription>
+      </CardHeader>
+    </>
   )
 }
 export default AuthFormsHeading

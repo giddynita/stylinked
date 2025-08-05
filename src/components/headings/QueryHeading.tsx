@@ -1,12 +1,10 @@
-function QueryHeading({
-  query,
-  queryResult,
-  type,
-}: {
+interface QueryHeadingProp {
   query: string | undefined
   queryResult: any[] | undefined
   type: string
-}) {
+}
+
+function QueryHeading({ query, queryResult, type }: QueryHeadingProp) {
   return (
     <>
       {query && queryResult && (

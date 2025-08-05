@@ -1,11 +1,11 @@
 import type { ProductWithRating } from '@/utils/types'
 import ProductListCard from './ProductListCard'
 
-function ProductList({
-  sortedProducts,
-}: {
+interface ProductListProp {
   sortedProducts: ProductWithRating[] | undefined
-}) {
+}
+
+function ProductList({ sortedProducts }: ProductListProp) {
   return (
     <div className="space-y-4">
       {sortedProducts?.map((product) => (

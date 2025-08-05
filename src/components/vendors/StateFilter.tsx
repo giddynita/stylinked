@@ -8,13 +8,12 @@ import {
 } from '../ui/select'
 import { southwestStates } from '@/utils/data'
 
-function StateFilter({
-  selectedState,
-  handleStateChange,
-}: {
+interface StateFilterProp {
   selectedState: string
   handleStateChange: (state: string) => void
-}) {
+}
+
+function StateFilter({ selectedState, handleStateChange }: StateFilterProp) {
   return (
     <Select
       value={selectedState}

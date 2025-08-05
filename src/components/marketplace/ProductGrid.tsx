@@ -1,11 +1,11 @@
 import type { ProductWithRating } from '@/utils/types'
 import ProductGridCard from './ProductGridCard'
 
-function ProductGrid({
-  sortedProducts,
-}: {
+interface ProductGridProp {
   sortedProducts: ProductWithRating[] | undefined
-}) {
+}
+
+function ProductGrid({ sortedProducts }: ProductGridProp) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {sortedProducts?.map((product) => (

@@ -4,21 +4,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import VendorAvatar from '../VendorAvatar'
+import VendorAvatar from '../vendors/VendorAvatar'
 import { MapPin, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { VendorProfile } from '@/utils/types'
 import { DialogDescription } from '@radix-ui/react-dialog'
 
+interface ContactVendorDialogProp {
+  vendorProfile: VendorProfile | undefined
+  contactSellerDialogOpen: boolean
+  setContactSellerDialogOpen: () => void
+}
+
 function ContactVendorDialog({
   vendorProfile,
   contactSellerDialogOpen,
   setContactSellerDialogOpen,
-}: {
-  vendorProfile: VendorProfile | undefined
-  contactSellerDialogOpen: boolean
-  setContactSellerDialogOpen: () => void
-}) {
+}: ContactVendorDialogProp) {
   const handlePhoneClick = () => {
     window.location.href = `tel:${vendorProfile?.phone}`
   }

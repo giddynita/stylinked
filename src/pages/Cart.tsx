@@ -1,5 +1,6 @@
 import { CartItems, EmptyCart, OrderSummary } from '@/components/cart'
 import AppHeader from '@/components/headers/AppHeader'
+import { PageHeading } from '@/components/headings'
 import { useSelector } from 'react-redux'
 
 function Cart() {
@@ -13,6 +14,8 @@ function Cart() {
           numItemsInCart && 'lg:grid-cols-3'
         }  lg:grid gap-10`}
       >
+        <PageHeading pageDesc="Cart items" pageTitle="Cart" />
+
         <section className="col-span-2">
           {!numItemsInCart ? <EmptyCart /> : <CartItems />}
         </section>

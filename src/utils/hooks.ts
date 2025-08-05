@@ -14,7 +14,7 @@ import type {
   SingleProduct,
   UserDataType,
   UserRole,
-  VendorCardProp,
+  VendorCard,
   VendorFilter,
   VendorProfile,
 } from './types'
@@ -104,10 +104,6 @@ export const useAllProducts = ({
       query = query.in('material', filters.selectedMaterials)
     }
 
-    if (typeof filters.minRating === 'number') {
-      query = query.gte('rating', filters.minRating)
-    }
-
     if (filters.inStockOnly) {
       query = query.gte('stock', 1)
     }
@@ -126,7 +122,7 @@ export const useAllProducts = ({
 
     if (reviewsError) throw new Error(reviewsError.message)
 
-    const productsWithRating = productsData.map((p) => {
+    const productsWithRating: ProductWithRating[] = productsData.map((p) => {
       const productReviews = reviewsData.filter((r) => r.productid == p.id)
       const year = new Date(p.createdat).getFullYear().toString()
       const totalReviews = productReviews.length
@@ -134,8 +130,12 @@ export const useAllProducts = ({
       const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0
       return { ...p, created: year, averageRating, totalReviews }
     })
+    const filteredbyRating = productsWithRating.filter(
+      (p) => p.averageRating >= filters.minRating
+    )
+
     return {
-      products: productsWithRating as ProductWithRating[],
+      products: filteredbyRating,
       total: count ?? 0,
     }
   }
@@ -171,7 +171,7 @@ export const useVendorsWithStats = (
       error: vendorsError,
     } = await query.range(fromIndex, toIndex)
 
-    if (vendorsError || !vendorsData) {
+    if (vendorsError) {
       throw new Error(vendorsError.message)
     }
     const vendorIds = vendorsData.map((v) => v.id)
@@ -193,7 +193,7 @@ export const useVendorsWithStats = (
         usersError?.message || productsError?.message || reviewsError?.message
       )
     }
-    const vendorWithStats: VendorCardProp[] = vendorsData.map((vendor) => {
+    const vendorWithStats: VendorCard[] = vendorsData.map((vendor) => {
       const user = usersData.find((u) => u.id === vendor.id)
       const vendorProducts = productsData.filter(
         (p) => p.vendorid === vendor.id
@@ -203,6 +203,7 @@ export const useVendorsWithStats = (
         productIds.includes(r.productid)
       )
       const year = new Date(user?.created_at).getFullYear().toString()
+
       const totalReviews = vendorReviews.length
       const totalRating = vendorReviews.reduce((sum, r) => sum + r.rating, 0)
       const averageRating = totalReviews > 0 ? totalRating / totalReviews : 0

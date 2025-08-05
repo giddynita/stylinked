@@ -34,14 +34,9 @@ export type ResetPasswordAction = {
 export type LoginAction = {
   email: string
   password: string
-  setSubmitting: (value: boolean) => void
-  navigate: (value: string) => void
-  pathname: string
 }
-export type LogoutAction = {
-  setLogout: (value: boolean) => void
-  navigate: (value: string) => void
-}
+export type LogoutAction = (value: string) => void
+
 export type ForgotPasswordAction = {
   email: string
   setSubmitting: (value: boolean) => void
@@ -103,21 +98,6 @@ export type UserDataType = {
   coveragearea?: string[]
   businessname?: string
   location?: string
-}
-
-export interface ProductCardProps {
-  product: Product
-}
-
-export interface SmartPaginationProps {
-  totalPages: number
-  currentPage: number
-  handlePageChange: (page: number) => void
-}
-
-export interface CategoriesCarouselProps {
-  selectedCategory: string
-  setSelectedCategory: (category: string) => void
 }
 
 export type ProductFilter = {
@@ -227,7 +207,7 @@ export interface PaymentMethodOption {
   popular?: boolean
 }
 
-export interface VendorCardProp {
+export interface VendorCard {
   rating: number
   totalReviews: number
   joinedDate: string
@@ -270,7 +250,7 @@ export type ProductWithRating = Product & {
   averageRating: number
   totalReviews: number
 }
-export type VendorProfile = VendorCardProp & {
+export type VendorProfile = VendorCard & {
   vendorProducts: ProductWithRating[]
   vendorReviews: Reviews[]
 }

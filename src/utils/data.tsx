@@ -148,7 +148,7 @@ export const defaultSidebarNavlinks = [
     icon: StoreIcon,
   },
   {
-    title: 'Find Vendors',
+    title: 'Vendors',
     url: '/vendors',
     icon: Users,
   },
@@ -522,5 +522,42 @@ export const marketplaceSorting = [
   {
     value: 'rating',
     label: 'Average Rating',
+  },
+]
+
+export const vendorSorting = [
+  {
+    value: 'rating',
+    label: 'Highest Rated',
+  },
+  {
+    value: 'reviews',
+    label: 'Most Reviews',
+  },
+  {
+    value: 'newest',
+    label: 'Newest',
+  },
+  {
+    value: 'products',
+    label: 'Most Products',
+  },
+]
+export const vendorProfileProductSorting = [
+  {
+    value: 'rating',
+    label: 'Rating',
+  },
+  {
+    value: 'price-low',
+    label: 'Price: Low to High',
+  },
+  {
+    value: 'price-high',
+    label: 'Price: High to Low',
+  },
+  {
+    value: 'newest',
+    label: 'Newest',
   },
 ]

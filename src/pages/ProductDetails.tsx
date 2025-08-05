@@ -3,7 +3,7 @@ import { Cart } from '@/components/marketplace'
 import { useSingleProduct } from '@/utils/hooks'
 import { ProductInfoSkeleton } from '@/components/skeletons'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
-import { ProductReviews } from '@/components/global'
+import { FetchingError, ProductReviews } from '@/components/global'
 
 import { PageHeading } from '@/components/headings'
 import {
@@ -16,7 +16,11 @@ const ProductDetails = () => {
   const { productid } = useParams()
   //fech single product
   const id = productid == undefined ? '' : productid
-  const { data: product, isLoading: productLoading } = useSingleProduct(id)
+  const {
+    data: product,
+    isLoading: productLoading,
+    isError,
+  } = useSingleProduct(id)
 
   return (
     <div className="min-h-screen relative container">
@@ -53,6 +57,7 @@ const ProductDetails = () => {
           <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
             <Cart />
           </div>
+          <FetchingError isError={isError} text="product" />
         </main>
       )}
     </div>

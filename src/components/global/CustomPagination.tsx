@@ -1,4 +1,3 @@
-import type { SmartPaginationProps } from '@/utils/types'
 import {
   Pagination,
   PaginationContent,
@@ -9,11 +8,17 @@ import {
   PaginationPrevious,
 } from '../ui/pagination'
 
+interface SmartPaginationProp {
+  totalPages: number
+  currentPage: number
+  handlePageChange: (page: number) => void
+}
+
 function CustomPagination({
   totalPages,
   currentPage,
   handlePageChange,
-}: SmartPaginationProps) {
+}: SmartPaginationProp) {
   const getPageRange = () => {
     const pages: (number | '...')[] = []
 

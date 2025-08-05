@@ -7,12 +7,16 @@ import {
 } from '../ui/carousel'
 import { categories } from '@/utils/data'
 import { Badge } from '../ui/badge'
-import type { CategoriesCarouselProps } from '@/utils/types'
+
+interface CategoriesCarouselProp {
+  selectedCategory: string
+  setSelectedCategory: (category: string) => void
+}
 
 function CategoriesCarousel({
   selectedCategory,
   setSelectedCategory,
-}: CategoriesCarouselProps) {
+}: CategoriesCarouselProp) {
   return (
     <div className="relative">
       <Carousel

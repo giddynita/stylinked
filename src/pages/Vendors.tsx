@@ -3,8 +3,6 @@ import { Button } from '@/components/ui/button'
 import AppHeader from '@/components/headers/AppHeader'
 import {
   CityFilter,
-  NoVendor,
-  Sorting,
   StateFilter,
   VendorGrid,
   VendorList,
@@ -12,7 +10,10 @@ import {
 import { Separator } from '@/components/ui/separator'
 import {
   CustomPagination,
+  FetchingError,
+  NoResult,
   SearchBar,
+  Sorting,
   ViewModeToggle,
 } from '@/components/global'
 import { useVendorsWithStats } from '@/utils/hooks'
@@ -20,7 +21,9 @@ import {
   VendorGridCardSkeleton,
   VendorListCardSkeleton,
 } from '@/components/skeletons'
-import { QueryHeading } from '@/components/headings'
+import { PageHeading, QueryHeading } from '@/components/headings'
+import { vendorSorting } from '@/utils/data'
+import { Users } from 'lucide-react'
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
@@ -49,11 +52,10 @@ const Vendors = () => {
     setSelectedCity(city)
   }
   const clearFilter = () => {
-    setSearchQuery('')
     setSelectedCity('')
     setSelectedState('')
     setFilters({
-      searchQuery: '',
+      searchQuery,
       selectedCity: '',
       selectedState: '',
     })
@@ -129,8 +131,13 @@ const Vendors = () => {
       {/* Header */}
       <AppHeader />
 
-      <main className="min-h-screen container space-y-10 my-12">
-        {/* Page Header */}
+      <main className="min-h-screen container space-y-10 mt-12 mb-18">
+        {/* Page Heading */}
+        <PageHeading
+          pageDesc="Find and connect with vendors who meet your needs."
+          pageTitle="Vendors"
+        />
+
         <section className="space-y-2">
           <h1 className="text-3xl font-bold text-foreground">
             Discover Vendors
@@ -177,7 +184,11 @@ const Vendors = () => {
 
           {/*  Sorting &  View Toggle */}
           <div className=" flex items-start justify-between gap-4 mb-8">
-            <Sorting sortBy={sortBy} setSortBy={setSortBy} />
+            <Sorting
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              options={vendorSorting}
+            />
             <ViewModeToggle
               viewMode={viewMode}
               handleViewMode={handleViewMode}
@@ -195,17 +206,14 @@ const Vendors = () => {
             />
           )}
           {/*fetching vendors failed */}
-          {!isLoading && isError && (
-            <div className="text-center py-12">
-              <p className="text-lg font-medium">Error fetching vendors.</p>
-              <Button className="mt-4" onClick={() => window.location.reload()}>
-                Reload Page
-              </Button>
-            </div>
-          )}
+          <FetchingError isError={isError} text="vendors" />
 
           {/* No result */}
-          <NoVendor sortedVendors={sortedVendors} />
+          <NoResult
+            length={sortedVendors?.length}
+            icon={Users}
+            text="No vendors found. Try adjusting your search and filter criteria."
+          />
         </section>
       </main>
     </>

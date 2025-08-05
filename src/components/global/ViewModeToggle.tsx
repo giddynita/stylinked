@@ -1,13 +1,12 @@
 import { Grid3X3, List } from 'lucide-react'
 import { Button } from '../ui/button'
 
-function ViewModeToggle({
-  viewMode,
-  handleViewMode,
-}: {
+interface ViewModeToggleProp {
   viewMode: string
   handleViewMode: (mode: 'grid' | 'list') => void
-}) {
+}
+
+function ViewModeToggle({ viewMode, handleViewMode }: ViewModeToggleProp) {
   return (
     <div className="flex ml-auto h-12 border rounded-md">
       <Button

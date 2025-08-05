@@ -4,7 +4,6 @@ import { bucket, supabase } from './supabaseClient'
 import type {
   ForgotPasswordAction,
   LoginAction,
-  LogoutAction,
   Order,
   OrderItem,
   Product,
@@ -70,23 +69,26 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
   return navigate('/auth/login')
 }
 
-export const loginAction = async (props: LoginAction) => {
-  const { email, password, setSubmitting, navigate, pathname } = props
-  setSubmitting(true)
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-  if (error) {
-    toast.error('Failed to login')
-    console.log(error.message)
-    setSubmitting(false)
-    return
+export const loginAction = () => {
+  const login = async (props: LoginAction) => {
+    const { email, password } = props
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    if (error) throw new Error(error.message)
   }
-  toast.success("Welcome! You're logged in.")
-  setSubmitting(false)
 
-  return navigate(pathname)
+  const queryClient = useQueryClient()
+
+  const loginFunction = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userData'] })
+    },
+  })
+
+  return loginFunction
 }
 
 export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
@@ -163,19 +165,21 @@ export const completeRegistrationAction = async (props: any) => {
   navigate('/')
 }
 
-export const logoutAction = async (props: LogoutAction) => {
-  const { setLogout, navigate } = props
-  setLogout(true)
-  navigate('/')
-  const { error } = await supabase.auth.signOut()
-  if (error) {
-    toast.error('Failed to logout')
-    setLogout(false)
-    return
+export const logoutAction = () => {
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) throw new Error(error.message)
   }
-  toast.success("You're logged out successfully.")
-  setLogout(false)
-  return
+
+  const queryClient = useQueryClient()
+  const logoutFunction = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userData'] })
+    },
+  })
+
+  return logoutFunction
 }
 
 export const uploadImage = async (images: File[]) => {

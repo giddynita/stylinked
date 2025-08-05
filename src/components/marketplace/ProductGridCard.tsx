@@ -12,7 +12,11 @@ import { useSelector } from 'react-redux'
 import { useContext, useEffect, useState } from 'react'
 import { MdOutlineAddShoppingCart } from 'react-icons/md'
 
-const ProductGridCard = ({ product }: { product: ProductWithRating }) => {
+interface ProductGridCardProp {
+  product: ProductWithRating
+}
+
+const ProductGridCard = ({ product }: ProductGridCardProp) => {
   const { cartItems, numItemsInCart } = useSelector(
     (state: any) => state.cartState
   )

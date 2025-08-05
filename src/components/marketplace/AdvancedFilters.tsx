@@ -5,25 +5,38 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Slider } from '@/components/ui/slider'
 import { X } from 'lucide-react'
 import { currencyFormatter } from '@/utils/format'
-import type { AdvancedFiltersProps } from '@/utils/types'
+import type { ProductFilter } from '@/utils/types'
+import { useState } from 'react'
 
+interface AdvancedFiltersProps {
+  onClose?: () => void
+  searchQuery: string
+  setFilters: ({
+    priceRange,
+    selectedMaterials,
+    selectedBrands,
+    inStockOnly,
+    minRating,
+    searchQuery,
+  }: ProductFilter) => void
+  isLoading: boolean
+  maxPrice: number | undefined
+  setCurrentPage: (value: number) => void
+}
 const AdvancedFilters = ({
   onClose,
-  priceRange,
-  selectedMaterials,
-  selectedBrands,
-  inStockOnly,
-  minRating,
   searchQuery,
-  setPriceRange,
-  setSelectedMaterials,
-  setSelectedBrands,
-  setInStockOnly,
-  setMinRating,
-  setFilters,
   isLoading,
   maxPrice,
+  setFilters,
+  setCurrentPage,
 }: AdvancedFiltersProps) => {
+  const max = maxPrice && maxPrice > 0 ? maxPrice : 1000000
+  const [priceRange, setPriceRange] = useState([0, max])
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([])
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
+  const [inStockOnly, setInStockOnly] = useState(false)
+  const [minRating, setMinRating] = useState(0)
   const materials = [
     'Cotton',
     'Silk',
@@ -63,20 +76,22 @@ const AdvancedFilters = ({
       setSelectedBrands(selectedBrands.filter((s) => s !== brand))
     }
   }
-  const max = maxPrice && maxPrice > 0 ? maxPrice : 0
+
   const clearFilters = () => {
     setFilters({
-      priceRange: [0, 1000000],
+      priceRange: [0, max],
       selectedMaterials: [],
       selectedBrands: [],
       inStockOnly: false,
       minRating: 0,
+      searchQuery,
     })
-    setPriceRange([0, 1000000])
+    setPriceRange([0, max])
     setSelectedMaterials([])
     setSelectedBrands([])
     setInStockOnly(false)
     setMinRating(0)
+    setCurrentPage(1)
   }
 
   return (
@@ -146,7 +161,7 @@ const AdvancedFilters = ({
             />
             <div className="flex justify-between text-sm text-gray-600">
               <span>{currencyFormatter(priceRange[0])}</span>
-              <span>{currencyFormatter(max ?? priceRange[1])}</span>
+              <span>{currencyFormatter(priceRange[1])}</span>
             </div>
           </div>
           {/* Rating */}
@@ -191,6 +206,7 @@ const AdvancedFilters = ({
                 minRating,
                 searchQuery,
               })
+              setCurrentPage(1)
             }}
           >
             Apply Filters

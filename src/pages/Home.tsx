@@ -13,9 +13,7 @@ const Home = () => {
     <>
       <AppHeader />
       <main>
-        <div className="sr-only">
-          <PageHeading pageTitle="Home" pageDesc="Stylinked home page" />
-        </div>
+        <PageHeading pageTitle="Home" pageDesc="Stylinked home page" />
         <Hero />
         <Stats />
         <Features />

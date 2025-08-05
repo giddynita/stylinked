@@ -9,7 +9,11 @@ import { GlobalContext } from '@/utils/globalContext'
 import { useDispatch } from 'react-redux'
 import { editItem, removeItem } from '@/features/cart/cartSlice'
 
-function CartItem({ cartItem }: { cartItem: CartItemType }) {
+interface CartItemProp {
+  cartItem: CartItemType
+}
+
+function CartItem({ cartItem }: CartItemProp) {
   const {
     setVariantDialogOpen,
     setSelectedItem,

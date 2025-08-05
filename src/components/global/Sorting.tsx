@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
+import { ArrowUpDown } from 'lucide-react'
 
 interface SortingProp {
   sortBy: string
@@ -20,6 +21,7 @@ function Sorting({ sortBy, setSortBy, options }: SortingProp) {
       <Label className="text-muted-foreground">Sort by:</Label>
       <Select value={sortBy} onValueChange={setSortBy}>
         <SelectTrigger className="max-w-35 sm:max-w-full">
+          <ArrowUpDown />
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
