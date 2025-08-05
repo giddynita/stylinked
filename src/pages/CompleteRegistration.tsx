@@ -57,7 +57,8 @@ function CompleteRegistration() {
       lastname: '',
       businessname: '',
       phone: '',
-      location: '',
+      city: '',
+      state: '',
     },
     logistics: {
       role: '',

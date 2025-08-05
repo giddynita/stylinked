@@ -117,7 +117,8 @@ export const completeRegistrationAction = async (props: any) => {
     lastname,
     phone,
     businessname,
-    location,
+    city,
+    state,
     coveragearea,
     vehicletype,
     setSubmitting,
@@ -146,7 +147,8 @@ export const completeRegistrationAction = async (props: any) => {
       lastname,
       businessname,
       phone,
-      location,
+      city,
+      state,
     })
   }
   if (role === 'logistics') {
