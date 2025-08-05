@@ -1,8 +1,27 @@
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
-import { nonUserFooterLinks } from '@/utils/data'
+import { nonUserFooterLinks, userFooterLinks } from '@/utils/data'
+import { useUserData } from '@/utils/hooks'
+import { useUser } from '@supabase/auth-helpers-react'
 
 function AppFooter() {
+  const { data: userInfo } = useUserData()
+  const role = userInfo?.userRole.role
+  const authUsersLinks = userFooterLinks.map((section) => {
+    if (section.heading === 'Your Account') {
+      const filteredSection = {
+        ...section,
+        links: section.links.filter((link) =>
+          role === 'buyer' ? link.label !== 'Manage Listings' : true
+        ),
+      }
+      return filteredSection
+    }
+    return section
+  })
+  const user = useUser()
+  const footerLinks = user ? authUsersLinks : nonUserFooterLinks
+
   return (
     <footer className="bg-accent text-accent-foreground pt-12 pb-6">
       <div className=" container grid md:grid-cols-4 gap-8">
@@ -12,7 +31,7 @@ function AppFooter() {
             Connecting fashion enthusiasts with skilled artisans worldwide.
           </p>
         </div>
-        {nonUserFooterLinks.map((group, index) => {
+        {footerLinks.map((group, index) => {
           return (
             <div key={index}>
               <h4 className="font-semibold text-sm mb-4">{group.heading}</h4>

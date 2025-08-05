@@ -165,33 +165,21 @@ export const nonUserFooterLinks = [
     heading: 'Marketplace',
     links: [
       {
-        label: 'Browse Products',
-        url: '/',
+        label: 'Shop Now',
+        url: '/marketplace',
       },
       {
-        label: 'Categories',
-        url: '/',
+        label: 'Discover Vendors',
+        url: '/vendors',
       },
+
       {
-        label: 'Vendors',
-        url: '/',
-      },
-    ],
-  },
-  {
-    heading: 'Account',
-    links: [
-      {
-        label: 'Login',
-        url: '/auth/login',
-      },
-      {
-        label: 'Create Account',
+        label: 'Become a Seller',
         url: '/auth/sign-up',
       },
       {
-        label: 'Dashboard',
-        url: '/account/dashboard',
+        label: 'Partner with Us',
+        url: '/auth/sign-up',
       },
     ],
   },
@@ -207,7 +195,91 @@ export const nonUserFooterLinks = [
         url: '/',
       },
       {
+        label: 'Shipping & Delivery',
+        url: '/',
+      },
+      {
+        label: 'FAQ',
+        url: '/',
+      },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      {
+        label: 'About Us',
+        url: '/',
+      },
+      {
         label: 'Terms of Service',
+        url: '/',
+      },
+      {
+        label: 'Privacy Policy',
+        url: '/',
+      },
+    ],
+  },
+]
+
+export const userFooterLinks = [
+  {
+    heading: 'Your Account',
+    links: [
+      {
+        label: 'Dashboard',
+        url: '/account/dashboard',
+      },
+      {
+        label: 'Orders',
+        url: '/account/orders',
+      },
+
+      {
+        label: 'Manage Listings',
+        url: '/account/products',
+      },
+      {
+        label: 'Settings',
+        url: '/account/settings',
+      },
+    ],
+  },
+  {
+    heading: 'Resources',
+    links: [
+      {
+        label: 'Help Center',
+        url: '/',
+      },
+      {
+        label: 'Contact Support',
+        url: '/',
+      },
+      {
+        label: 'Shipping Guidelines',
+        url: '/',
+      },
+      {
+        label: 'Dispute Resolution',
+        url: '/',
+      },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      {
+        label: 'About Us',
+        url: '/',
+      },
+      {
+        label: 'Terms of Service',
+        url: '/',
+      },
+      {
+        label: 'Privacy Policy',
         url: '/',
       },
     ],
