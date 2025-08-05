@@ -11,10 +11,11 @@ import {
   ProductTableHeader,
   SearchBar,
 } from '@/components/account'
+import { FetchingError } from '@/components/global'
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const { data: products, isLoading } = useVendorProducts()
+  const { data: products, isLoading, isError } = useVendorProducts()
   const filteredProducts = products?.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -58,6 +59,7 @@ const Products = () => {
               searchQuery={searchQuery}
               filteredProducts={filteredProducts}
             />
+            <FetchingError isError={isError} text="your products" />
           </div>
         </CardContent>
       </Card>

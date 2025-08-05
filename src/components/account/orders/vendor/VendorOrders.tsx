@@ -7,10 +7,11 @@ import { useState } from 'react'
 import { useVendorOrders } from '@/utils/hooks'
 import SearchBar from '../../SearchBar'
 import OrderTabsList from '../OrderTabsList'
+import { FetchingError } from '@/components/global'
 
 function VendorOrders() {
   const [searchQuery, setSearchQuery] = useState('')
-  const { data: orders, isLoading } = useVendorOrders()
+  const { data: orders, isLoading, isError } = useVendorOrders()
   const ordersDetails = orders?.sortedGroupedOrders?.map(
     ([order_id, order_items]) => {
       const amount = order_items.reduce((acc, item) => {
@@ -48,10 +49,13 @@ function VendorOrders() {
           {isLoading ? (
             <VendorOrdersSkeleton />
           ) : (
-            <OrdersTabsContent
-              orders={ordersDetails}
-              searchQuery={searchQuery}
-            />
+            <>
+              <OrdersTabsContent
+                orders={ordersDetails}
+                searchQuery={searchQuery}
+              />
+              <FetchingError isError={isError} text="your orders" />
+            </>
           )}
         </Tabs>
       </CardContent>
