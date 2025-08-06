@@ -1,12 +1,8 @@
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import {
-  LoadingIcon,
-  ProtectedRoute,
-  ProtectedRouteForVendors,
-} from './components/global'
-import { lazy, Suspense, type JSX } from 'react'
+import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
+import { lazy } from 'react'
 import {
   AccountLayout,
   AppLayout,
@@ -15,6 +11,7 @@ import {
   MarketplaceLayout,
   VendorsLayout,
 } from './components/layouts'
+import { pageSuspense } from './utils/suspense'
 const Login = lazy(() => import('./pages/Login'))
 const SignUp = lazy(() => import('./pages/SignUp'))
 const Verification = lazy(() => import('./pages/Verification'))
@@ -44,10 +41,6 @@ const queryClient = new QueryClient({
   },
 })
 
-const withSuspense = (Component: JSX.Element) => (
-  <Suspense fallback={<LoadingIcon />}>{Component}</Suspense>
-)
-
 const router = createBrowserRouter([
   {
     path: 'auth',
@@ -60,27 +53,27 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-        element: withSuspense(<Login />),
+        element: pageSuspense(<Login />),
       },
       {
         path: 'sign-up',
-        element: withSuspense(<SignUp />),
+        element: pageSuspense(<SignUp />),
       },
       {
         path: 'verification/:type',
-        element: withSuspense(<Verification />),
+        element: pageSuspense(<Verification />),
       },
       {
         path: 'complete-registration',
-        element: withSuspense(<CompleteRegistration />),
+        element: pageSuspense(<CompleteRegistration />),
       },
       {
         path: 'forgot-password',
-        element: withSuspense(<ForgotPassword />),
+        element: pageSuspense(<ForgotPassword />),
       },
       {
         path: 'reset-password',
-        element: withSuspense(<ResetPassword />),
+        element: pageSuspense(<ResetPassword />),
       },
     ],
   },
@@ -91,7 +84,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: withSuspense(<Home />),
+        element: pageSuspense(<Home />),
       },
       {
         path: 'marketplace',
@@ -104,12 +97,12 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: withSuspense(<Marketplace />),
+            element: pageSuspense(<Marketplace />),
           },
 
           {
             path: ':productname/:productid',
-            element: withSuspense(<ProductDetails />),
+            element: pageSuspense(<ProductDetails />),
           },
         ],
       },
@@ -124,11 +117,11 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: withSuspense(<Cart />),
+            element: pageSuspense(<Cart />),
           },
           {
             path: 'checkout',
-            element: withSuspense(
+            element: pageSuspense(
               <ProtectedRoute>
                 <Checkout />
               </ProtectedRoute>
@@ -146,17 +139,17 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: withSuspense(<Vendors />),
+            element: pageSuspense(<Vendors />),
           },
           {
             path: ':vendorname/:vendorid',
-            element: withSuspense(<VendorProfile />),
+            element: pageSuspense(<VendorProfile />),
           },
         ],
       },
       {
         path: 'restricted_access',
-        element: withSuspense(<RestrictedAccess />),
+        element: pageSuspense(<RestrictedAccess />),
       },
     ],
   },
@@ -171,7 +164,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: withSuspense(
+        element: pageSuspense(
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
@@ -179,7 +172,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'products',
-        element: withSuspense(
+        element: pageSuspense(
           <ProtectedRoute>
             <Products />
           </ProtectedRoute>
@@ -187,7 +180,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'orders',
-        element: withSuspense(
+        element: pageSuspense(
           <ProtectedRoute>
             <Orders />
           </ProtectedRoute>
@@ -195,7 +188,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: withSuspense(<Settings />),
+        element: pageSuspense(<Settings />),
       },
     ],
   },
