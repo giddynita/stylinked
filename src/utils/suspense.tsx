@@ -1,5 +1,4 @@
 import { LoadingIcon } from '@/components/global'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Suspense, type JSX } from 'react'
 
 export const pageSuspense = (Component: JSX.Element) => (
