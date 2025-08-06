@@ -123,7 +123,7 @@ function CompleteRegistration() {
           setTokenIsValid(true)
         }
       } catch (error) {
-        console.log(error)
+        toast.error('An error occured')
       }
     }
     fetchUser()

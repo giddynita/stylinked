@@ -130,7 +130,7 @@ const Marketplace = () => {
           pageDesc="Discover exclusive fashion collections from verified sellers worldwide."
         />
         <section className="space-y-2">
-          <h1 className="text-3xl font-bold text-foreground">Shop Now</h1>
+          <h2 className="text-3xl font-bold text-foreground">Shop Now</h2>
           <p className="text-muted-foreground">
             Browse our marketplace to find what you need.
           </p>

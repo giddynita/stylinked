@@ -1,28 +1,12 @@
 import { ThemeProvider } from '@/components/theme/theme-provider'
-import {
-  CompleteRegistration,
-  ForgotPassword,
-  Home,
-  Login,
-  Dashboard,
-  ResetPassword,
-  SignUp,
-  Verification,
-  Products,
-  Marketplace,
-  ProductDetails,
-  Cart,
-  Checkout,
-  Orders,
-  Vendors,
-  RestrictedAccess,
-  Error,
-  Settings,
-} from './pages'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
-import VendorProfile from './pages/VendorProfile'
+import {
+  LoadingIcon,
+  ProtectedRoute,
+  ProtectedRouteForVendors,
+} from './components/global'
+import { lazy, Suspense, type JSX } from 'react'
 import {
   AccountLayout,
   AppLayout,
@@ -31,6 +15,26 @@ import {
   MarketplaceLayout,
   VendorsLayout,
 } from './components/layouts'
+const Login = lazy(() => import('./pages/Login'))
+const SignUp = lazy(() => import('./pages/SignUp'))
+const Verification = lazy(() => import('./pages/Verification'))
+const CompleteRegistration = lazy(() => import('./pages/CompleteRegistration'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+
+const Home = lazy(() => import('./pages/Home'))
+const Marketplace = lazy(() => import('./pages/Marketplace'))
+const ProductDetails = lazy(() => import('./pages/ProductDetails'))
+const Cart = lazy(() => import('./pages/Cart'))
+const Checkout = lazy(() => import('./pages/Checkout'))
+const Orders = lazy(() => import('./pages/Orders'))
+const Vendors = lazy(() => import('./pages/Vendors'))
+const VendorProfile = lazy(() => import('./pages/VendorProfile'))
+const RestrictedAccess = lazy(() => import('./pages/RestrictedAccess'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Products = lazy(() => import('./pages/Products'))
+const Settings = lazy(() => import('./pages/Settings'))
+const Error = lazy(() => import('./pages/Error'))
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +43,10 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+const withSuspense = (Component: JSX.Element) => (
+  <Suspense fallback={<LoadingIcon />}>{Component}</Suspense>
+)
 
 const router = createBrowserRouter([
   {
@@ -52,27 +60,27 @@ const router = createBrowserRouter([
       },
       {
         path: 'login',
-        element: <Login />,
+        element: withSuspense(<Login />),
       },
       {
         path: 'sign-up',
-        element: <SignUp />,
+        element: withSuspense(<SignUp />),
       },
       {
         path: 'verification/:type',
-        element: <Verification />,
+        element: withSuspense(<Verification />),
       },
       {
         path: 'complete-registration',
-        element: <CompleteRegistration />,
+        element: withSuspense(<CompleteRegistration />),
       },
       {
         path: 'forgot-password',
-        element: <ForgotPassword />,
+        element: withSuspense(<ForgotPassword />),
       },
       {
         path: 'reset-password',
-        element: <ResetPassword />,
+        element: withSuspense(<ResetPassword />),
       },
     ],
   },
@@ -83,7 +91,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: withSuspense(<Home />),
       },
       {
         path: 'marketplace',
@@ -96,12 +104,12 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Marketplace />,
+            element: withSuspense(<Marketplace />),
           },
 
           {
             path: ':productname/:productid',
-            element: <ProductDetails />,
+            element: withSuspense(<ProductDetails />),
           },
         ],
       },
@@ -116,11 +124,11 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Cart />,
+            element: withSuspense(<Cart />),
           },
           {
             path: 'checkout',
-            element: (
+            element: withSuspense(
               <ProtectedRoute>
                 <Checkout />
               </ProtectedRoute>
@@ -138,15 +146,18 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Vendors />,
+            element: withSuspense(<Vendors />),
           },
           {
             path: ':vendorname/:vendorid',
-            element: <VendorProfile />,
+            element: withSuspense(<VendorProfile />),
           },
         ],
       },
-      { path: 'restricted_access', element: <RestrictedAccess /> },
+      {
+        path: 'restricted_access',
+        element: withSuspense(<RestrictedAccess />),
+      },
     ],
   },
   {
@@ -160,7 +171,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: (
+        element: withSuspense(
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
@@ -168,7 +179,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'products',
-        element: (
+        element: withSuspense(
           <ProtectedRoute>
             <Products />
           </ProtectedRoute>
@@ -176,7 +187,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'orders',
-        element: (
+        element: withSuspense(
           <ProtectedRoute>
             <Orders />
           </ProtectedRoute>
@@ -184,7 +195,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: <Settings />,
+        element: withSuspense(<Settings />),
       },
     ],
   },

@@ -27,9 +27,9 @@ function VendorGridCard({
               <VendorAvatar businessname={businessname} image={image} />
             </figure>
           </div>
-          <h3 className="text-lg font-semibold text-foreground">
+          <p className="text-lg font-semibold text-foreground">
             {businessname}
-          </h3>
+          </p>
           <div className="flex items-center justify-center space-x-1.5">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
             <span className="font-semibold">{rating}</span>

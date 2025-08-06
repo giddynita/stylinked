@@ -37,7 +37,6 @@ export const signUpAction = async (props: SignUpAction) => {
   })
   if (error) {
     toast.error('Failed to sign up')
-    console.log(error.message)
     setSubmitting(false)
     return
   }
@@ -61,7 +60,6 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
   if (error) {
     toast.error('Password reset failed!')
     navigate('/auth/forgot-password')
-    console.log(error.message)
   }
   toast.success(
     'Password reset successful! You can now log in with your new password'
@@ -99,7 +97,6 @@ export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
   })
   if (error) {
     toast.error('Failed')
-    console.log(error.message)
     setSubmitting(false)
     return
   }
@@ -194,7 +191,6 @@ export const uploadImage = async (images: File[]) => {
           .from(bucket)
           .upload(newFileName, file)
         if (error) {
-          console.log(`Upload error: ${error.message}`)
           toast.error('Images upload failed!')
           return ''
         }
@@ -207,7 +203,7 @@ export const uploadImage = async (images: File[]) => {
 
     return uploadedImageUrls
   } catch (error) {
-    console.log(error)
+    toast.error('An error occured')
   }
 }
 

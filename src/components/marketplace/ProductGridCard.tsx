@@ -60,7 +60,7 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
           </div>
         </CardHeader>
         <CardContent className="p-4">
-          <h3 className="font-semibold text-base line-clamp-2 h-12">
+          <p className="font-semibold text-base line-clamp-2 h-12">
             <Link
               to={`${slugify(product.name)}/${product.id}`}
               className="hover:text-primary transition-colors"
@@ -68,7 +68,7 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
               {' '}
               {product.name}{' '}
             </Link>
-          </h3>
+          </p>
 
           <p className="text-sm text-muted-foreground hover:text-accent-foreground text-ellipsis overflow-hidden line-clamp-1 w-full">
             <Link to={`/vendors/${product.vendor}`}>

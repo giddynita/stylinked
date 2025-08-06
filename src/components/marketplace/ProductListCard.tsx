@@ -51,9 +51,9 @@ function ProductListCard({ product }: ProductListCardProp) {
               loading="lazy"
             />
             <div className="flex-1 space-y-2 py-4">
-              <h3 className="font-semibold text-base line-clamp-1">
+              <p className="font-semibold text-base line-clamp-1">
                 {product.name}
-              </h3>
+              </p>
               <p className="text-muted-foreground text-sm line-clamp-1">
                 Sold by {product.vendor}
               </p>

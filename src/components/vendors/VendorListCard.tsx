@@ -28,9 +28,9 @@ function VendorListCard({
           <div className="flex-1 space-y-4">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-foreground">
+                <p className="text-lg font-semibold text-foreground">
                   {businessname}
-                </h3>
+                </p>
                 <div className="flex sm:flex-row flex-col gap-4">
                   <div className="flex items-center space-x-1">
                     <MapPin className="w-4 h-4 text-muted-foreground " />

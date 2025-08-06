@@ -637,3 +637,27 @@ export const vendorProfileProductSorting = [
     label: 'Newest',
   },
 ]
+
+export const materials = [
+  'Cotton',
+  'Silk',
+  'Wool',
+  'Leather',
+  'Polyester',
+  'Linen',
+  'Cashmere',
+]
+export const brands = [
+  'Nike',
+  'Adidas',
+  'Zara',
+  'H&M',
+  'Uniqlo',
+  "Levi's",
+  'Gucci',
+  'Under Armour',
+  'Puma',
+  'Tommy Hilfiger',
+  'The North Face',
+  'Calvin Klein',
+]

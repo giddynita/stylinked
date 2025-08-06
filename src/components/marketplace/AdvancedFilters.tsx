@@ -7,6 +7,7 @@ import { X } from 'lucide-react'
 import { currencyFormatter } from '@/utils/format'
 import type { ProductFilter } from '@/utils/types'
 import { useState } from 'react'
+import { brands, materials } from '@/utils/data'
 
 interface AdvancedFiltersProps {
   onClose?: () => void
@@ -37,29 +38,6 @@ const AdvancedFilters = ({
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [inStockOnly, setInStockOnly] = useState(false)
   const [minRating, setMinRating] = useState(0)
-  const materials = [
-    'Cotton',
-    'Silk',
-    'Wool',
-    'Leather',
-    'Polyester',
-    'Linen',
-    'Cashmere',
-  ]
-  const brands = [
-    'Nike',
-    'Adidas',
-    'Zara',
-    'H&M',
-    'Uniqlo',
-    "Levi's",
-    'Gucci',
-    'Under Armour',
-    'Puma',
-    'Tommy Hilfiger',
-    'The North Face',
-    'Calvin Klein',
-  ]
 
   const handleMaterialChange = (material: string, checked: boolean) => {
     if (checked) {
