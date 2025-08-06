@@ -23,7 +23,7 @@ function AppFooter() {
   const footerLinks = user ? authUsersLinks : nonUserFooterLinks
 
   return (
-    <footer className="bg-accent text-accent-foreground pt-12 pb-6">
+    <footer className="bg-navbarbg text-accent-foreground pt-12 pb-6">
       <div className=" container grid md:grid-cols-4 gap-8">
         <div>
           <Logo icon="w-5 h-5" text="text-sm" />
@@ -34,7 +34,7 @@ function AppFooter() {
         {footerLinks.map((group, index) => {
           return (
             <div key={index}>
-              <h4 className="font-semibold text-sm mb-4">{group.heading}</h4>
+              <h3 className="font-semibold text-sm mb-4">{group.heading}</h3>
               <ul>
                 {group.links.map((link, index) => {
                   return (

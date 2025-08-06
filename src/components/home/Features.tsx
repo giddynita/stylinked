@@ -13,9 +13,9 @@ function Features() {
   return (
     <section className="container py-20 ">
       <div className=" text-center mb-16">
-        <h3 className="text-3xl font-bold text-foreground mb-4">
+        <h2 className="text-3xl font-bold text-foreground mb-4">
           Why Choose STYLINKED?
-        </h3>
+        </h2>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Experience the future of online fashion shopping with our innovative
           three-way platform connecting buyers, sellers, and delivery partners.
