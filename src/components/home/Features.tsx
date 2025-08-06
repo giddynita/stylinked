@@ -44,7 +44,7 @@ function Features() {
                     variant="outline"
                     className="group-hover:border-primary hover:bg-primary hover:text-primary-foreground cursor-pointer  group-hover:text-primary"
                   >
-                    Learn More
+                    {feature.link_text}
                   </Button>
                 </Link>
               </CardContent>

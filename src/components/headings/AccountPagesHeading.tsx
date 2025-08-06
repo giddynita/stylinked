@@ -11,6 +11,7 @@ function AccountPagesHeading({ pageTitle, pageDesc }: AccountPagesHeadingProp) {
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDesc} />
+        <meta name="robots" content="noindex" />
       </Helmet>
       <h1 className="text-3xl font-bold tracking-tight">{pageTitle}</h1>
       <p className="text-muted-foreground">{pageDesc}</p>

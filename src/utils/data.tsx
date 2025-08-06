@@ -64,6 +64,7 @@ export const features = [
     description:
       'Discover exclusive fashion collections from verified sellers worldwide. Browse curated styles, trending designs, and unique pieces.',
     link: '/marketplace',
+    link_text: 'Shop Now',
   },
   {
     icon: Store,
@@ -71,6 +72,7 @@ export const features = [
     description:
       'Launch your fashion business and reach thousands of buyers. Showcase your designs with powerful seller tools and analytics.',
     link: '/signup',
+    link_text: 'Become a Vendor',
   },
   {
     icon: Truck,
@@ -78,13 +80,15 @@ export const features = [
     description:
       'Join our logistics network for reliable fashion item delivery. Earn competitive rates with flexible scheduling.',
     link: '/signup',
+    link_text: 'Partner with Us',
   },
   {
     icon: Shield,
     title: 'Secure Platform',
     description:
-      'Shop with confidence using our secure payment system, buyer protection, and verified seller guarantee program.',
-    link: '/auth/login',
+      'Place order with confidence using our secure payment system, buyer protection, and verified seller guarantee program.',
+    link: '/cart',
+    link_text: 'Place your Order',
   },
 ]
 

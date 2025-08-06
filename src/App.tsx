@@ -146,6 +146,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      { path: 'restricted_access', element: <RestrictedAccess /> },
     ],
   },
   {
@@ -187,7 +188,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: 'restricted_access', element: <RestrictedAccess /> },
 ])
 
 function App() {
