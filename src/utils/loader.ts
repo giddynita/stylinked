@@ -7,7 +7,7 @@ export const getAuthUser = async () => {
     error,
   } = await supabase.auth.getUser()
   if (error || !user) {
-    console.error('No user found or error:', error?.message)
+    return
   }
   return user
 }
