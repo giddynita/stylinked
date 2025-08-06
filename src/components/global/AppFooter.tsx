@@ -27,13 +27,13 @@ function AppFooter() {
       <div className=" container grid md:grid-cols-4 gap-8">
         <div>
           <Logo icon="w-5 h-5" text="text-sm" />
-          <p className="text-muted-foreground text-xs font-medium mt-2 max-w-[12rem]">
+          <p className="text-accent-foreground text-xs font-medium mt-2 max-w-[12rem]">
             Connecting fashion enthusiasts with skilled artisans worldwide.
           </p>
         </div>
         {footerLinks.map((group, index) => {
           return (
-            <div key={index}>
+            <section key={index}>
               <h3 className="font-semibold text-sm mb-4">{group.heading}</h3>
               <ul>
                 {group.links.map((link, index) => {
@@ -49,7 +49,7 @@ function AppFooter() {
                   )
                 })}
               </ul>
-            </div>
+            </section>
           )
         })}
       </div>

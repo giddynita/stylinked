@@ -97,7 +97,8 @@ export type UserDataType = {
   vehicletype?: string
   coveragearea?: string[]
   businessname?: string
-  location?: string
+  city?: string
+  state?: string
 }
 
 export type ProductFilter = {

@@ -13,8 +13,8 @@ function ProfileImage() {
           <User className="h-4 w-4" />
         ) : (
           <Link to="/account">
-            {userInfo?.userData?.firstname.charAt(0)}
-            {userInfo?.userData?.lastname.charAt(0)}
+            {userInfo?.userData?.firstname.charAt(0) ?? ' '}
+            {userInfo?.userData?.lastname.charAt(0) ?? ' '}
           </Link>
         )}
       </AvatarFallback>
