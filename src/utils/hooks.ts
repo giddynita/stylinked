@@ -44,7 +44,7 @@ export const useUserData = () => {
       .single()
     if (dataError) throw new Error(dataError.message)
 
-    return { userData, userRole }
+    return { userData, userRole } as {userData:UserDataType | null, userRole:UserRole}
   }
   const queryData = useQuery({
     queryKey: ['userData'],
