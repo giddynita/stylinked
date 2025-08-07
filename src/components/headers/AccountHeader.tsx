@@ -6,6 +6,7 @@ import { useUserData } from '@/utils/hooks'
 
 function AccountHeader() {
   const { data: userInfo, isLoading } = useUserData()
+  const userData = userInfo?.userData
   return (
     <header className="h-16 border-b bg-card  flex items-center justify-between px-4 bg-navbarbg/80">
       <div className="flex items-center gap-4">
@@ -21,7 +22,7 @@ function AccountHeader() {
 
       <div className="flex items-center gap-3 sm:gap-4 ">
         <ModeToggle align="start" />
-        <ProfileImage />
+        <ProfileImage userData={userData} isLoading={isLoading} />
       </div>
     </header>
   )
