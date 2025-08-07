@@ -10,11 +10,11 @@ import {
 } from '@/components/ui/sidebar'
 import { Button } from '../ui/button'
 import { Link, useLocation } from 'react-router-dom'
-import { LogIn } from 'lucide-react'
+import { LogIn, User } from 'lucide-react'
 import { defaultSidebarNavlinks, vendorSidebarNavlinks } from '@/utils/data'
-import { ProfileImage } from '../global'
-import { useMemo } from 'react'
+import { lazy, Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+const ProfileImage = lazy(() => import('../global/ProfileImage'))
 
 export function AppSidebar() {
   const { isMobile, open, setOpen } = useSidebar()
@@ -39,7 +39,9 @@ export function AppSidebar() {
         <SidebarHeader className=" pl-1 mb-2">
           <SidebarMenu>
             <SidebarMenuItem className="mx-auto my-2">
-              {user && <ProfileImage userData={userData} />}
+              <Suspense fallback={<User className="h-4 w-4" />}>
+                {user && <ProfileImage userData={userData} />}
+              </Suspense>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
