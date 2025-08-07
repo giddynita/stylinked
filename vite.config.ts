@@ -15,13 +15,9 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Core React
-          react: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-lazyload',
-            '@tanstack/react-query',
-          ],
+          react: ['react', 'react-dom', 'react-router-dom'],
+          reactQuery: ['@tanstack/react-query'],
+          lazyLoad: ['react-lazyload'],
           // State & Form
           state: ['@reduxjs/toolkit', 'react-redux'],
           forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
