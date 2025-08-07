@@ -1,4 +1,5 @@
 import { LinkIcon } from 'lucide-react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 function Logo({ icon, text }: { icon: string; text: string }) {
@@ -9,4 +10,4 @@ function Logo({ icon, text }: { icon: string; text: string }) {
     </Link>
   )
 }
-export default Logo
+export default React.memo(Logo)

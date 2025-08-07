@@ -15,7 +15,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Core React
-          react: ['react', 'react-dom', 'react-router-dom'],
+          react: ['react', 'react-dom', 'react-router-dom', 'react-lazyload'],
 
           // State & Form
           state: [

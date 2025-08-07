@@ -22,7 +22,7 @@ function AccountHeader() {
 
       <div className="flex items-center gap-3 sm:gap-4 ">
         <ModeToggle align="start" />
-        <ProfileImage userData={userData} isLoading={isLoading} />
+        <ProfileImage userData={userData} />
       </div>
     </header>
   )

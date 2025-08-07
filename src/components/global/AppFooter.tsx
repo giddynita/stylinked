@@ -1,15 +1,11 @@
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
 import { nonUserFooterLinks, userFooterLinks } from '@/utils/data'
-import { useUserData } from '@/utils/hooks'
-import { useUser } from '@supabase/auth-helpers-react'
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 function AppFooter() {
-  const { data: userInfo } = useUserData()
-  const role = userInfo?.userRole.role
-
-  const user = useUser()
+  const { userRole, user } = useSelector((state: any) => state.userState)
   const footerLinks = useMemo(() => {
     if (!user) return nonUserFooterLinks
 
@@ -18,13 +14,13 @@ function AppFooter() {
         return {
           ...section,
           links: section.links.filter((link) =>
-            role === 'buyer' ? link.label !== 'Manage Listings' : true
+            userRole === 'buyer' ? link.label !== 'Manage Listings' : true
           ),
         }
       }
       return section
     })
-  }, [user, role])
+  }, [user, userRole])
 
   return (
     <footer className="bg-navbarbg/70 pt-12 pb-6">

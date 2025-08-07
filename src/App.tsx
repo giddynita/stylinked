@@ -2,9 +2,12 @@ import { ThemeProvider } from '@/components/theme/theme-provider'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
-import { lazy } from 'react'
+import { lazy, useEffect } from 'react'
 
 import { pageSuspense } from './utils/suspense'
+import { useDispatch } from 'react-redux'
+import { useUserData } from './utils/hooks'
+import { setUser } from './features/user/userSlice'
 
 const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
 const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
@@ -197,6 +200,23 @@ const router = createBrowserRouter([
 ])
 
 function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const getUser = () => {
+      const { data: userInfo, isError } = useUserData()
+      if (isError) return
+
+      dispatch(
+        setUser({
+          userData: userInfo?.userData,
+          userRole: userInfo?.userRole,
+          user: userInfo?.user,
+        })
+      )
+    }
+
+    getUser()
+  }, [dispatch])
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

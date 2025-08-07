@@ -13,10 +13,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { LogIn } from 'lucide-react'
 import { defaultSidebarNavlinks, vendorSidebarNavlinks } from '@/utils/data'
 import { ProfileImage } from '../global'
-import { useUser } from '@supabase/auth-helpers-react'
-import { useUserData } from '@/utils/hooks'
-import { Skeleton } from '../ui/skeleton'
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 export function AppSidebar() {
   const { isMobile, open, setOpen } = useSidebar()
@@ -25,16 +23,15 @@ export function AppSidebar() {
   }
   const location = useLocation()
   const pathname = location.pathname
-  const user = useUser()
-  const { data: userInfo, isLoading } = useUserData()
-  const role = userInfo?.userRole.role
-  const userData = userInfo?.userData
+  const { userRole, userData, user } = useSelector(
+    (state: any) => state.userState
+  )
   const navlinks = useMemo(() => {
-    if (role == 'vendor') {
+    if (userRole == 'vendor') {
       return vendorSidebarNavlinks
     }
     return defaultSidebarNavlinks
-  }, [role])
+  }, [userRole])
 
   return (
     <div>
@@ -42,28 +39,22 @@ export function AppSidebar() {
         <SidebarHeader className=" pl-1 mb-2">
           <SidebarMenu>
             <SidebarMenuItem className="mx-auto my-2">
-              {user && (
-                <ProfileImage userData={userData} isLoading={isLoading} />
-              )}
+              {user && <ProfileImage userData={userData} />}
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
         <SidebarContent className="px-3">
           <SidebarMenu>
-            {isLoading ? (
-              <Skeleton className="w-full h-10" />
-            ) : (
-              navlinks.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={item.url === pathname}>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))
-            )}
+            {navlinks.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild isActive={item.url === pathname}>
+                  <Link to={item.url}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarContent>
         {

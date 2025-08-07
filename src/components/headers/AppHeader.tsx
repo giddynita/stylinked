@@ -1,30 +1,34 @@
 import { Link } from 'react-router-dom'
-import { Logo, ProfileImage } from '../global'
+import { Logo } from '../global'
 import { Button } from '../ui/button'
 import ModeToggle from '../theme/mode-toggle'
 import { SidebarTrigger } from '../ui/sidebar'
-import { useEffect, useState } from 'react'
-import Cart from './Cart'
-import { useUser } from '@supabase/auth-helpers-react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import Navbar from './Navbar'
-import { useUserData } from '@/utils/hooks'
+import { useSelector } from 'react-redux'
+import { User } from 'lucide-react'
+const Cart = lazy(() => import('./Cart'))
+const ProfileImage = lazy(() => import('../global/ProfileImage'))
+
 function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
-  const user = useUser()
-  const { data: userInfo, isLoading } = useUserData()
-  const role = userInfo?.userRole.role
-  const userData = userInfo?.userData
+  const { userRole, userData, user } = useSelector(
+    (state: any) => state.userState
+  )
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY
+          setShowHeader(currentScrollY <= 50 || currentScrollY < lastScrollY)
+          setLastScrollY(currentScrollY)
+          ticking = false
+        })
 
-      if (currentScrollY > 50 && currentScrollY > lastScrollY) {
-        setShowHeader(false)
-      } else {
-        setShowHeader(true)
+        ticking = true
       }
-      setLastScrollY(currentScrollY)
     }
     window.addEventListener('scroll', handleScroll)
     return () => {
@@ -40,13 +44,16 @@ function AppHeader() {
       <div className="container flex items-center justify-between gap-10">
         <Logo icon="w-5 h-5" text="text-sm" />
         <div className="hidden md:flex md:flex-1 items-center gap-x-8">
-          <Navbar role={role} />
+          <Navbar role={userRole} />
           <div className="flex flex-row gap-x-2 items-center">
             <ModeToggle align="end" />
-            {role == 'buyer' && <Cart />}
-            {user ? (
-              <ProfileImage userData={userData} isLoading={isLoading} />
-            ) : (
+            <Suspense fallback={null}>
+              {userRole === 'buyer' && <Cart />}
+            </Suspense>
+            <Suspense fallback={<User className="h-4 w-4" />}>
+              {user && <ProfileImage userData={userData} />}
+            </Suspense>
+            {!user && (
               <>
                 <Button variant="outline" size="sm" asChild>
                   <Link
@@ -65,7 +72,9 @@ function AppHeader() {
         </div>
         <div className="md:hidden flex flex-row gap-x-2 items-center">
           <ModeToggle align="end" />
-          {role == 'buyer' && <Cart />}
+          <Suspense fallback={null}>
+            {userRole === 'buyer' && <Cart />}
+          </Suspense>
           <SidebarTrigger />
         </div>
       </div>

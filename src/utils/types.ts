@@ -1,3 +1,5 @@
+import type { User } from '@supabase/supabase-js'
+
 export type Options = {
   value: string
   label: string
@@ -99,6 +101,12 @@ export type UserDataType = {
   businessname?: string
   city?: string
   state?: string
+}
+
+export type AppUser = {
+  userData: UserDataType | null
+  userRole: UserRole | null
+  user: User | null
 }
 
 export type ProductFilter = {
