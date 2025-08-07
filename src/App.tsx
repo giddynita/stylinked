@@ -8,9 +8,11 @@ import { pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
 import { setUser } from './features/user/userSlice'
 import { getAuthUserDetails } from './utils/api'
+import LazyLoad from 'react-lazyload'
+import AppLayout from './components/layouts/AppLayout'
 
 const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
-const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
+
 const AuthLayout = lazy(() => import('./components/layouts/AuthLayout'))
 const CartLayout = lazy(() => import('./components/layouts/CartLayout'))
 const MarketplaceLayout = lazy(
@@ -84,7 +86,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: pageSuspense(<AppLayout />),
+    element: (
+      <LazyLoad>
+        <AppLayout />
+      </LazyLoad>
+    ),
     errorElement: <Error />,
     children: [
       {
