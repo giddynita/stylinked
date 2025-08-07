@@ -1,13 +1,20 @@
 import { defaultNavlinks, vendorNavlinks } from '@/utils/data'
-import { useUserData } from '@/utils/hooks'
 import { Button } from '../ui/button'
 import { NavLink } from 'react-router-dom'
+import { useMemo } from 'react'
 
-function Navbar() {
-  const { data: userInfo } = useUserData()
+interface NavbarProp {
+  role: string | undefined
+}
 
-  const navlinks =
-    userInfo?.userRole?.role == 'vendor' ? vendorNavlinks : defaultNavlinks
+function Navbar({ role }: NavbarProp) {
+  const navlinks = useMemo(() => {
+    if (role == 'vendor') {
+      return vendorNavlinks
+    }
+    return defaultNavlinks
+  }, [role])
+
   return (
     <nav className="hidden md:flex md:flex-1 items-center justify-center space-x-1 font-medium text-sm px-2">
       {navlinks.map((item, index) => (

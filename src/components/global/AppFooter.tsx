@@ -3,24 +3,28 @@ import Logo from './Logo'
 import { nonUserFooterLinks, userFooterLinks } from '@/utils/data'
 import { useUserData } from '@/utils/hooks'
 import { useUser } from '@supabase/auth-helpers-react'
+import { useMemo } from 'react'
 
 function AppFooter() {
   const { data: userInfo } = useUserData()
   const role = userInfo?.userRole.role
-  const authUsersLinks = userFooterLinks.map((section) => {
-    if (section.heading === 'Your Account') {
-      const filteredSection = {
-        ...section,
-        links: section.links.filter((link) =>
-          role === 'buyer' ? link.label !== 'Manage Listings' : true
-        ),
-      }
-      return filteredSection
-    }
-    return section
-  })
+
   const user = useUser()
-  const footerLinks = user ? authUsersLinks : nonUserFooterLinks
+  const footerLinks = useMemo(() => {
+    if (!user) return nonUserFooterLinks
+
+    return userFooterLinks.map((section) => {
+      if (section.heading === 'Your Account') {
+        return {
+          ...section,
+          links: section.links.filter((link) =>
+            role === 'buyer' ? link.label !== 'Manage Listings' : true
+          ),
+        }
+      }
+      return section
+    })
+  }, [user, role])
 
   return (
     <footer className="bg-navbarbg/70 pt-12 pb-6">
@@ -31,16 +35,14 @@ function AppFooter() {
             Connecting fashion enthusiasts with skilled artisans worldwide.
           </p>
         </div>
-        {footerLinks.map((group, index) => {
+        {footerLinks.map((group) => {
           return (
-            <div key={index}>
-              <span className="font-semibold text-sm mb-4">
-                {group.heading}
-              </span>
+            <div key={group.heading}>
+              <h2 className="font-semibold text-sm mb-4">{group.heading}</h2>
               <ul>
-                {group.links.map((link, index) => {
+                {group.links.map((link) => {
                   return (
-                    <li key={index}>
+                    <li key={link.label}>
                       <Link
                         to={link.url}
                         className="hover:text-primary text-sm  "

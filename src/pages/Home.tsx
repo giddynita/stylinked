@@ -1,12 +1,12 @@
 import AppHeader from '@/components/headers/AppHeader'
 import { PageHeading } from '@/components/headings'
+import Hero from '@/components/home/Hero'
 import { sectionSuspense } from '@/utils/suspense'
 import { lazy } from 'react'
 const CallToAction = lazy(() => import('../components/home/CallToAction'))
 const Features = lazy(() => import('../components/home/Features'))
-const Hero = lazy(() => import('../components/home/Hero'))
 const Stats = lazy(() => import('../components/home/Stats'))
-const Testimonials = lazy(() => import('../components/home/CallToAction'))
+const Testimonials = lazy(() => import('../components/home/Testimonials'))
 
 const Home = () => {
   return (
@@ -14,7 +14,7 @@ const Home = () => {
       <AppHeader />
       <main>
         <PageHeading pageTitle="Home" pageDesc="Stylinked home page" />
-        {sectionSuspense(<Hero />)}
+        <Hero />
         {sectionSuspense(<Stats />)}
         {sectionSuspense(<Features />)}
         {sectionSuspense(<Testimonials />)}

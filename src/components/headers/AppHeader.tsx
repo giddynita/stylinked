@@ -12,7 +12,9 @@ function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const user = useUser()
-  const { data: userInfo } = useUserData()
+  const { data: userInfo, isLoading } = useUserData()
+  const role = userInfo?.userRole.role
+  const userData = userInfo?.userData
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
@@ -38,12 +40,12 @@ function AppHeader() {
       <div className="container flex items-center justify-between gap-10">
         <Logo icon="w-5 h-5" text="text-sm" />
         <div className="hidden md:flex md:flex-1 items-center gap-x-8">
-          <Navbar />
+          <Navbar role={role} />
           <div className="flex flex-row gap-x-2 items-center">
             <ModeToggle align="end" />
-            {userInfo?.userRole.role == 'buyer' && <Cart />}
+            {role == 'buyer' && <Cart />}
             {user ? (
-              <ProfileImage />
+              <ProfileImage userData={userData} isLoading={isLoading} />
             ) : (
               <>
                 <Button variant="outline" size="sm" asChild>
@@ -63,7 +65,7 @@ function AppHeader() {
         </div>
         <div className="md:hidden flex flex-row gap-x-2 items-center">
           <ModeToggle align="end" />
-          {userInfo?.userRole.role == 'buyer' && <Cart />}
+          {role == 'buyer' && <Cart />}
           <SidebarTrigger />
         </div>
       </div>

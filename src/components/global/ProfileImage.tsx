@@ -1,11 +1,14 @@
 import { User } from 'lucide-react'
 import { Avatar, AvatarFallback } from '../ui/avatar'
-import { useUserData } from '@/utils/hooks'
 import { Link } from 'react-router-dom'
+import type { UserDataType } from '@/utils/types'
 
-function ProfileImage() {
-  const { data: userInfo, isLoading } = useUserData()
+interface ProfileImageProp {
+  userData: UserDataType | null | undefined
+  isLoading: boolean
+}
 
+function ProfileImage({ userData, isLoading }: ProfileImageProp) {
   return (
     <Avatar>
       <AvatarFallback className="uppercase font-bold bg-muted-foreground  text-muted">
@@ -14,8 +17,8 @@ function ProfileImage() {
         ) : (
           <Link to="/account">
             <span className="sr-only">user initials</span>
-            {userInfo?.userData?.firstname.charAt(0)}
-            {userInfo?.userData?.lastname.charAt(0)}
+            {userData?.firstname.charAt(0)}
+            {userData?.lastname.charAt(0)}
           </Link>
         )}
       </AvatarFallback>
