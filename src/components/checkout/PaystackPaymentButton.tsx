@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../ui/button'
 import { useUserData } from '@/utils/hooks'
-import { useUser } from '@supabase/auth-helpers-react'
 import { addOrdersAction } from '@/utils/action'
 import type {
   Cart,
@@ -18,7 +17,7 @@ import { resetCheckout } from '@/features/checkout/checkoutSlice'
 
 function PaystackPaymentButton() {
   const { data: userInfo, isLoading } = useUserData()
-  const user = useUser()
+  const { user } = useSelector((state: any) => state.userState)
   const time = new Date().getTime().toString()
   const reference = `${user?.id}-${time}`
   const { paymentMethod, shippingForm }: CheckoutType = useSelector(

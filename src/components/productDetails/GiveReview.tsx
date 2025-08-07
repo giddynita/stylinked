@@ -1,16 +1,16 @@
-import { useUser } from '@supabase/auth-helpers-react'
 import { Card, CardContent } from '../ui/card'
 import type { SingleProduct } from '@/utils/types'
 import { addReviewAction } from '@/utils/action'
 import { toast } from 'sonner'
 import { ReviewForm } from '../formTypes'
+import { useSelector } from 'react-redux'
 
 interface GiveReviewProp {
   product: SingleProduct | undefined
 }
 
 function GiveReview({ product }: GiveReviewProp) {
-  const user = useUser()
+  const { user } = useSelector((state: any) => state.userState)
   const { mutate: addReview, isPending } = addReviewAction()
   const submitReview = (reviewData: any) => {
     addReview(reviewData, {

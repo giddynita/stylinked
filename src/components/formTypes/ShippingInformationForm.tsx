@@ -6,15 +6,12 @@ import {
   handleShippingFormInput,
   handleStepChange,
 } from '@/features/checkout/checkoutSlice'
-import { useUserData } from '@/utils/hooks'
-import { useUser } from '@supabase/auth-helpers-react'
 import { shippingInfoSchema, validateWithZodSchema } from '@/utils/schema'
 import { toast } from 'sonner'
 import type { FormEvent } from 'react'
 
 function ShippingInformationForm() {
-  const { data: userInfo } = useUserData()
-  const user = useUser()
+  const { user, userData } = useSelector((state: any) => state.userState)
 
   const { shippingForm } = useSelector((state: any) => state.checkoutState)
   const {
@@ -93,7 +90,7 @@ function ShippingInformationForm() {
             type="tel"
             value={phone}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={userInfo?.userData?.phone}
+            placeholder={userData?.phone}
             required
           />
         </div>
@@ -107,7 +104,7 @@ function ShippingInformationForm() {
             name="firstname"
             value={firstname}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={userInfo?.userData?.firstname}
+            placeholder={userData?.firstname}
             required
           />
         </div>
@@ -118,7 +115,7 @@ function ShippingInformationForm() {
             name="lastname"
             value={lastname}
             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            placeholder={userInfo?.userData?.lastname}
+            placeholder={userData?.lastname}
             required
           />
         </div>
