@@ -18,14 +18,9 @@ export default defineConfig({
           react: ['react', 'react-dom', 'react-router-dom', 'react-lazyload'],
 
           // State & Form
-          state: [
-            '@reduxjs/toolkit',
-            'react-redux',
-            '@tanstack/react-query',
-            'react-hook-form',
-            '@hookform/resolvers',
-            'zod',
-          ],
+          state: ['@reduxjs/toolkit', 'react-redux'],
+          query: ['@tanstack/react-query'],
+          forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
 
           // Supabase
           supabase: ['@supabase/supabase-js', '@supabase/auth-helpers-react'],
