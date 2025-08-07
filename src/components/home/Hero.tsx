@@ -9,7 +9,7 @@ function Hero() {
           Discover Fashion from
           <span className="text-primary block">Vendors Nationwide</span>
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+        <p className="text-xl text-muted-foreground w-full sm:max-w-xl mx-auto mb-8">
           The ultimate marketplace where fashion buyers discover unique items,
           sellers showcase their collections, and logistics partners ensure
           seamless delivery.
