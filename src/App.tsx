@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
 import { lazy, useEffect } from 'react'
 
-import { nullSuspense, pageSuspense } from './utils/suspense'
+import { pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
 import { setUser } from './features/user/userSlice'
 import { getAuthUserDetails } from './utils/api'
@@ -89,7 +89,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: nullSuspense(<Home />),
+        element: pageSuspense(<Home />),
       },
       {
         path: 'marketplace',
