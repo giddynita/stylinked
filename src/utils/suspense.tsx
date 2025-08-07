@@ -7,15 +7,8 @@ export const pageSuspense = (Component: JSX.Element) => (
 )
 
 export const sectionSuspense = (Component: JSX.Element) => (
-  <LazyLoad height={200} offset={100}>
-    <Suspense fallback={<div className="container h-full" />}>
-      {Component}
-    </Suspense>
-  </LazyLoad>
-)
-export const sidebarSuspense = (Component: JSX.Element) => (
-  <LazyLoad height={200} offset={100}>
-    <Suspense fallback={<div className="fixed h-screen w-1/3" />}>
+  <LazyLoad>
+    <Suspense fallback={<div className="container py-20" />}>
       {Component}
     </Suspense>
   </LazyLoad>
