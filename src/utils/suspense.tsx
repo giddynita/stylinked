@@ -14,6 +14,11 @@ export const sectionSuspense = (Component: JSX.Element) => (
   </LazyLoad>
 )
 
-export const pageHeadingSuspense = (Component: JSX.Element) => (
+export const nullSuspense = (Component: JSX.Element) => (
   <Suspense fallback={null}>{Component}</Suspense>
+)
+export const sidebarSuspense = (Component: JSX.Element) => (
+  <Suspense fallback={<div className="w-1/3 fixed h-screen" />}>
+    {Component}
+  </Suspense>
 )

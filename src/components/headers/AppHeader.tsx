@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Logo } from '../global'
 import { Button } from '../ui/button'
-import ModeToggle from '../theme/mode-toggle'
 import { SidebarTrigger } from '../ui/sidebar'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import Navbar from './Navbar'
@@ -9,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { User } from 'lucide-react'
 const Cart = lazy(() => import('./Cart'))
 const ProfileImage = lazy(() => import('../global/ProfileImage'))
+const ModeToggle = lazy(() => import('../theme/mode-toggle'))
 
 function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
@@ -46,7 +46,9 @@ function AppHeader() {
         <div className="hidden md:flex md:flex-1 items-center gap-x-8">
           <Navbar role={userRole} />
           <div className="flex flex-row gap-x-2 items-center">
-            <ModeToggle align="end" />
+            <Suspense fallback={null}>
+              <ModeToggle align="end" />
+            </Suspense>
             <Suspense fallback={null}>
               {userRole === 'buyer' && <Cart />}
             </Suspense>
@@ -71,7 +73,9 @@ function AppHeader() {
           </div>
         </div>
         <div className="md:hidden flex flex-row gap-x-2 items-center">
-          <ModeToggle align="end" />
+          <Suspense fallback={null}>
+            <ModeToggle align="end" />
+          </Suspense>
           <Suspense fallback={null}>
             {userRole === 'buyer' && <Cart />}
           </Suspense>

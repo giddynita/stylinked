@@ -14,9 +14,10 @@ import { LogIn, User } from 'lucide-react'
 import { defaultSidebarNavlinks, vendorSidebarNavlinks } from '@/utils/data'
 import { lazy, Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+
 const ProfileImage = lazy(() => import('../global/ProfileImage'))
 
-export function AppSidebar() {
+function AppSidebar() {
   const { isMobile, open, setOpen } = useSidebar()
   if (!isMobile && open) {
     setOpen(false)
@@ -96,3 +97,5 @@ export function AppSidebar() {
     </div>
   )
 }
+
+export default AppSidebar
