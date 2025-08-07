@@ -13,3 +13,7 @@ export const sectionSuspense = (Component: JSX.Element) => (
     </Suspense>
   </LazyLoad>
 )
+
+export const pageHeadingSuspense = (Component: JSX.Element) => (
+  <Suspense fallback={null}>{Component}</Suspense>
+)
