@@ -6,8 +6,8 @@ import { lazy, useEffect } from 'react'
 
 import { pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
-import { useUserData } from './utils/hooks'
 import { setUser } from './features/user/userSlice'
+import { getAuthUserDetails } from './utils/api'
 
 const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
 const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
@@ -201,10 +201,10 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useDispatch()
+
   useEffect(() => {
-    const getUser = () => {
-      const { data: userInfo, isError } = useUserData()
-      if (isError) return
+    const getUser = async () => {
+      const userInfo = await getAuthUserDetails()
 
       dispatch(
         setUser({
