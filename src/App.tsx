@@ -15,15 +15,6 @@ import CartLayout from './components/layouts/CartLayout'
 import VendorsLayout from './components/layouts/VendorsLayout'
 import AccountLayout from './components/layouts/AccountLayout'
 
-/* const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
-const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
-const AuthLayout = lazy(() => import('./components/layouts/AuthLayout'))
-const CartLayout = lazy(() => import('./components/layouts/CartLayout'))
-const MarketplaceLayout = lazy(
-  () => import('./components/layouts/MarketplaceLayout')
-)
-const VendorsLayout = lazy(() => import('./components/layouts/VendorsLayout')) */
-
 const Login = lazy(() => import('./pages/Login'))
 const SignUp = lazy(() => import('./pages/SignUp'))
 const Verification = lazy(() => import('./pages/Verification'))

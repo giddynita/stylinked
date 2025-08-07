@@ -19,9 +19,9 @@ export default defineConfig({
             'react',
             'react-dom',
             'react-router-dom',
-            'react-lazyload',
             '@tanstack/react-query',
           ],
+          lazyloading: ['react-lazyload'],
 
           // State & Form
           state: ['@reduxjs/toolkit', 'react-redux'],
