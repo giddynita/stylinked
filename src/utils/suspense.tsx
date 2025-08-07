@@ -2,10 +2,11 @@ import { LoadingIcon } from '@/components/global'
 import { Suspense, type JSX } from 'react'
 import LazyLoad from 'react-lazyload'
 
+export const layoutSuspense = (Component: JSX.Element) => (
+  <LazyLoad>{Component}</LazyLoad>
+)
 export const pageSuspense = (Component: JSX.Element) => (
-  <LazyLoad>
-    <Suspense fallback={<LoadingIcon />}>{Component}</Suspense>
-  </LazyLoad>
+  <Suspense fallback={<LoadingIcon />}>{Component}</Suspense>
 )
 
 export const sectionSuspense = (Component: JSX.Element) => (

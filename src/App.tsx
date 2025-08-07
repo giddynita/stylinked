@@ -4,19 +4,26 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
 import { lazy, useEffect } from 'react'
 
-import { pageSuspense } from './utils/suspense'
+import { layoutSuspense, pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
 import { setUser } from './features/user/userSlice'
 import { getAuthUserDetails } from './utils/api'
+import AuthLayout from './components/layouts/AuthLayout'
+import AppLayout from './components/layouts/AppLayout'
+import MarketplaceLayout from './components/layouts/MarketplaceLayout'
+import CartLayout from './components/layouts/CartLayout'
+import VendorsLayout from './components/layouts/VendorsLayout'
+import AccountLayout from './components/layouts/AccountLayout'
 
-const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
+/* const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
 const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
 const AuthLayout = lazy(() => import('./components/layouts/AuthLayout'))
 const CartLayout = lazy(() => import('./components/layouts/CartLayout'))
 const MarketplaceLayout = lazy(
   () => import('./components/layouts/MarketplaceLayout')
 )
-const VendorsLayout = lazy(() => import('./components/layouts/VendorsLayout'))
+const VendorsLayout = lazy(() => import('./components/layouts/VendorsLayout')) */
+
 const Login = lazy(() => import('./pages/Login'))
 const SignUp = lazy(() => import('./pages/SignUp'))
 const Verification = lazy(() => import('./pages/Verification'))
@@ -49,7 +56,7 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: 'auth',
-    element: pageSuspense(<AuthLayout />),
+    element: layoutSuspense(<AuthLayout />),
     errorElement: <Error />,
     children: [
       {
@@ -96,7 +103,7 @@ const router = createBrowserRouter([
 
         element: pageSuspense(
           <ProtectedRouteForVendors>
-            <MarketplaceLayout />
+            {layoutSuspense(<MarketplaceLayout />)}
           </ProtectedRouteForVendors>
         ),
         children: [
@@ -114,9 +121,9 @@ const router = createBrowserRouter([
       {
         path: 'cart',
 
-        element: pageSuspense(
+        element: (
           <ProtectedRouteForVendors>
-            <CartLayout />
+            {layoutSuspense(<CartLayout />)}
           </ProtectedRouteForVendors>
         ),
         children: [
@@ -136,9 +143,9 @@ const router = createBrowserRouter([
       },
       {
         path: 'vendors',
-        element: pageSuspense(
+        element: (
           <ProtectedRouteForVendors>
-            <VendorsLayout />
+            {layoutSuspense(<VendorsLayout />)}
           </ProtectedRouteForVendors>
         ),
         children: [
@@ -160,7 +167,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'account',
-    element: pageSuspense(<AccountLayout />),
+    element: layoutSuspense(<AccountLayout />),
     errorElement: <Error />,
     children: [
       {
