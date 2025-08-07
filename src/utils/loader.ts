@@ -7,7 +7,7 @@ export const getAuthUser = async () => {
     error,
   } = await supabase.auth.getUser()
   if (error || !user) {
-    return
+    return null
   }
   return user
 }

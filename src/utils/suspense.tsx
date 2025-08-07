@@ -6,7 +6,7 @@ export const pageSuspense = (Component: JSX.Element) => (
 )
 
 export const sectionSuspense = (Component: JSX.Element) => (
-  <Suspense fallback={<div className="container animate-pulse py-20" />}>
+  <Suspense fallback={<div className="container py-20" />}>
     {Component}
   </Suspense>
 )

@@ -3,15 +3,17 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
 import { lazy } from 'react'
-import {
-  AccountLayout,
-  AppLayout,
-  AuthLayout,
-  CartLayout,
-  MarketplaceLayout,
-  VendorsLayout,
-} from './components/layouts'
+
 import { pageSuspense } from './utils/suspense'
+
+const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
+const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
+const AuthLayout = lazy(() => import('./components/layouts/AuthLayout'))
+const CartLayout = lazy(() => import('./components/layouts/CartLayout'))
+const MarketplaceLayout = lazy(
+  () => import('./components/layouts/MarketplaceLayout')
+)
+const VendorsLayout = lazy(() => import('./components/layouts/VendorsLayout'))
 const Login = lazy(() => import('./pages/Login'))
 const SignUp = lazy(() => import('./pages/SignUp'))
 const Verification = lazy(() => import('./pages/Verification'))
@@ -44,7 +46,7 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: 'auth',
-    element: <AuthLayout />,
+    element: pageSuspense(<AuthLayout />),
     errorElement: <Error />,
     children: [
       {
@@ -79,7 +81,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <AppLayout />,
+    element: pageSuspense(<AppLayout />),
     errorElement: <Error />,
     children: [
       {
@@ -109,7 +111,7 @@ const router = createBrowserRouter([
       {
         path: 'cart',
 
-        element: (
+        element: pageSuspense(
           <ProtectedRouteForVendors>
             <CartLayout />
           </ProtectedRouteForVendors>
@@ -131,7 +133,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'vendors',
-        element: (
+        element: pageSuspense(
           <ProtectedRouteForVendors>
             <VendorsLayout />
           </ProtectedRouteForVendors>
@@ -155,7 +157,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'account',
-    element: <AccountLayout />,
+    element: pageSuspense(<AccountLayout />),
     errorElement: <Error />,
     children: [
       {
