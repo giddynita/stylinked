@@ -1,17 +1,11 @@
-import { useUserData } from '@/utils/hooks'
-import LoadingIcon from './LoadingIcon'
 import { Navigate } from 'react-router-dom'
-import { useUser } from '@supabase/auth-helpers-react'
+
+import { useSelector } from 'react-redux'
 
 function ProtectedRouteForVendors({ children }: { children: any }) {
-  const { data: userInfo, isLoading } = useUserData()
-  const user = useUser()
+  const { userRole } = useSelector((state: any) => state.userState)
 
-  if (user && isLoading) {
-    return <LoadingIcon />
-  }
-
-  if (userInfo?.userRole.role == 'vendor') {
+  if (userRole == 'vendor') {
     return <Navigate to="/restricted_access" />
   }
   return children

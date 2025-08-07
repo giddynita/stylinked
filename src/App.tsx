@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
 import { lazy, useEffect } from 'react'
 
 import { pageSuspense } from './utils/suspense'
@@ -8,10 +9,6 @@ import { useDispatch } from 'react-redux'
 import { setUser } from './features/user/userSlice'
 import { getAuthUserDetails } from './utils/api'
 
-const ProtectedRoute = lazy(() => import('./components/global/ProtectedRoute'))
-const ProtectedRouteForVendors = lazy(
-  () => import('./components/global/ProtectedRouteForVendors')
-)
 const AccountLayout = lazy(() => import('./components/layouts/AccountLayout'))
 const AppLayout = lazy(() => import('./components/layouts/AppLayout'))
 const AuthLayout = lazy(() => import('./components/layouts/AuthLayout'))

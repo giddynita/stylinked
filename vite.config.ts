@@ -15,11 +15,16 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Core React
-          react: ['react', 'react-dom', 'react-router-dom', 'react-lazyload'],
+          react: [
+            'react',
+            'react-dom',
+            'react-router-dom',
+            'react-lazyload',
+            '@tanstack/react-query',
+          ],
 
           // State & Form
           state: ['@reduxjs/toolkit', 'react-redux'],
-          query: ['@tanstack/react-query'],
           forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
 
           // Supabase
@@ -46,9 +51,9 @@ export default defineConfig({
           ],
 
           // UI & Icons
-          ui: [
+          reacticons: ['react-icons'],
+          lucide: [
             'lucide-react',
-            'react-icons',
             'clsx',
             'class-variance-authority',
             'tailwind-merge',
