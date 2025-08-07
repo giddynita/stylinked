@@ -24,27 +24,32 @@ import type { PostgrestError } from '@supabase/supabase-js'
 export const useUserData = () => {
   const getAuthUserDetails = async () => {
     const user = await getAuthUser()
-    const { data: userRole, error: userError } = await supabase
-      .from('users')
-      .select<'role', UserRole>('role')
-      .eq('id', user?.id)
-      .single()
-    if (userError) throw new Error(userError.message)
+    if (user) {
+      const { data: userRole, error: userError } = await supabase
+        .from('users')
+        .select<'role', UserRole>('role')
+        .eq('id', user?.id)
+        .single()
+      if (userError) throw new Error(userError.message)
 
-    const userRoleTable =
-      userRole?.role == 'buyer'
-        ? 'buyers'
-        : userRole?.role == 'vendor'
-        ? 'vendors'
-        : 'logistics'
-    const { data: userData, error: dataError } = await supabase
-      .from(userRoleTable)
-      .select<'*', UserDataType>('*')
-      .eq('id', user?.id)
-      .single()
-    if (dataError) throw new Error(dataError.message)
+      const userRoleTable =
+        userRole?.role == 'buyer'
+          ? 'buyers'
+          : userRole?.role == 'vendor'
+          ? 'vendors'
+          : 'logistics'
+      const { data: userData, error: dataError } = await supabase
+        .from(userRoleTable)
+        .select<'*', UserDataType>('*')
+        .eq('id', user?.id)
+        .single()
+      if (dataError) throw new Error(dataError.message)
 
-    return { userData, userRole } as {userData:UserDataType | null, userRole:UserRole}
+      return { userData, userRole } as {
+        userData: UserDataType | null
+        userRole: UserRole
+      }
+    }
   }
   const queryData = useQuery({
     queryKey: ['userData'],
