@@ -3,7 +3,9 @@ import { Suspense, type JSX } from 'react'
 import LazyLoad from 'react-lazyload'
 
 export const pageSuspense = (Component: JSX.Element) => (
-  <Suspense fallback={<LoadingIcon />}>{Component}</Suspense>
+  <LazyLoad>
+    <Suspense fallback={<LoadingIcon />}>{Component}</Suspense>
+  </LazyLoad>
 )
 
 export const sectionSuspense = (Component: JSX.Element) => (
