@@ -30,8 +30,6 @@ export default defineConfig({
           // Supabase
           supabase: ['@supabase/supabase-js'],
 
-          supabasehelper: ['@supabase/auth-helpers-react'],
-
           // Radix UI (grouped together)
           dropmenu: ['@radix-ui/react-dropdown-menu', '@radix-ui/react-slot'],
           radix: [
