@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '@/features/user/userSlice'
 import { Form } from '../ui/form'
 import { useForm } from 'react-hook-form'
+import LazyLoad from 'react-lazyload'
 
 function LoginForm() {
   const navigate = useNavigate()
@@ -74,22 +75,24 @@ function LoginForm() {
             />
           </form>
         </Form>
-        <p className="text-center pt-2  text-sm font-medium text-foreground ">
-          Don't have an account?
-          <Button asChild={true} variant="link">
-            <Link to="/auth/sign-up" className="text-primary -ml-2">
-              Sign up
-            </Link>
-          </Button>
-        </p>
-        <p className="text-center -mt-4  text-sm font-medium text-foreground ">
-          Forgot password?
-          <Button asChild={true} variant="link">
-            <Link to="/auth/forgot-password" className="text-primary -ml-2">
-              Reset password
-            </Link>
-          </Button>
-        </p>
+        <LazyLoad>
+          <p className="text-center pt-2  text-sm font-medium text-foreground ">
+            Don't have an account?
+            <Button asChild={true} variant="link">
+              <Link to="/auth/sign-up" className="text-primary -ml-2">
+                Sign up
+              </Link>
+            </Button>
+          </p>
+          <p className="text-center -mt-4  text-sm font-medium text-foreground ">
+            Forgot password?
+            <Button asChild={true} variant="link">
+              <Link to="/auth/forgot-password" className="text-primary -ml-2">
+                Reset password
+              </Link>
+            </Button>
+          </p>
+        </LazyLoad>
       </CardContent>
     </Card>
   )
