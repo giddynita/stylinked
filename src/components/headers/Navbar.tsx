@@ -1,5 +1,4 @@
 import { defaultNavlinks, vendorNavlinks } from '@/utils/data'
-import { Button } from '../ui/button'
 import { NavLink } from 'react-router-dom'
 import { useMemo } from 'react'
 
@@ -16,19 +15,22 @@ function Navbar({ role }: NavbarProp) {
   }, [role])
 
   return (
-    <nav className="hidden md:flex md:flex-1 items-center justify-center space-x-1 font-medium px-2">
-      {navlinks.map((item, index) => (
-        <Button variant="ghost" size="lg" key={index}>
+    <nav className="hidden md:flex items-center justify-center bg-red-100font-medium text-base ">
+      {navlinks.map((item) => {
+        return (
           <NavLink
-            className={({ isActive }) =>
-              isActive ? 'text-primary' : 'text-muted-foreground'
-            }
             to={item.url}
+            key={item.title}
+            className={({ isActive }) =>
+              isActive
+                ? 'text-primary py-2 px-3  hover:bg-primary/10'
+                : 'text-muted-foreground py-2 px-3 hover:bg-secondary/20'
+            }
           >
             {item.title}
           </NavLink>
-        </Button>
-      ))}
+        )
+      })}
     </nav>
   )
 }

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Logo } from '../global'
-import { Button } from '../ui/button'
 import { SidebarTrigger } from '../ui/sidebar'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import Navbar from './Navbar'
@@ -43,36 +42,37 @@ function AppHeader() {
     >
       <div className="container flex items-center justify-between gap-10">
         <Logo icon="w-5 h-5" text="text-sm" />
-        <div className="hidden md:flex md:flex-1 items-center gap-x-8">
+        <div className="hidden md:flex md:flex-1 justify-between gap-x-4">
           <Navbar role={userRole} />
           <div className="flex flex-row gap-x-2 items-center">
             <Suspense fallback={null}>
               <ModeToggle align="end" />
             </Suspense>
             <Suspense fallback={null}>
-              {userRole === 'buyer' && <Cart />}
+              {userRole !== 'buyer' && <Cart />}
             </Suspense>
             <Suspense fallback={<User className="h-4 w-4" />}>
               {user && <ProfileImage userData={userData} />}
             </Suspense>
             {!user && (
               <>
-                <Button variant="outline" size="lg" asChild>
-                  <Link
-                    to="/auth"
-                    className="text-muted-foreground hover:text-primary transition-colors font-medium"
-                  >
-                    Login
-                  </Link>
-                </Button>
-                <Button size="lg">
-                  <Link to="/auth/sign-up">Sign Up</Link>
-                </Button>
+                <Link
+                  to="/auth"
+                  className="text-muted-foreground hover:text-primary bg-secondary py-2 px-4 text-base font-medium rounded-lg border"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/auth/sign-up"
+                  className="bg-primary py-2 px-4 text-base font-medium rounded-lg hover:bg-primary/80"
+                >
+                  Sign Up
+                </Link>
               </>
             )}
           </div>
         </div>
-        <div className="md:hidden flex flex-row gap-x-2 items-center">
+        <div className="md:hidden flex flex-row gap-x-2 items-center justify-b">
           <Suspense fallback={null}>
             <ModeToggle align="end" />
           </Suspense>
