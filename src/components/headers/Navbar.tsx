@@ -16,9 +16,9 @@ function Navbar({ role }: NavbarProp) {
   }, [role])
 
   return (
-    <nav className="hidden md:flex md:flex-1 items-center justify-center space-x-1 font-medium text-sm px-2">
+    <nav className="hidden md:flex md:flex-1 items-center justify-center space-x-1 font-medium px-2">
       {navlinks.map((item, index) => (
-        <Button variant="ghost" size="sm" key={index}>
+        <Button variant="ghost" size="lg" key={index}>
           <NavLink
             className={({ isActive }) =>
               isActive ? 'text-primary' : 'text-muted-foreground'

@@ -57,7 +57,7 @@ function AppHeader() {
             </Suspense>
             {!user && (
               <>
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="lg" asChild>
                   <Link
                     to="/auth"
                     className="text-muted-foreground hover:text-primary transition-colors font-medium"
@@ -65,7 +65,7 @@ function AppHeader() {
                     Login
                   </Link>
                 </Button>
-                <Button size="sm">
+                <Button size="lg">
                   <Link to="/auth/sign-up">Sign Up</Link>
                 </Button>
               </>
