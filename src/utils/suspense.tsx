@@ -25,3 +25,6 @@ export const sidebarSuspense = (Component: JSX.Element) => (
     {Component}
   </Suspense>
 )
+export const formFieldSuspense = (Component: JSX.Element) => (
+  <Suspense fallback={<div className="w-ful h-12" />}>{Component}</Suspense>
+)

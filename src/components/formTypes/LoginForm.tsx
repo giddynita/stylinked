@@ -8,12 +8,11 @@ import { toast } from 'sonner'
 import { Card, CardContent } from '../ui/card'
 import { AuthFormsHeading } from '../headings'
 import { Button } from '../ui/button'
-import { login } from '@/utils/api'
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/features/user/userSlice'
 import { Form } from '../ui/form'
 import { useForm } from 'react-hook-form'
-import { nullSuspense } from '@/utils/suspense'
+import { formFieldSuspense } from '@/utils/suspense'
 const FormInput = lazy(() => import('../form/FormInput'))
 const FormPassword = lazy(() => import('../form/FormPassword'))
 const SubmitButton = lazy(() => import('../form/SubmitButton'))
@@ -32,6 +31,7 @@ function LoginForm() {
   })
 
   const onSubmit = async (data: LoginFormSchema) => {
+    const { login } = await import('@/utils/api')
     const user = await login(data)
     dispatch(
       setUser({
@@ -54,7 +54,7 @@ function LoginForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {nullSuspense(
+            {formFieldSuspense(
               <FormInput
                 form={form}
                 label="Email"
@@ -63,7 +63,7 @@ function LoginForm() {
                 name="email"
               />
             )}
-            {nullSuspense(
+            {formFieldSuspense(
               <FormPassword
                 form={form}
                 name="password"
@@ -71,8 +71,7 @@ function LoginForm() {
                 placeholder="Enter your password"
               />
             )}
-
-            {nullSuspense(
+            {formFieldSuspense(
               <SubmitButton
                 submitting={isPending}
                 text="Login"
