@@ -92,5 +92,6 @@ export default defineConfig({
       },
     },
     target: 'es2020',
+    cssCodeSplit: true,
   },
 })
