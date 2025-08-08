@@ -2,9 +2,34 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
+import fs from 'fs'
+// @ts-expect-error - typings not exported properly by critters
+import type { Options } from 'critters/src/index.d.ts'
+// @ts-ignore
+import Critters from 'critters'
+
+function viteCritters() {
+  return {
+    name: 'vite-plugin-critters-custom',
+    apply: 'build' as const,
+    closeBundle() {
+      const indexPath = path.resolve(__dirname, 'dist/index.html')
+      let html = fs.readFileSync(indexPath, 'utf-8')
+      const critters = new Critters({
+        preload: 'swap',
+        inlineFonts: true,
+        pruneSource: true,
+      } as Options)
+      critters.process(html).then((output: any) => {
+        fs.writeFileSync(indexPath, output)
+        console.log('✅ Critical CSS inlined successfully')
+      })
+    },
+  }
+}
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), viteCritters()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

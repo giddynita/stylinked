@@ -61,6 +61,7 @@
     "@types/react-dom": "^19.1.2",
     "@types/react-lazyload": "^3.2.3",
     "@vitejs/plugin-react": "^4.4.1",
+    "critters": "^0.0.23",
     "daisyui": "^5.0.43",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
