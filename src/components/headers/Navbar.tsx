@@ -15,7 +15,7 @@ function Navbar({ role }: NavbarProp) {
   }, [role])
 
   return (
-    <nav className="hidden md:flex items-center justify-center bg-red-100font-medium text-base ">
+    <nav className="hidden md:flex md:flex-1 items-center justify-center bg-red-100font-medium text-base ">
       {navlinks.map((item) => {
         return (
           <NavLink

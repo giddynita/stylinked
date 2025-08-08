@@ -18,6 +18,7 @@ function Cart() {
           } `}
           to="/cart"
         >
+          <span className="sr-only">cart</span>
           <ShoppingCart stroke="currentColor" />
         </NavLink>
       </Button>
