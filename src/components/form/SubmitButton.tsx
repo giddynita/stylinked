@@ -1,14 +1,14 @@
 import { Button } from '../ui/button'
 import { Loader2Icon } from 'lucide-react'
-function SubmitButton({
-  submitting,
-  text,
-  texting,
-}: {
+
+interface SubmitButtonProp {
   submitting: boolean
   text: string
   texting: string
-}) {
+  setSubmitting?: (value: boolean) => void
+}
+
+function SubmitButton({ submitting, text, texting }: SubmitButtonProp) {
   return (
     <div>
       {submitting ? (
@@ -16,7 +16,10 @@ function SubmitButton({
           <Loader2Icon className="animate-spin " /> {texting}
         </Button>
       ) : (
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full" /* onClick={() => setSubmitting(true)} */
+        >
           {text}
         </Button>
       )}

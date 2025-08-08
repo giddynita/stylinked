@@ -1,5 +1,6 @@
+import { toast } from 'sonner'
 import { supabase } from './supabaseClient'
-import type { UserDataType, UserRole } from './types'
+import type { LoginAction, UserDataType, UserRole } from './types'
 
 export const getAuthUserDetails = async () => {
   const {
@@ -32,4 +33,17 @@ export const getAuthUserDetails = async () => {
 
   const AuthUser = { userData, userRole, user }
   return AuthUser
+}
+
+export const login = async (props: LoginAction) => {
+  const { email, password } = props
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+  if (error) {
+    toast.error('Failed to login.')
+    throw new Error(error.message)
+  }
+  return data.user
 }

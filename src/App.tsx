@@ -14,6 +14,7 @@ import MarketplaceLayout from './components/layouts/MarketplaceLayout'
 import CartLayout from './components/layouts/CartLayout'
 import VendorsLayout from './components/layouts/VendorsLayout'
 import AccountLayout from './components/layouts/AccountLayout'
+import { useSelector } from 'react-redux'
 
 const Login = lazy(() => import('./pages/Login'))
 const SignUp = lazy(() => import('./pages/SignUp'))
@@ -199,6 +200,7 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useDispatch()
+  const { user } = useSelector((state: any) => state.userState)
 
   useEffect(() => {
     const getUser = async () => {
@@ -214,7 +216,7 @@ function App() {
     }
 
     getUser()
-  }, [dispatch])
+  }, [user])
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
