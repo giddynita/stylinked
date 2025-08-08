@@ -5,7 +5,7 @@ interface SubmitButtonProp {
   submitting: boolean
   text: string
   texting: string
-  setSubmitting?: (value: boolean) => void
+  /* setSubmitting?: (value: boolean) => voi */
 }
 
 function SubmitButton({ submitting, text, texting }: SubmitButtonProp) {

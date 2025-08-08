@@ -2,8 +2,8 @@ import { GlobalContext } from '@/utils/globalContext'
 import { loginFormSchema, type LoginFormSchema } from '@/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Form, Link, useNavigate } from 'react-router-dom'
+
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Card, CardContent } from '../ui/card'
 import { AuthFormsHeading } from '../headings'
@@ -14,6 +14,8 @@ import { Button } from '../ui/button'
 import { login } from '@/utils/api'
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/features/user/userSlice'
+import { Form } from '../ui/form'
+import { useForm } from 'react-hook-form'
 
 function LoginForm() {
   const navigate = useNavigate()
@@ -68,7 +70,7 @@ function LoginForm() {
               submitting={isPending}
               text="Login"
               texting="Logging in"
-              setSubmitting={setIsPending}
+              /* setSubmitting={setIsPending} */
             />
           </form>
         </Form>
