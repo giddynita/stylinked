@@ -22,7 +22,6 @@ function viteCritters() {
       } as Options)
       critters.process(html).then((output: any) => {
         fs.writeFileSync(indexPath, output)
-        console.log('✅ Critical CSS inlined successfully')
       })
     },
   }
