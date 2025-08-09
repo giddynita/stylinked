@@ -7,7 +7,6 @@ import { lazy, useEffect } from 'react'
 import { layoutSuspense, pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
 import { setUser } from './features/user/userSlice'
-import { getAuthUserDetails } from './utils/api'
 import AuthLayout from './components/layouts/AuthLayout'
 import AppLayout from './components/layouts/AppLayout'
 import MarketplaceLayout from './components/layouts/MarketplaceLayout'
@@ -204,6 +203,7 @@ function App() {
 
   useEffect(() => {
     const getUser = async () => {
+      const { getAuthUserDetails } = await import('@/utils/api')
       const userInfo = await getAuthUserDetails()
 
       dispatch(
