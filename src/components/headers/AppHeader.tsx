@@ -73,10 +73,10 @@ function AppHeader() {
           </div>
         </div>
         <div className="md:hidden flex flex-row gap-x-2 items-center justify-b">
-          <Suspense fallback={null}>
+          <Suspense fallback={<div className="w-[32px] h-[32px]" />}>
             <ModeToggle align="end" />
           </Suspense>
-          <Suspense fallback={null}>
+          <Suspense fallback={<div className="w-[32px] h-[32px]" />}>
             {userRole !== 'buyer' && <Cart />}
           </Suspense>
           <SidebarTrigger />
