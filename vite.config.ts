@@ -2,8 +2,13 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
+import fs from 'fs'
+// @ts-expect-error - typings not exported properly by critters
+import type { Options } from 'critters/src/index.d.ts'
+// @ts-ignore
+import Critters from 'critters'
 
-/* function viteCritters() {
+function viteCritters() {
   return {
     name: 'vite-plugin-critters-custom',
     apply: 'build' as const,
@@ -20,10 +25,10 @@ import tailwindcss from '@tailwindcss/vite'
       })
     },
   }
-} */
+}
 
 export default defineConfig({
-  plugins: [react(), tailwindcss() /* viteCritters() */],
+  plugins: [react(), tailwindcss(), viteCritters()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -41,7 +46,6 @@ export default defineConfig({
             'react-lazyload',
             'react-helmet-async',
           ],
-          tailwind: ['tailwindcss'],
           reactQuery: ['@tanstack/react-query'],
 
           // State & Form
