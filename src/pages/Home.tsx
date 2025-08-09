@@ -11,11 +11,11 @@ const PageHeading = lazy(() => import('../components/headings/PageHeading'))
 const Home = () => {
   return (
     <>
-      {nullSuspense(
-        <PageHeading pageTitle="Home" pageDesc="Stylinked home page" />
-      )}
       <AppHeader />
       <main>
+        {nullSuspense(
+          <PageHeading pageTitle="Home" pageDesc="Stylinked home page" />
+        )}
         <Hero />
         {sectionSuspense(<Stats />)}
         {sectionSuspense(<Features />)}
