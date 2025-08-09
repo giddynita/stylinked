@@ -10,7 +10,7 @@ function AppLayout() {
   return (
     <SidebarProvider defaultOpen={false}>
       {sidebarSuspense(<AppSidebar />)}
-      <div className="bg-gradient-to-b from-primary/10 to-accent/50 w-screen">
+      <div className="bg-gradient-to-b from-primary/10 to-accent/50 w-full ">
         <Outlet />
         {sectionSuspense(<AppFooter />)}
       </div>

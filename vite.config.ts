@@ -41,6 +41,7 @@ export default defineConfig({
             'react-lazyload',
             'react-helmet-async',
           ],
+          tailwind: ['tailwindcss'],
           reactQuery: ['@tanstack/react-query'],
 
           // State & Form
