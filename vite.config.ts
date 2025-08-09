@@ -39,17 +39,10 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Core React
-          react: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-lazyload',
-            'react-helmet-async',
-          ],
-          reactQuery: ['@tanstack/react-query'],
-
-          // State & Form
+          react: ['react', 'react-dom', 'sonner', 'react-helmet-async'],
           state: ['@reduxjs/toolkit', 'react-redux'],
+          router: ['react-router-dom', 'react-lazyload'],
+          reactQuery: ['@tanstack/react-query'],
           forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
 
           // Supabase
