@@ -77,7 +77,7 @@ function AppHeader() {
             <ModeToggle align="end" />
           </Suspense>
           <Suspense fallback={null}>
-            {userRole === 'buyer' && <Cart />}
+            {userRole !== 'buyer' && <Cart />}
           </Suspense>
           <SidebarTrigger />
         </div>

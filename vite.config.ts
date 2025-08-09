@@ -60,10 +60,10 @@ export default defineConfig({
             '@radix-ui/react-slot',
             '@radix-ui/react-tooltip',
             '@radix-ui/react-separator',
-            '@radix-ui/react-avatar',
             '@radix-ui/react-navigation-menu',
-            '@radix-ui/react-dropdown-menu',
           ],
+          avatar: ['@radix-ui/react-avatar'],
+          dropmenu: ['@radix-ui/react-dropdown-menu'],
           dialog: ['@radix-ui/react-alert-dialog', '@radix-ui/react-dialog'],
           form: [
             '@radix-ui/react-select',
