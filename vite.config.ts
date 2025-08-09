@@ -39,7 +39,13 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Core React
-          react: ['react', 'react-dom', 'react-router-dom', 'react-lazyload'],
+          react: [
+            'react',
+            'react-dom',
+            'react-router-dom',
+            'react-lazyload',
+            'react-helmet-async',
+          ],
           reactQuery: ['@tanstack/react-query'],
 
           // State & Form
@@ -50,20 +56,24 @@ export default defineConfig({
           supabase: ['@supabase/supabase-js'],
 
           // Radix UI (grouped together)
-          slot: ['@radix-ui/react-slot'],
+          slot: [
+            '@radix-ui/react-slot',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-separator',
+            '@radix-ui/react-avatar',
+            '@radix-ui/react-navigation-menu',
+          ],
           dropmenu: ['@radix-ui/react-dropdown-menu'],
-          tooltip: ['@radix-ui/react-tooltip'],
-          alertdialog: ['@radix-ui/react-alert-dialog'],
-          avatar: ['@radix-ui/react-avatar'],
-          checkbox: ['@radix-ui/react-checkbox'],
-          dialog: ['@radix-ui/react-dialog'],
-          label: ['@radix-ui/react-label'],
-          menu: ['@radix-ui/react-navigation-menu'],
-          progress: ['@radix-ui/react-progress'],
-          radio: ['@radix-ui/react-radio-group'],
-          select: ['@radix-ui/react-select'],
-          separator: ['@radix-ui/react-separator'],
-          slider: ['@radix-ui/react-slider'],
+          dialog: ['@radix-ui/react-alert-dialog', '@radix-ui/react-dialog'],
+          progress: ['@radix-ui/react-slider'],
+          form: [
+            '@radix-ui/react-select',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-label',
+            '@radix-ui/react-slider',
+            '@radix-ui/react-slider',
+          ],
           tabs: ['@radix-ui/react-tabs'],
 
           // UI & Icons
@@ -83,7 +93,6 @@ export default defineConfig({
 
           // Other
           theming: ['next-themes'],
-          head: ['react-helmet-async'],
           payment: ['react-paystack'],
           sitemap: ['sitemap'],
         },
