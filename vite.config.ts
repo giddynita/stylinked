@@ -76,12 +76,8 @@ export default defineConfig({
 
           // UI & Icons
           reacticons: ['react-icons'],
-          lucide: [
-            'lucide-react',
-            'clsx',
-            'class-variance-authority',
-            'tailwind-merge',
-          ],
+          lucide: ['lucide-react'],
+          cn: ['clsx', 'class-variance-authority', 'tailwind-merge'],
 
           // Time & Utils
           utils: ['dayjs', 'relative-time'],
