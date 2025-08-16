@@ -49,7 +49,7 @@ const router = createBrowserRouter([
   {
     path: 'auth',
     element: layoutSuspense(<AuthLayout />),
-    errorElement: <Error />,
+    errorElement: pageSuspense(<Error />),
     children: [
       {
         index: true,
@@ -84,7 +84,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: pageSuspense(<AppLayout />),
-    errorElement: <Error />,
+    errorElement: pageSuspense(<Error />),
     children: [
       {
         index: true,
@@ -160,7 +160,7 @@ const router = createBrowserRouter([
   {
     path: 'account',
     element: layoutSuspense(<AccountLayout />),
-    errorElement: <Error />,
+    errorElement: pageSuspense(<Error />),
     children: [
       {
         index: true,
