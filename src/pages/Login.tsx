@@ -1,10 +1,12 @@
 import { AuthContainer } from '@/components/auth'
-import { nullSuspense } from '@/utils/suspense'
-import { lazy } from 'react'
-const LoginForm = lazy(() => import('../components/formTypes/LoginForm'))
+import LoginForm from '@/components/formTypes/LoginForm'
 
 function Login() {
-  return <AuthContainer>{nullSuspense(<LoginForm />)}</AuthContainer>
+  return (
+    <AuthContainer>
+      <LoginForm />
+    </AuthContainer>
+  )
 }
 
 export default Login

@@ -3,26 +3,27 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
 import { lazy, useEffect } from 'react'
-
 import { layoutSuspense, pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
-import { setUser } from './features/user/userSlice'
+import { setUserData } from './features/user/userSlice'
 import { getAuthUserDetails } from './utils/api'
+import { useSelector } from 'react-redux'
+
+//layouts
 import AuthLayout from './components/layouts/AuthLayout'
 import AppLayout from './components/layouts/AppLayout'
 import MarketplaceLayout from './components/layouts/MarketplaceLayout'
 import CartLayout from './components/layouts/CartLayout'
 import VendorsLayout from './components/layouts/VendorsLayout'
 import AccountLayout from './components/layouts/AccountLayout'
-import { useSelector } from 'react-redux'
 
+//pages
 const Login = lazy(() => import('./pages/Login'))
 const SignUp = lazy(() => import('./pages/SignUp'))
 const Verification = lazy(() => import('./pages/Verification'))
 const CompleteRegistration = lazy(() => import('./pages/CompleteRegistration'))
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword'))
-
 const Home = lazy(() => import('./pages/Home'))
 const Marketplace = lazy(() => import('./pages/Marketplace'))
 const ProductDetails = lazy(() => import('./pages/ProductDetails'))
@@ -203,19 +204,16 @@ function App() {
   const { user } = useSelector((state: any) => state.userState)
 
   useEffect(() => {
-    const getUser = async () => {
-      const userInfo = await getAuthUserDetails()
-
+    const getUserDetails = async () => {
+      const { userData, userRole } = await getAuthUserDetails(user)
       dispatch(
-        setUser({
-          userData: userInfo?.userData,
-          userRole: userInfo?.userRole,
-          user: userInfo?.user,
+        setUserData({
+          userData,
+          userRole,
         })
       )
     }
-
-    getUser()
+    getUserDetails()
   }, [user])
   return (
     <QueryClientProvider client={queryClient}>

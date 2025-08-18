@@ -1,16 +1,15 @@
 import { toast } from 'sonner'
 import { supabase } from './supabaseClient'
 import type { LoginAction, UserDataType, UserRole } from './types'
+import type { User } from '@supabase/supabase-js'
 
-export const getAuthUserDetails = async () => {
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) {
-    return null
+export const getAuthUserDetails = async (user: User | null) => {
+  if (!user) {
+    return {
+      userData: null,
+      userRole: null,
+    }
   }
-
   const { data: userRole, error: userError } = await supabase
     .from('users')
     .select<'role', UserRole>('role')
@@ -27,12 +26,12 @@ export const getAuthUserDetails = async () => {
   const { data: userData, error: dataError } = await supabase
     .from(userRoleTable)
     .select<'*', UserDataType>('*')
-    .eq('id', user?.id)
+    .eq('id', user.id)
     .single()
   if (dataError) throw new Error(dataError.message)
 
-  const AuthUser = { userData, userRole, user }
-  return AuthUser
+  const AuthUserData = { userData, userRole }
+  return AuthUserData
 }
 
 export const login = async (props: LoginAction) => {

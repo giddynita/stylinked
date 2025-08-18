@@ -2,7 +2,6 @@ import { GlobalContext } from '@/utils/globalContext'
 import { loginFormSchema, type LoginFormSchema } from '@/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { lazy, useContext, useState } from 'react'
-
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Card, CardContent } from '../ui/card'
@@ -36,8 +35,6 @@ function LoginForm() {
     dispatch(
       setUser({
         user,
-        userData: null,
-        userRole: null,
       })
     )
     toast.success("Welcome, you've logged in successfully!")
