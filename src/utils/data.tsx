@@ -661,3 +661,42 @@ export const brands = [
   'The North Face',
   'Calvin Klein',
 ]
+
+export const defaultValues = {
+  buyer: {
+    role: '',
+    firstname: '',
+    lastname: '',
+    phone: '',
+  },
+  vendor: {
+    role: '',
+    firstname: '',
+    lastname: '',
+    businessname: '',
+    phone: '',
+    city: '',
+    state: '',
+  },
+  logistics: {
+    role: '',
+    firstname: '',
+    lastname: '',
+    businessname: '',
+    phone: '',
+    vehicletype: '',
+    coveragearea: '',
+  },
+}
+
+export const ordersTabsList = [
+  'all',
+  'pending',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+]
+export const vendorSettingsTabsList = ['profile', 'business', 'security']
+
+export const buyerSettingsTabsList = ['profile', 'security']

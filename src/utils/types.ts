@@ -1,4 +1,10 @@
 import type { User } from '@supabase/supabase-js'
+import type {
+  BuyerFormSchema,
+  EmptySchema,
+  LogisticsFormSchema,
+  VendorFormSchema,
+} from './schema'
 
 export type Options = {
   value: string
@@ -392,3 +398,14 @@ export type SelectItems = {
   value: string
   label: string
 }
+
+export type registrationSchemaTypes =
+  | BuyerFormSchema
+  | VendorFormSchema
+  | LogisticsFormSchema
+  | EmptySchema
+
+export type settingsSchemaTypes =
+  | BuyerFormSchema
+  | VendorFormSchema
+  | LogisticsFormSchema

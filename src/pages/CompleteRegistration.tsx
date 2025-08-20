@@ -1,18 +1,8 @@
 import { Form } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {
-  buyerFormSchema,
-  emptySchema,
-  logisticsFormSchema,
-  vendorFormSchema,
-} from '@/utils/schema'
-import type {
-  BuyerFormSchema,
-  EmptySchema,
-  LogisticsFormSchema,
-  VendorFormSchema,
-} from '@/utils/schema'
+import { emptySchema, registrationSchemaMap } from '@/utils/schema'
+
 import { FormRadio, SubmitButton } from '@/components/form'
 import { Card, CardContent } from '@/components/ui/card'
 import { AuthFormsHeading } from '@/components/headings'
@@ -22,19 +12,13 @@ import {
   LogisticsDetailsForm,
   VendorDetailsForm,
 } from '@/components/formTypes'
-import { type AccountType } from '@/utils/types'
+import { type AccountType, type registrationSchemaTypes } from '@/utils/types'
 import { supabase } from '@/utils/supabaseClient'
 import { toast } from 'sonner'
 import { AuthContainer, AuthLoading, InvalidToken } from '@/components/auth'
-import { accountTypeOptions } from '@/utils/data'
+import { accountTypeOptions, defaultValues } from '@/utils/data'
 import { completeRegistrationAction } from '@/utils/action'
 import { useNavigate } from 'react-router-dom'
-
-const schemaMap = {
-  buyer: buyerFormSchema,
-  vendor: vendorFormSchema,
-  logistics: logisticsFormSchema,
-}
 
 function CompleteRegistration() {
   const [submitting, setSubmitting] = useState<boolean>(false)
@@ -43,49 +27,19 @@ function CompleteRegistration() {
   const [tokenIsValid, setTokenIsValid] = useState<boolean>(true)
   const navigate = useNavigate()
 
-  const schema = accountType ? schemaMap[accountType] : emptySchema
-  const defaultValues = {
-    buyer: {
-      role: '',
-      firstname: '',
-      lastname: '',
-      phone: '',
-    },
-    vendor: {
-      role: '',
-      firstname: '',
-      lastname: '',
-      businessname: '',
-      phone: '',
-      city: '',
-      state: '',
-    },
-    logistics: {
-      role: '',
-      firstname: '',
-      lastname: '',
-      businessname: '',
-      phone: '',
-      vehicletype: '',
-      coveragearea: '',
-    },
-  }
+  const schema = accountType ? registrationSchemaMap[accountType] : emptySchema
+
   const setDefaultValues = accountType
     ? defaultValues[accountType]
     : {
         role: '',
       }
-  type schemaTypes =
-    | BuyerFormSchema
-    | VendorFormSchema
-    | LogisticsFormSchema
-    | EmptySchema
 
-  const form = useForm<schemaTypes>({
+  const form = useForm<registrationSchemaTypes>({
     resolver: zodResolver(schema),
     defaultValues: setDefaultValues,
   })
-  const onSubmit = (data: schemaTypes) => {
+  const onSubmit = (data: registrationSchemaTypes) => {
     const { role } = data
     if (!role) {
       return toast.warning('You need to select an account type.')

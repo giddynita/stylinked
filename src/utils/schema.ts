@@ -100,8 +100,8 @@ export const vendorFormSchema = z.object({
     .length(11, {
       message: 'Please enter a valid 11-digit phone number.',
     }),
-  city: z.string().trim().min(3, { message: 'Please enter valid city' }),
-  state: z.string().trim().min(3, { message: 'Please enter valid state' }),
+  city: z.string().trim().min(3, { message: 'Please enter a valid city' }),
+  state: z.string().trim().min(3, { message: 'Please enter a valid state' }),
 })
 export type VendorFormSchema = z.infer<typeof vendorFormSchema>
 
@@ -252,3 +252,9 @@ export const shippingInfoSchema = z.object({
       message: 'Please enter a valid 11-digit phone number',
     }),
 })
+
+export const registrationSchemaMap = {
+  buyer: buyerFormSchema,
+  vendor: vendorFormSchema,
+  logistics: logisticsFormSchema,
+}

@@ -10,6 +10,7 @@ interface FormInputFieldProp {
   type: string
   min?: string
   required?: boolean
+  disabled?: boolean
 }
 
 function FormInputField({
@@ -21,6 +22,7 @@ function FormInputField({
   type,
   min,
   required,
+  disabled,
 }: FormInputFieldProp) {
   return (
     <div className="space-y-2">
@@ -33,6 +35,7 @@ function FormInputField({
         type={type}
         min={min}
         required={required}
+        disabled={disabled}
       />
     </div>
   )

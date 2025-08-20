@@ -4,6 +4,7 @@ import type { CustomerOrder, OrderAndOrderItems } from '@/utils/types'
 import { ShoppingBag } from 'lucide-react'
 import VendorOrderCard from './vendor/VendorOrderCard'
 import BuyerOrderCard from './buyer/BuyerOrderCard'
+import { ordersTabsList } from '@/utils/data'
 
 interface OrdersTabsContentProp {
   orders: CustomerOrder[] | OrderAndOrderItems[] | undefined
@@ -36,15 +37,8 @@ function OrdersTabsContent({ orders, searchQuery }: OrdersTabsContentProp) {
   }
   return (
     <>
-      {[
-        'all',
-        'pending',
-        'processing',
-        'shipped',
-        'delivered',
-        'cancelled',
-      ].map((status) => (
-        <TabsContent key={status} value={status} className="">
+      {ordersTabsList.map((status) => (
+        <TabsContent key={status} value={status}>
           <div className="space-y-4 py-4">
             <NoResult
               length={filteredOrdersByStatus(status)?.length}
