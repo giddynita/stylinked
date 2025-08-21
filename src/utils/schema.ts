@@ -258,3 +258,40 @@ export const registrationSchemaMap = {
   vendor: vendorFormSchema,
   logistics: logisticsFormSchema,
 }
+
+export const VendorBusinessFormSchema = z.object({
+  businessname: z
+    .string()
+    .min(2, {
+      message: 'Business name must be at least 2 characters.',
+    })
+    .max(30, {
+      message: 'name must be less than 30 characters.',
+    }),
+  description: z.string().refine(
+    (description) => {
+      if (!description || description.trim() === '') return true
+      const wordCount = description.trim().split(/\s+/).length
+      return wordCount >= 10 && wordCount <= 200
+    },
+    {
+      message: 'Description must be between 10 and 200 words',
+    }
+  ),
+  city: z.string().trim().min(3, { message: 'Please enter a valid city' }),
+  state: z.string().trim().min(3, { message: 'Please enter a valid state' }),
+})
+
+export const ProfileFormSchema = z.object({
+  phone: z
+    .string()
+    .trim()
+    .startsWith('0', { message: 'Phone number must start with 0' })
+    .length(11, {
+      message: 'Please enter a valid 11-digit phone number',
+    }),
+})
+
+export const PasswordFormSchema = z.object({
+  password: z.string().min(6).max(50),
+})

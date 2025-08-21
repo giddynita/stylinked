@@ -13,38 +13,38 @@ import {
 } from '@/components/ui/sidebar'
 import { LogOutIcon, Home, Loader2Icon, LinkIcon } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { useUserData } from '@/utils/hooks'
 import { buyerNavigation, vendorNavigation } from '@/utils/data'
-import { logoutAction } from '@/utils/action'
 import { toast } from 'sonner'
+import { logout } from '@/utils/api'
+import { useSelector } from 'react-redux'
+import type { UserRole } from '@/utils/types'
+import { useDispatch } from 'react-redux'
+import { clearUser } from '@/features/user/userSlice'
+import { useState } from 'react'
 
 function AccountSidebar() {
+  const [submitting, setSubmitting] = useState(false)
   const { state, isMobile } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname.split('/').pop()
   const navigate = useNavigate()
   const tooltip = state == 'collapsed' && !isMobile
-  const { data: userInfo } = useUserData()
+  const { userRole }: { userRole: UserRole } = useSelector(
+    (state: any) => state.userState
+  )
   const navigation =
-    userInfo?.userRole.role == 'buyer'
+    userRole.role == 'buyer'
       ? buyerNavigation
-      : userInfo?.userRole.role == 'vendor'
+      : userRole.role == 'vendor'
       ? vendorNavigation
       : []
-  const { mutate: logout, isPending } = logoutAction()
-
-  const handleLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        navigate('/')
-        toast.success("You're logged out successfully.")
-
-        window.location.reload()
-      },
-      onError: () => {
-        toast.error('Failed to logout')
-      },
-    })
+  const dispatch = useDispatch()
+  const handleLogout = async () => {
+    setSubmitting(true)
+    await logout(setSubmitting)
+    navigate('/')
+    dispatch(clearUser())
+    toast.success("You've logged out successfully.")
   }
 
   return (
@@ -133,7 +133,7 @@ function AccountSidebar() {
                   asChild
                   className="bg-destructive hover:bg-red-500 cursor-pointer"
                 >
-                  {isPending ? (
+                  {submitting ? (
                     <div className="py-2 pl-2 pr-4">
                       <Loader2Icon className="animate-spin" />
                       <span>Logging out</span>

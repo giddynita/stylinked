@@ -1,7 +1,6 @@
 import { GlobalContext } from '@/utils/globalContext'
 import { useContext, useEffect } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { toast } from 'sonner'
 import { useSelector } from 'react-redux'
 
 const ProtectedRoute = ({ children }: { children: any }) => {
@@ -16,7 +15,6 @@ const ProtectedRoute = ({ children }: { children: any }) => {
   }, [])
 
   if (!user) {
-    toast.warning('You must be logged in to access this page.')
     return <Navigate to="/auth/login" />
   }
   return children

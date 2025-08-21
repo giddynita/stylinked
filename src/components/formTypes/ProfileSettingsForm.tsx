@@ -1,31 +1,59 @@
 import { FormInputField } from '@/components/form'
 import FormSubmitButton from '@/components/form/FormSubmitButton'
-import type { UserDataType } from '@/utils/types'
+import { setUserData } from '@/features/user/userSlice'
+import { updateSettings } from '@/utils/action'
+import { ProfileFormSchema, validateWithZodSchema } from '@/utils/schema'
+import type { UserDataType, UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { toast } from 'sonner'
 
-function Profile() {
-  const { user, userData }: { user: User; userData: UserDataType } =
-    useSelector((state: any) => state.userState)
+function ProfileSettingsForm() {
+  const {
+    user,
+    userData,
+    userRole,
+  }: { user: User; userData: UserDataType; userRole: UserRole } = useSelector(
+    (state: any) => state.userState
+  )
   const [formData, setFormData] = useState({
-    firstname: userData.firstname,
-    lastname: userData.lastname,
     phone: userData.phone,
-    email: user.email || '',
   })
   const [submitting, setSubmitting] = useState(false)
-
+  const dispatch = useDispatch()
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSubmitting(true)
+    const validatedData = validateWithZodSchema(ProfileFormSchema, formData)
+    if (!validatedData) {
+      setSubmitting(false)
+      return
+    }
+    await updateSettings({
+      role: userRole.role,
+      newData: validatedData,
+      uid: user.id,
+    })
 
+    dispatch(
+      setUserData({
+        userData: { ...userData, formData },
+      })
+    )
+    setSubmitting(false)
+    toast.success('Updated successfully!')
+  }
   return (
-    <form className="space-y-6 max-w-xl">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <FormInputField
         name="firstname"
         label="First Name"
-        value={formData.firstname}
+        value={userData.firstname}
         handleInputChange={handleInputChange}
         placeholder="First Name"
         type="text"
@@ -35,7 +63,7 @@ function Profile() {
       <FormInputField
         name="lastname"
         label="Last Name"
-        value={formData.lastname}
+        value={userData.lastname}
         handleInputChange={handleInputChange}
         placeholder="Last Name"
         type="text"
@@ -45,7 +73,7 @@ function Profile() {
       <FormInputField
         name="email"
         label="Email"
-        value={formData.email}
+        value={user.email ?? ''}
         handleInputChange={handleInputChange}
         placeholder="Last Name"
         type="email"
@@ -65,9 +93,8 @@ function Profile() {
         text="Update Profile"
         texting="Updating"
         submitting={submitting}
-        setSubmitting={setSubmitting}
       />
     </form>
   )
 }
-export default Profile
+export default ProfileSettingsForm

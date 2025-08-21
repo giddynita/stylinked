@@ -5,15 +5,9 @@ interface SubmitButtonProp {
   submitting: boolean
   text: string
   texting: string
-  setSubmitting: (value: boolean) => void
 }
 
-function FormSubmitButton({
-  submitting,
-  text,
-  texting,
-  setSubmitting,
-}: SubmitButtonProp) {
+function FormSubmitButton({ submitting, text, texting }: SubmitButtonProp) {
   return (
     <div>
       {submitting ? (
@@ -21,11 +15,7 @@ function FormSubmitButton({
           {texting} <Loader2Icon className="animate-spin " />
         </Button>
       ) : (
-        <Button
-          type="submit"
-          className="w-full"
-          onClick={() => setSubmitting(true)}
-        >
+        <Button type="submit" className="w-full">
           {text}
         </Button>
       )}

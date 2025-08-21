@@ -1,7 +1,7 @@
 import { GlobalContext } from '@/utils/globalContext'
 import { loginFormSchema, type LoginFormSchema } from '@/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { lazy, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Card, CardContent } from '../ui/card'
@@ -11,15 +11,14 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '@/features/user/userSlice'
 import { Form } from '../ui/form'
 import { useForm } from 'react-hook-form'
-import { formFieldSuspense } from '@/utils/suspense'
-const FormInput = lazy(() => import('../form/FormInput'))
-const FormPassword = lazy(() => import('../form/FormPassword'))
-const SubmitButton = lazy(() => import('../form/SubmitButton'))
+import FormSubmitButton from '../form/FormSubmitButton'
+import FormInput from '../form/FormInput'
+import FormPassword from '../form/FormPassword'
 
 function LoginForm() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [isPending, setIsPending] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const { pathname, setPathname } = useContext(GlobalContext)
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -31,7 +30,8 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginFormSchema) => {
     const { login } = await import('@/utils/api')
-    const user = await login(data)
+    const props = { ...data, setSubmitting }
+    const user = await login(props)
     dispatch(
       setUser({
         user,
@@ -39,7 +39,7 @@ function LoginForm() {
     )
     toast.success("Welcome, you've logged in successfully!")
     navigate(pathname)
-    setIsPending(false)
+    setSubmitting(false)
     return setPathname('/')
   }
   return (
@@ -51,31 +51,24 @@ function LoginForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {formFieldSuspense(
-              <FormInput
-                form={form}
-                label="Email"
-                placeholder="Enter your email address"
-                type="email"
-                name="email"
-              />
-            )}
-            {formFieldSuspense(
-              <FormPassword
-                form={form}
-                name="password"
-                label="Password"
-                placeholder="Enter your password"
-              />
-            )}
-            {formFieldSuspense(
-              <SubmitButton
-                submitting={isPending}
-                text="Login"
-                texting="Logging in"
-                /* setSubmitting={setIsPending} */
-              />
-            )}
+            <FormInput
+              form={form}
+              label="Email"
+              placeholder="Enter your email address"
+              type="email"
+              name="email"
+            />
+            <FormPassword
+              form={form}
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+            />
+            <FormSubmitButton
+              submitting={submitting}
+              text="Login"
+              texting="Logging in"
+            />
           </form>
         </Form>
         <p className="text-center pt-2  text-sm font-medium text-foreground ">

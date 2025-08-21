@@ -5,7 +5,7 @@ import { ProtectedRoute, ProtectedRouteForVendors } from './components/global'
 import { lazy, useEffect } from 'react'
 import { layoutSuspense, pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
-import { setUserData } from './features/user/userSlice'
+import { setUserData, setUserRole } from './features/user/userSlice'
 import { getAuthUserDetails } from './utils/api'
 import { useSelector } from 'react-redux'
 
@@ -201,20 +201,26 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useDispatch()
-  const { user } = useSelector((state: any) => state.userState)
+  const { user, userData } = useSelector((state: any) => state.userState)
 
   useEffect(() => {
     const getUserDetails = async () => {
-      const { userData, userRole } = await getAuthUserDetails(user)
-      dispatch(
-        setUserData({
-          userData,
-          userRole,
-        })
-      )
+      if (user) {
+        const { userData, userRole } = await getAuthUserDetails(user)
+        dispatch(
+          setUserData({
+            userData,
+          })
+        )
+        dispatch(
+          setUserRole({
+            userRole,
+          })
+        )
+      }
     }
     getUserDetails()
-  }, [user])
+  }, [user, userData])
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

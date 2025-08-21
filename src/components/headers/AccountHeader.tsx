@@ -14,7 +14,7 @@ function AccountHeader() {
       <div className="flex items-center gap-4">
         <SidebarTrigger />
         <h1 className="text-2xl font-semibold text-foreground">
-          Hi, {userData.firstname}
+          Hi, {userData?.firstname}
         </h1>
       </div>
       <div className="flex items-center gap-3 sm:gap-4 ">

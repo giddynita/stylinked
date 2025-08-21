@@ -2,6 +2,7 @@ import { toast } from 'sonner'
 import { bucket, supabase } from './supabaseClient'
 
 import type {
+  AccountType,
   ForgotPasswordAction,
   LoginAction,
   Order,
@@ -341,4 +342,54 @@ export const addOrdersAction = () => {
   })
 
   return addOrderFunction
+}
+
+export const updateSettings = async ({
+  role,
+  newData,
+  uid,
+}: {
+  role: AccountType
+  newData: any
+  uid: string
+}) => {
+  const userTable = role !== 'logistics' ? `${role}s` : 'logistics'
+  const { data, error } = await supabase
+    .from(userTable)
+    .update(newData)
+    .eq('id', uid)
+
+  if (error) {
+    throw new Error(error.message)
+  }
+  return data
+}
+
+export const updatePassword = async ({
+  email,
+  oldPassword,
+  newPassword,
+}: {
+  email: string
+  oldPassword: string
+  newPassword: string
+}) => {
+  const { error: oldPasswordError } = await supabase.auth.signInWithPassword({
+    email,
+    password: oldPassword,
+  })
+  if (oldPasswordError) {
+    toast.error('Incorrect current password')
+    return null
+  }
+
+  const { data, error: newPasswordError } = await supabase.auth.updateUser({
+    password: newPassword,
+  })
+  if (newPasswordError) {
+    toast.error('Password update failed!')
+    return null
+  }
+
+  return data.user
 }

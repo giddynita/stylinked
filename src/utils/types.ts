@@ -42,6 +42,7 @@ export type ResetPasswordAction = {
 export type LoginAction = {
   email: string
   password: string
+  setSubmitting: (value: boolean) => void
 }
 export type LogoutAction = (value: string) => void
 
@@ -94,7 +95,7 @@ export type UpdateProduct = {
 }
 
 export type UserRole = {
-  role: string
+  role: AccountType
 }
 
 export type UserDataType = {
@@ -105,6 +106,7 @@ export type UserDataType = {
   vehicletype?: string
   coveragearea?: string[]
   businessname?: string
+  description?: string
   city?: string
   state?: string
 }

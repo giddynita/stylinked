@@ -3,13 +3,7 @@ import { supabase } from './supabaseClient'
 import type { LoginAction, UserDataType, UserRole } from './types'
 import type { User } from '@supabase/supabase-js'
 
-export const getAuthUserDetails = async (user: User | null) => {
-  if (!user) {
-    return {
-      userData: null,
-      userRole: null,
-    }
-  }
+export const getAuthUserDetails = async (user: User) => {
   const { data: userRole, error: userError } = await supabase
     .from('users')
     .select<'role', UserRole>('role')
@@ -35,14 +29,24 @@ export const getAuthUserDetails = async (user: User | null) => {
 }
 
 export const login = async (props: LoginAction) => {
-  const { email, password } = props
+  const { email, password, setSubmitting } = props
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
   if (error) {
     toast.error('Failed to login.')
+    setSubmitting(false)
     throw new Error(error.message)
   }
   return data.user
+}
+
+export const logout = async (setSubmitting: (value: boolean) => void) => {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    toast.error('Failed to log out.')
+    setSubmitting(false)
+    throw new Error(error.message)
+  }
 }
