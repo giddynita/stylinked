@@ -15,7 +15,6 @@ import { LogOutIcon, Home, Loader2Icon, LinkIcon } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { buyerNavigation, vendorNavigation } from '@/utils/data'
 import { toast } from 'sonner'
-import { logout } from '@/utils/api'
 import { useSelector } from 'react-redux'
 import type { UserRole } from '@/utils/types'
 import { useDispatch } from 'react-redux'
@@ -40,6 +39,7 @@ function AccountSidebar() {
       : []
   const dispatch = useDispatch()
   const handleLogout = async () => {
+    const { logout } = await import('@/utils/api')
     setSubmitting(true)
     await logout(setSubmitting)
     navigate('/')
