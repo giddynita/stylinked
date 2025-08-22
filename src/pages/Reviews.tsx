@@ -1,11 +1,16 @@
-import BuyerReviews from '@/components/account/reviews/BuyerReviews'
-import VendorReviews from '@/components/account/reviews/VendorReviews'
 import { AccountPagesHeading } from '@/components/headings'
 import { ReviewsSkeleton } from '@/components/skeletons'
 import { useReviews } from '@/utils/hooks'
 import type { Reviews, UserRole } from '@/utils/types'
-import type { User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js/src/index.ts'
+import { lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
+const BuyerReviews = lazy(
+  () => import('@/components/account/reviews/BuyerReviews')
+)
+const VendorReviews = lazy(
+  () => import('@/components/account/reviews/VendorReviews')
+)
 
 function Reviews() {
   const { user, userRole }: { user: User; userRole: UserRole } = useSelector(
@@ -33,11 +38,13 @@ function Reviews() {
     <>
       <AccountPagesHeading pageTitle="Reviews" pageDesc={pageDesc} />
       <div className="my-6">
-        {isLoading ? (
-          <ReviewsSkeleton />
-        ) : (
-          <ReviewComponent reviews={reviews} />
-        )}
+        <Suspense fallback={<ReviewsSkeleton />}>
+          {isLoading ? (
+            <ReviewsSkeleton />
+          ) : (
+            <ReviewComponent reviews={reviews} />
+          )}
+        </Suspense>
       </div>
     </>
   )
