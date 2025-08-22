@@ -1,5 +1,5 @@
-import BuyerTabsList from '@/components/account/settings/buyer/BuyerTabsList'
-import VendorTabsList from '@/components/account/settings/vendor/VendorTabsList'
+import BuyerTabsList from '@/components/account/settings/BuyerTabsList'
+import VendorTabsList from '@/components/account/settings/VendorTabsList'
 import { AccountPagesHeading } from '@/components/headings'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs } from '@/components/ui/tabs'

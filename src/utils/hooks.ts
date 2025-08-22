@@ -11,6 +11,7 @@ import type {
   Product,
   ProductTrendData,
   ProductWithRating,
+  Reviews,
   SingleProduct,
   UserDataType,
   UserRole,
@@ -489,6 +490,43 @@ export const useBuyerOrders = () => {
   const queryData = useQuery({
     queryKey: ['orders'],
     queryFn: getBuyerOrders,
+  })
+
+  return queryData
+}
+
+export const useReviews = ({
+  userRole,
+  userid,
+}: {
+  userRole: string
+  userid: string
+}) => {
+  const getReviews = async () => {
+    if (userRole == 'buyer') {
+      const { data: reviews, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('userid', userid)
+
+      if (error) throw new Error(error.message)
+
+      return reviews as Reviews[]
+    }
+    if (userRole == 'vendor') {
+      const { data: reviews, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('vendorid', userid)
+
+      if (error) throw new Error(error.message)
+
+      return reviews as Reviews[]
+    }
+  }
+  const queryData = useQuery({
+    queryKey: ['reviews'],
+    queryFn: getReviews,
   })
 
   return queryData
