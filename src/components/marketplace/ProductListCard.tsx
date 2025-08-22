@@ -44,19 +44,25 @@ function ProductListCard({ product }: ProductListCardProp) {
       <Card className="hover:shadow-md transition-shadow p-0">
         <CardContent className="p-0">
           <div className="flex items-stretch gap-4">
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className=" object-cover w-[30%] max-w-[150px] rounded-l-xl "
-              loading="lazy"
-            />
+            <div className="relative w-[30%] max-w-[150px] rounded-l-xl">
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className=" object-cover w-full rounded-l-xl  "
+                loading="lazy"
+              />
+              <Badge className="absolute top-2 right-2 capitalize flex items-center text-[10px]">
+                {product.category}
+              </Badge>
+            </div>
+
             <div className="flex-1 space-y-2 py-4">
               <p className="font-semibold text-base line-clamp-1">
                 {product.name}
               </p>
               <Link
                 to={`/vendors/${slugify(product.vendor)}/${product.vendorid}`}
-                className="text-muted-foreground text-sm line-clamp-1 hover:text-foreground"
+                className="text-muted-foreground text-sm line-clamp-1 hover:text-foreground w-max"
               >
                 Sold by {product.vendor}
               </Link>
