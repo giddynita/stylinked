@@ -1,7 +1,5 @@
 import { Card, CardContent } from '../ui/card'
 import type { SingleProduct } from '@/utils/types'
-import { addReviewAction } from '@/utils/action'
-import { toast } from 'sonner'
 import { ReviewForm } from '../formTypes'
 import { useSelector } from 'react-redux'
 
@@ -11,20 +9,7 @@ interface GiveReviewProp {
 
 function GiveReview({ product }: GiveReviewProp) {
   const { user } = useSelector((state: any) => state.userState)
-  const { mutate: addReview, isPending } = addReviewAction()
-  const submitReview = (reviewData: any) => {
-    addReview(reviewData, {
-      onSuccess: () => {
-        toast.success(
-          'Review submitted successfully! Thank you for your feedback.'
-        )
-        window.location.reload()
-      },
-      onError: () => {
-        toast.error('Uploading Review failed. Please try again.')
-      },
-    })
-  }
+
   return (
     <>
       {user && (
@@ -32,11 +17,7 @@ function GiveReview({ product }: GiveReviewProp) {
           <h2 className="text-xl font-bold mb-4">Write a Review</h2>
           <Card>
             <CardContent>
-              <ReviewForm
-                product={product}
-                onSubmitting={isPending}
-                onSubmit={submitReview}
-              />
+              <ReviewForm product={product} />
             </CardContent>
           </Card>
         </section>

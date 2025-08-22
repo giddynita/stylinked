@@ -157,11 +157,14 @@ export interface AdvancedFiltersProps {
 }
 
 export type ReviewsForm = {
-  name: string
-  comment: string
+  productid: string | undefined
   rating: number
-  productid: string
-  productname: string
+  comment: string
+  name: string
+  productname: string | undefined
+  vendorname: string | undefined
+  vendorid: string | undefined
+  userid: string
 }
 
 export type Reviews = {
@@ -172,6 +175,9 @@ export type Reviews = {
   id: string
   createdat: string
   productname: string
+  vendorname: string
+  vendorid: string
+  userid: string
 }
 
 export type CartItemType = {

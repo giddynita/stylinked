@@ -7,24 +7,24 @@ import FormTextArea from '../form/FormTextArea'
 import { Button } from '../ui/button'
 import { useSelector } from 'react-redux'
 import type { User } from '@supabase/supabase-js'
+import { addReviewAction } from '@/utils/action'
+import { toast } from 'sonner'
 
 interface ReviewFormProp {
-  onSubmit: (data: any) => void
   product: SingleProduct | undefined
-  onSubmitting: boolean
 }
 
-function ReviewForm({ onSubmit, product, onSubmitting }: ReviewFormProp) {
+function ReviewForm({ product }: ReviewFormProp) {
   const [formData, setFormData] = useState({
     rating: 5,
     text: '',
   })
   const { user, userData }: { user: User; userData: UserDataType } =
     useSelector((state: any) => state.userState)
-
   const handleReviewChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
+  const { mutate: addReview, isPending } = addReviewAction()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -43,7 +43,20 @@ function ReviewForm({ onSubmit, product, onSubmitting }: ReviewFormProp) {
     if (!validatedData) {
       return
     }
-    onSubmit(reviewData)
+    addReview(reviewData, {
+      onSuccess: () => {
+        setFormData({
+          rating: 5,
+          text: '',
+        })
+        toast.success(
+          'Review submitted successfully! Thank you for your feedback.'
+        )
+      },
+      onError: () => {
+        toast.error('Uploading Review failed. Please try again.')
+      },
+    })
   }
 
   return (
@@ -76,10 +89,10 @@ function ReviewForm({ onSubmit, product, onSubmitting }: ReviewFormProp) {
       <Button
         type="submit"
         className="w-full bg-purple-600 hover:bg-purple-700"
-        disabled={onSubmitting}
+        disabled={isPending}
       >
         <MessageCircle className="w-4 h-4 mr-2" />
-        {onSubmitting ? 'Submitting...' : 'Submit Review'}
+        {isPending ? 'Submitting...' : 'Submit Review'}
       </Button>
     </form>
   )

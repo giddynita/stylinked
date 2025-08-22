@@ -36,6 +36,7 @@ const RestrictedAccess = lazy(() => import('./pages/RestrictedAccess'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Products = lazy(() => import('./pages/Products'))
 const Settings = lazy(() => import('./pages/Settings'))
+const Reviews = lazy(() => import('./pages/Reviews'))
 const Error = lazy(() => import('./pages/Error'))
 
 const queryClient = new QueryClient({
@@ -188,6 +189,14 @@ const router = createBrowserRouter([
         element: pageSuspense(
           <ProtectedRoute>
             <Orders />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'reviews',
+        element: pageSuspense(
+          <ProtectedRoute>
+            <Reviews />
           </ProtectedRoute>
         ),
       },

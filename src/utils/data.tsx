@@ -14,6 +14,7 @@ import {
   PackageIcon,
   User,
   ShoppingBag,
+  Star,
 } from 'lucide-react'
 
 export const signUp = {
@@ -356,11 +357,13 @@ export const vendorNavigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Products', url: 'products', icon: PackageIcon },
   { title: 'Orders', url: 'orders', icon: ShoppingBag },
+  { title: 'Reviews', url: 'reviews', icon: Star },
   { title: 'Settings', url: 'settings', icon: User },
 ]
 export const buyerNavigation = [
   { title: 'Dashboard', url: 'dashboard', icon: LayoutDashboardIcon },
   { title: 'Orders', url: 'orders', icon: ShoppingBag },
+  { title: 'Reviews', url: 'reviews', icon: Star },
   { title: 'Settings', url: 'settings', icon: User },
 ]
 
