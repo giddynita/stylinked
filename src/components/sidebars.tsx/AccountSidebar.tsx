@@ -57,6 +57,7 @@ function AccountSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className=" mt-1.5 w-max">
               <Link to="/">
+                <span className="sr-only">Home</span>
                 <LinkIcon className="w-10 h-10 font-bolder text-primary" />
               </Link>
             </SidebarMenuButton>
