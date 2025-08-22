@@ -54,9 +54,12 @@ function ProductListCard({ product }: ProductListCardProp) {
               <p className="font-semibold text-base line-clamp-1">
                 {product.name}
               </p>
-              <p className="text-muted-foreground text-sm line-clamp-1">
+              <Link
+                to={`/vendors/${slugify(product.vendor)}/${product.vendorid}`}
+                className="text-muted-foreground text-sm line-clamp-1 hover:text-foreground"
+              >
                 Sold by {product.vendor}
-              </p>
+              </Link>
               <Reviews
                 totalReviews={product.totalReviews}
                 averageRating={product.averageRating}

@@ -27,7 +27,10 @@ export const padNumber = (n: number | undefined) => {
   }
 }
 
-export const slugify = (name: string) => {
+export const slugify = (name: string | undefined) => {
+  if (!name) {
+    return ''
+  }
   return name
     .toLowerCase()
     .trim()

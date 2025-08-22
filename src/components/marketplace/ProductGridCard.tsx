@@ -65,13 +65,14 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
               to={`${slugify(product.name)}/${product.id}`}
               className="hover:text-primary transition-colors"
             >
-              {' '}
-              {product.name}{' '}
+              {product.name}
             </Link>
           </p>
 
           <p className="text-sm text-muted-foreground hover:text-accent-foreground text-ellipsis overflow-hidden line-clamp-1 w-full">
-            <Link to={`/vendors/${product.vendor}`}>
+            <Link
+              to={`/vendors/${slugify(product.vendor)}/${product.vendorid}`}
+            >
               Sold by {product.vendor}
             </Link>
           </p>

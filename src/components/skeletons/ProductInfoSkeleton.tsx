@@ -2,7 +2,7 @@ import { Skeleton } from '../ui/skeleton'
 
 function ProductInfoSkeleton() {
   return (
-    <div>
+    <div className="my-10">
       <Skeleton className="w-full   space-y-8 p-6">
         <Skeleton className="w-30 h-30 mx-auto bg-background " />
         <div className="flex items-center justify-center gap-4">
