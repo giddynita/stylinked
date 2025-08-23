@@ -1,6 +1,4 @@
-import FormPasswordField from '@/components/form/FormPasswordField'
-import FormSubmitButton from '@/components/form/FormSubmitButton'
-import { updatePassword } from '@/utils/action'
+import { FormPasswordField, FormSubmitButton } from '@/components/form'
 import { PasswordFormSchema, validateWithZodSchema } from '@/utils/schema'
 import type { User } from '@supabase/supabase-js'
 import { useState, type FormEvent } from 'react'
@@ -33,6 +31,8 @@ function SecuritySettingsForm() {
       setSubmitting(false)
       return
     }
+    const { updatePassword } = await import('@/utils/action')
+
     const updatedUser = await updatePassword({
       email: user.email ?? '',
       oldPassword: formData.currentPassword,

@@ -5,14 +5,11 @@ import {
 } from '@/components/form'
 import { Label } from '@/components/ui/label'
 import { setUserData } from '@/features/user/userSlice'
-import { updateSettings } from '@/utils/action'
 import { validateWithZodSchema, VendorBusinessFormSchema } from '@/utils/schema'
 import type { UserDataType, UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
 import { useState, type FormEvent } from 'react'
-import { useDispatch } from 'react-redux'
-
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
 function BusinessSettingsForm() {
@@ -47,15 +44,15 @@ function BusinessSettingsForm() {
       setSubmitting(false)
       return
     }
-    await updateSettings({
+    const { updateSettings } = await import('@/utils/action')
+    const newUserData = await updateSettings({
       role: userRole.role,
       newData: validatedData,
       uid: user.id,
     })
-
     dispatch(
       setUserData({
-        userData: { ...userData, formData },
+        userData: newUserData,
       })
     )
     setSubmitting(false)

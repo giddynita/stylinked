@@ -12,6 +12,7 @@ import type {
   ReviewsForm,
   SignUpAction,
   UpdateProduct,
+  UserDataType,
 } from './types'
 import { parseStringToArray } from './format'
 import {
@@ -358,11 +359,13 @@ export const updateSettings = async ({
     .from(userTable)
     .update(newData)
     .eq('id', uid)
+    .select('*')
+    .single()
 
   if (error) {
     throw new Error(error.message)
   }
-  return data
+  return data as UserDataType
 }
 
 export const updatePassword = async ({
