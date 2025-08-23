@@ -20,6 +20,7 @@ import type { UserRole } from '@/utils/types'
 import { useDispatch } from 'react-redux'
 import { clearUser } from '@/features/user/userSlice'
 import { useState } from 'react'
+import { clearCart } from '@/features/cart/cartSlice'
 
 function AccountSidebar() {
   const [submitting, setSubmitting] = useState(false)
@@ -44,6 +45,7 @@ function AccountSidebar() {
     await logout(setSubmitting)
     navigate('/')
     dispatch(clearUser())
+    dispatch(clearCart())
     toast.success("You've logged out successfully.")
   }
 
