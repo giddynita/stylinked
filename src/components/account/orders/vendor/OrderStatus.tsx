@@ -5,8 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { updateOrderStatusAction } from '@/utils/action'
 import type { CustomerOrder } from '@/utils/types'
+import type { User } from '@supabase/supabase-js'
 import { RefreshCcw } from 'lucide-react'
+import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
 interface OrderStatusProp {
@@ -16,12 +19,28 @@ interface OrderStatusProp {
 const orderStatus = ['processing', 'shipped']
 
 function OrderStatus({ order }: OrderStatusProp) {
+  const { user }: { user: User } = useSelector((state: any) => state.userState)
+  const { mutate: updateOrderStatus, isPending: updating } =
+    updateOrderStatusAction()
+
   const handleStatusUpdate = (
     orderId: string,
-    newStatus: string | undefined
+    newStatus: 'processing' | 'shipped'
   ) => {
-    toast.success(
-      `Order Updated - Order ${orderId} status changed to ${newStatus}`
+    updateOrderStatus(
+      { uid: user?.id, newStatus },
+      {
+        onSuccess: () => {
+          console.log(user?.id)
+
+          toast.success(
+            `Order Updated - Order ${orderId} status changed to ${newStatus}`
+          )
+        },
+        onError: () => {
+          toast.error('Error updating order status')
+        },
+      }
     )
   }
 
@@ -29,7 +48,9 @@ function OrderStatus({ order }: OrderStatusProp) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="sm" variant="outline" className="h-8">
-          <RefreshCcw className="h-4 w-4 mr-1" />
+          <RefreshCcw
+            className={`h-4 w-4 mr-1 ${updating && 'animate-spin'}`}
+          />
           Update Status
         </Button>
       </DropdownMenuTrigger>
@@ -41,14 +62,15 @@ function OrderStatus({ order }: OrderStatusProp) {
                 size="sm"
                 variant="outline"
                 className="text-xs w-full capitalize cursor-pointer"
+                disabled={status == order.status}
                 onClick={() =>
                   handleStatusUpdate(
                     order.order_id,
-                    order?.status === 'pending' ? 'processing' : 'shipped'
+                    order.status === 'pending' ? 'processing' : 'shipped'
                   )
                 }
               >
-                {status}
+                {status}{' '}
               </Button>
             </DropdownMenuItem>
           )

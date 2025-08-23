@@ -393,3 +393,33 @@ export const updatePassword = async ({
 
   return data.user
 }
+
+export const updateOrderStatusAction = () => {
+  const updateOrderStatus = async ({
+    uid,
+    newStatus,
+  }: {
+    uid: string
+    newStatus: 'processing' | 'shipped'
+  }) => {
+    const { data, error } = await supabase
+      .from('order_items')
+      .update({ status: newStatus })
+      .eq('vendor_id', uid)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+    return data
+  }
+
+  const queryClient = useQueryClient()
+
+  const updateOrderStatusFunction = useMutation({
+    mutationFn: updateOrderStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    },
+  })
+  return updateOrderStatusFunction
+}
