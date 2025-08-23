@@ -2,6 +2,7 @@ import { Ratings } from '@/components/global'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatCreatedAt } from '@/utils/format'
 import type { Reviews } from '@/utils/types'
+import React from 'react'
 
 function BuyerReviews({ reviews }: { reviews: Reviews[] | undefined }) {
   return (
@@ -39,4 +40,4 @@ function BuyerReviews({ reviews }: { reviews: Reviews[] | undefined }) {
     </div>
   )
 }
-export default BuyerReviews
+export default React.memo(BuyerReviews)
