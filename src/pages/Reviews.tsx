@@ -5,6 +5,7 @@ import type { Reviews, UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
 import { useSelector } from 'react-redux'
 import { lazy, Suspense } from 'react'
+import { Loader2Icon } from 'lucide-react'
 const BuyerReviews = lazy(
   () => import('@/components/account/reviews/BuyerReviews')
 )
@@ -38,13 +39,19 @@ function Reviews() {
     <>
       <AccountPagesHeading pageTitle="Reviews" pageDesc={pageDesc} />
       <div className="my-6">
-        {isLoading ? (
-          <ReviewsSkeleton />
-        ) : (
-          <Suspense fallback={<ReviewsSkeleton />}>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center h-65vh">
+              <Loader2Icon className="w-6 h-6 animate-spin" />
+            </div>
+          }
+        >
+          {isLoading ? (
+            <ReviewsSkeleton />
+          ) : (
             <ReviewComponent reviews={reviews} />
-          </Suspense>
-        )}
+          )}
+        </Suspense>
       </div>
     </>
   )

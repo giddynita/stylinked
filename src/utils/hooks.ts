@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getSupabaseClient, supabase } from './supabaseClient'
+import { supabase } from './supabaseClient'
 import type {
   getProductsType,
   Grouped,
@@ -503,7 +503,6 @@ export const useReviews = ({
   userid: string
 }) => {
   const getReviews = async () => {
-    const supabase = await getSupabaseClient()
     if (userRole == 'buyer') {
       const { data: reviews, error } = await supabase
         .from('reviews')
