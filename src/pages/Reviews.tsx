@@ -6,6 +6,7 @@ import type { User } from '@supabase/supabase-js'
 import { useSelector } from 'react-redux'
 import BuyerReviews from '@/components/account/reviews/BuyerReviews'
 import VendorReviews from '@/components/account/reviews/VendorReviews'
+import LazyLoad from 'react-lazyload'
 
 function Reviews() {
   const { user, userRole }: { user: User; userRole: UserRole } = useSelector(
@@ -36,7 +37,9 @@ function Reviews() {
         {isLoading ? (
           <ReviewsSkeleton />
         ) : (
-          <ReviewComponent reviews={reviews} />
+          <LazyLoad>
+            <ReviewComponent reviews={reviews} />
+          </LazyLoad>
         )}
       </div>
     </>
