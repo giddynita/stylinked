@@ -1,22 +1,31 @@
 import { BuyerOrders, VendorOrders } from '@/components/account'
 import { AccountPagesHeading } from '@/components/headings'
-import { useUserData } from '@/utils/hooks'
+import type { UserRole } from '@/utils/types'
+import { useSelector } from 'react-redux'
 
 function Orders() {
-  const { data: userInfo } = useUserData()
-  const pageDesc =
-    userInfo?.userRole.role == 'buyer'
-      ? 'Track and manage your order history'
-      : userInfo?.userRole.role == 'vendor'
-      ? 'Manage and track all customer orders in one place'
-      : ''
+  const { userRole }: { userRole: UserRole } = useSelector(
+    (state: any) => state.userState
+  )
+  const rolePageDesc: Record<string, string> = {
+    buyer: 'Track and manage your order history',
+    vendor: 'Manage and track all customer orders in one place',
+  }
+
+  const pageDesc = rolePageDesc[userRole.role]
+
+  const roleComponents: Record<string, React.ComponentType> = {
+    buyer: BuyerOrders,
+    vendor: VendorOrders,
+  }
+
+  const OrderComponent = roleComponents[userRole.role]
 
   return (
     <>
       <AccountPagesHeading pageTitle="Orders" pageDesc={pageDesc} />
       <div className="my-6">
-        {userInfo?.userRole.role == 'vendor' && <VendorOrders />}
-        {userInfo?.userRole.role == 'buyer' && <BuyerOrders />}
+        <OrderComponent />
       </div>
     </>
   )

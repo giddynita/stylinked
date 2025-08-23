@@ -10,7 +10,6 @@ const Dashboard = () => {
       : userInfo?.userRole.role == 'vendor'
       ? 'Your business metrics at a glance'
       : ''
-
   return (
     <>
       <AccountPagesHeading pageTitle="Dashboard" pageDesc={pageDesc} />

@@ -49,3 +49,15 @@ export const avatarSuspense = (Component: JSX.Element | undefined) => (
     {Component}
   </Suspense>
 )
+
+export const accountPageSuspense = (Component: JSX.Element) => (
+  <Suspense
+    fallback={
+      <div className="flex items-center justify-center h-[65vh]">
+        <Loader2Icon className="w-6 h-6 animate-spin" />
+      </div>
+    }
+  >
+    {Component}
+  </Suspense>
+)

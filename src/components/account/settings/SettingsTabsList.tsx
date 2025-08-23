@@ -1,10 +1,9 @@
 import { TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { vendorSettingsTabsList } from '@/utils/data'
 
-function VendorTabsList() {
+function SettingsTabsList({ tabsList }: { tabsList: string[] }) {
   return (
     <TabsList>
-      {vendorSettingsTabsList.map((tabs) => {
+      {tabsList.map((tabs) => {
         return (
           <TabsTrigger
             key={tabs}
@@ -18,4 +17,4 @@ function VendorTabsList() {
     </TabsList>
   )
 }
-export default VendorTabsList
+export default SettingsTabsList

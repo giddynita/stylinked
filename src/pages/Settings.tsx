@@ -1,5 +1,3 @@
-import BuyerTabsList from '@/components/account/settings/BuyerTabsList'
-import VendorTabsList from '@/components/account/settings/VendorTabsList'
 import { AccountPagesHeading } from '@/components/headings'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs } from '@/components/ui/tabs'
@@ -7,6 +5,8 @@ import { type UserRole } from '@/utils/types'
 import { useSelector } from 'react-redux'
 import { lazy } from 'react'
 import { formSuspense } from '@/utils/suspense'
+import { buyerSettingsTabsList, vendorSettingsTabsList } from '@/utils/data'
+import SettingsTabsList from '@/components/account/settings/SettingsTabsList'
 const SettingsTabsContent = lazy(
   () => import('@/components/account/settings/SettingsTabsContent')
 )
@@ -15,8 +15,11 @@ function Settings() {
   const { userRole }: { userRole: UserRole } = useSelector(
     (state: any) => state.userState
   )
-  const tabsList =
-    userRole?.role === 'vendor' ? <VendorTabsList /> : <BuyerTabsList />
+  const roleTabsList: Record<string, string[]> = {
+    buyer: buyerSettingsTabsList,
+    vendor: vendorSettingsTabsList,
+  }
+  const tabsList = roleTabsList[userRole.role]
 
   return (
     <>
@@ -28,8 +31,8 @@ function Settings() {
         <Card>
           <CardContent>
             <Tabs defaultValue="profile" className="w-full">
-              {tabsList}
-              {formSuspense(<SettingsTabsContent />)}
+              <SettingsTabsList tabsList={tabsList} />
+              {formSuspense(<SettingsTabsContent tabsList={tabsList} />)}
             </Tabs>
           </CardContent>
         </Card>

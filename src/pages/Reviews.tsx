@@ -18,10 +18,11 @@ function Reviews() {
   const { user, userRole }: { user: User; userRole: UserRole } = useSelector(
     (state: any) => state.userState
   )
-  const pageDesc =
-    userRole.role == 'buyer'
-      ? "Track reviews you've given"
-      : "Track reviews you've received"
+  const rolePageDesc: Record<string, string> = {
+    buyer: "Track reviews you've given",
+    vendor: "Track reviews you've received",
+  }
+  const pageDesc = rolePageDesc[userRole.role]
   const {
     data: reviews,
     isLoading,
