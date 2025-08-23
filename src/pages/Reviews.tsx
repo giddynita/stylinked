@@ -1,11 +1,11 @@
-import BuyerReviews from '@/components/account/reviews/BuyerReviews'
-import VendorReviews from '@/components/account/reviews/VendorReviews'
 import { AccountPagesHeading } from '@/components/headings'
 import { ReviewsSkeleton } from '@/components/skeletons'
 import { useReviews } from '@/utils/hooks'
 import type { Reviews, UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
 import { useSelector } from 'react-redux'
+import BuyerReviews from '@/components/account/reviews/BuyerReviews'
+import VendorReviews from '@/components/account/reviews/VendorReviews'
 
 function Reviews() {
   const { user, userRole }: { user: User; userRole: UserRole } = useSelector(
