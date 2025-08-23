@@ -4,15 +4,16 @@ import { useReviews } from '@/utils/hooks'
 import type { Reviews, UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
 import { useSelector } from 'react-redux'
-import { lazy, Suspense } from 'react'
-import { Loader2Icon } from 'lucide-react'
-import { FetchingError } from '@/components/global'
+import { lazy } from 'react'
+import { accountPageSuspense, nullSuspense } from '@/utils/suspense'
+
 const BuyerReviews = lazy(
   () => import('@/components/account/reviews/BuyerReviews')
 )
 const VendorReviews = lazy(
   () => import('@/components/account/reviews/VendorReviews')
 )
+const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 
 function Reviews() {
   const { user, userRole }: { user: User; userRole: UserRole } = useSelector(
@@ -45,20 +46,12 @@ function Reviews() {
     <>
       <AccountPagesHeading pageTitle="Reviews" pageDesc={pageDesc} />
       <div className="my-6">
-        <Suspense
-          fallback={
-            <div className="flex items-center justify-center h-[65vh]">
-              <Loader2Icon className="w-6 h-6 animate-spin" />
-            </div>
-          }
-        >
-          {isLoading ? (
-            <ReviewsSkeleton />
-          ) : (
-            <ReviewComponent reviews={reviews} />
-          )}
-        </Suspense>
-        <FetchingError isError={isError} text="your reviews" />
+        {isLoading ? (
+          <ReviewsSkeleton />
+        ) : (
+          accountPageSuspense(<ReviewComponent reviews={reviews} />)
+        )}
+        {nullSuspense(<FetchingError isError={isError} text="your reviews" />)}
       </div>
     </>
   )
