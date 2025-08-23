@@ -1,8 +1,10 @@
 import { SidebarTrigger } from '../ui/sidebar'
-import ModeToggle from '../theme/mode-toggle'
-import { ProfileImage } from '../global'
 import { useSelector } from 'react-redux'
 import type { UserDataType } from '@/utils/types'
+import { lazy, Suspense } from 'react'
+import { User } from 'lucide-react'
+const ProfileImage = lazy(() => import('../global/ProfileImage'))
+const ModeToggle = lazy(() => import('../theme/mode-toggle'))
 
 function AccountHeader() {
   const { userData }: { userData: UserDataType } = useSelector(
@@ -17,9 +19,13 @@ function AccountHeader() {
           Hi, {userData?.firstname}
         </h1>
       </div>
-      <div className="flex items-center gap-3 sm:gap-4 ">
-        <ModeToggle align="start" />
-        <ProfileImage userData={userData} />
+      <div className="flex items-center gap-3 sm:gap-4">
+        <Suspense fallback={null}>
+          <ModeToggle align="start" />
+        </Suspense>
+        <Suspense fallback={<User className="h-4 w-4" />}>
+          <ProfileImage userData={userData} />
+        </Suspense>
       </div>
     </header>
   )

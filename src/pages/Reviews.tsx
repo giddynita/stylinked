@@ -41,7 +41,7 @@ function Reviews() {
       <div className="my-6">
         <Suspense
           fallback={
-            <div className="flex items-center justify-center h-65vh">
+            <div className="flex items-center justify-center h-[65vh]">
               <Loader2Icon className="w-6 h-6 animate-spin" />
             </div>
           }
