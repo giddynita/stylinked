@@ -2,7 +2,7 @@ import { SidebarTrigger } from '../ui/sidebar'
 import { useSelector } from 'react-redux'
 import type { UserDataType } from '@/utils/types'
 import { lazy, Suspense } from 'react'
-import { User } from 'lucide-react'
+import { avatarSuspense } from '@/utils/suspense'
 const ProfileImage = lazy(() => import('../global/ProfileImage'))
 const ModeToggle = lazy(() => import('../theme/mode-toggle'))
 
@@ -23,9 +23,7 @@ function AccountHeader() {
         <Suspense fallback={null}>
           <ModeToggle align="start" />
         </Suspense>
-        <Suspense fallback={<User className="h-4 w-4" />}>
-          <ProfileImage userData={userData} />
-        </Suspense>
+        {avatarSuspense(<ProfileImage userData={userData} />)}
       </div>
     </header>
   )

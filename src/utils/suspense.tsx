@@ -1,5 +1,5 @@
 import { LoadingIcon } from '@/components/global'
-import { Loader2Icon } from 'lucide-react'
+import { Loader2Icon, User } from 'lucide-react'
 import { Suspense, type JSX } from 'react'
 import LazyLoad from 'react-lazyload'
 
@@ -31,6 +31,18 @@ export const formSuspense = (Component: JSX.Element) => (
     fallback={
       <div className="w-[90%] mx-auto max-w-lg flex items-center justify-center py-20">
         <Loader2Icon className="w-6 h-6 animate-spin" />
+      </div>
+    }
+  >
+    {Component}
+  </Suspense>
+)
+
+export const avatarSuspense = (Component: JSX.Element | undefined) => (
+  <Suspense
+    fallback={
+      <div className="w-max rounded-full p-2 bg-muted-foreground">
+        <User className="h-4 w-4 text-background" />
       </div>
     }
   >

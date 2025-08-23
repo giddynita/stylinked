@@ -1,4 +1,3 @@
-export { default as UserSkeleton } from './UserSkeleton'
 export { default as VendorRecentOrdersSkeleton } from './VendorRecentOrdersSkeleton'
 export { default as StockAlertSkeleton } from './StockAlertSkeleton'
 export { default as ProductListSkeleton } from './ProductListSkeleton'

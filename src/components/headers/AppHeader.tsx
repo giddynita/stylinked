@@ -4,7 +4,7 @@ import { SidebarTrigger } from '../ui/sidebar'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useSelector } from 'react-redux'
-import { User } from 'lucide-react'
+import { avatarSuspense } from '@/utils/suspense'
 const Cart = lazy(() => import('./Cart'))
 const ProfileImage = lazy(() => import('../global/ProfileImage'))
 const ModeToggle = lazy(() => import('../theme/mode-toggle'))
@@ -51,9 +51,8 @@ function AppHeader() {
             <Suspense fallback={null}>
               {userRole !== 'buyer' && <Cart />}
             </Suspense>
-            <Suspense fallback={<User className="h-4 w-4" />}>
-              {user && <ProfileImage userData={userData} />}
-            </Suspense>
+            {avatarSuspense(user && <ProfileImage userData={userData} />)}
+
             {!user && (
               <>
                 <Link
