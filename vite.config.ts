@@ -12,17 +12,30 @@ function viteCritters() {
   return {
     name: 'vite-plugin-critters-custom',
     apply: 'build' as const,
-    closeBundle() {
+    async writeBundle() {
       const indexPath = path.resolve(__dirname, 'dist/index.html')
-      let html = fs.readFileSync(indexPath, 'utf-8')
+
+      if (!fs.existsSync(indexPath)) {
+        console.warn(
+          `[vite-plugin-critters] index.html not found at ${indexPath}`
+        )
+        return
+      }
+
+      const html = fs.readFileSync(indexPath, 'utf-8')
+
       const critters = new Critters({
         preload: 'swap',
         inlineFonts: true,
         pruneSource: true,
       } as Options)
-      critters.process(html).then((output: any) => {
+
+      try {
+        const output = await critters.process(html)
         fs.writeFileSync(indexPath, output)
-      })
+      } catch (err) {
+        console.error(`[vite-plugin-critters] Failed to process HTML`, err)
+      }
     },
   }
 }
