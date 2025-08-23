@@ -6,6 +6,7 @@ import type { User } from '@supabase/supabase-js'
 import { useSelector } from 'react-redux'
 import { lazy, Suspense } from 'react'
 import { Loader2Icon } from 'lucide-react'
+import { FetchingError } from '@/components/global'
 const BuyerReviews = lazy(
   () => import('@/components/account/reviews/BuyerReviews')
 )
@@ -21,7 +22,11 @@ function Reviews() {
     userRole.role == 'buyer'
       ? "Track reviews you've given"
       : "Track reviews you've received"
-  const { data: reviews, isLoading } = useReviews({
+  const {
+    data: reviews,
+    isLoading,
+    isError,
+  } = useReviews({
     userRole: userRole.role,
     userid: user?.id,
   })
@@ -52,6 +57,7 @@ function Reviews() {
             <ReviewComponent reviews={reviews} />
           )}
         </Suspense>
+        <FetchingError isError={isError} text="your reviews" />
       </div>
     </>
   )
