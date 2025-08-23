@@ -194,15 +194,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'reviews',
-        element: pageSuspense(
-          <ProtectedRoute>
-            <Reviews />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute>{pageSuspense(<Reviews />)}</ProtectedRoute>,
       },
       {
         path: 'settings',
-        element: pageSuspense(<Settings />),
+        element: <ProtectedRoute>{pageSuspense(<Settings />)}</ProtectedRoute>,
       },
     ],
   },
