@@ -206,7 +206,7 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useDispatch()
-  const { user, userData } = useSelector((state: any) => state.userState)
+  const { user } = useSelector((state: any) => state.userState)
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -225,7 +225,7 @@ function App() {
       }
     }
     getUserDetails()
-  }, [user, userData])
+  }, [user, dispatch])
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

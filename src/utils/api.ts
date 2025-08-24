@@ -35,7 +35,7 @@ export const login = async (props: LoginAction) => {
     password,
   })
   if (error) {
-    toast.error('Failed to login.')
+    toast.error(error.message)
     setSubmitting(false)
     throw new Error(error.message)
   }
@@ -45,7 +45,7 @@ export const login = async (props: LoginAction) => {
 export const logout = async (setSubmitting: (value: boolean) => void) => {
   const { error } = await supabase.auth.signOut()
   if (error) {
-    toast.error('Failed to log out.')
+    toast.error(error.message)
     setSubmitting(false)
     throw new Error(error.message)
   }
