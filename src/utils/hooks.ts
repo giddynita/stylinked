@@ -414,7 +414,7 @@ export const useVendorOrders = (user: User) => {
     return ordersWithPendingOrderNo as OrdersWithPendingOrderNo
   }
   const queryData = useQuery({
-    queryKey: ['orders'],
+    queryKey: ['vendor-orders'],
     queryFn: getVendorOrders,
   })
 
@@ -485,7 +485,7 @@ export const useBuyerOrders = (user: User) => {
     return ordersByBuyer
   }
   const queryData = useQuery({
-    queryKey: ['orders'],
+    queryKey: ['buyer-orders'],
     queryFn: getBuyerOrders,
   })
 

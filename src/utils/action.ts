@@ -336,7 +336,8 @@ export const addOrdersAction = () => {
   const addOrderFunction = useMutation({
     mutationFn: addOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['vendor-orders'] })
+      queryClient.invalidateQueries({ queryKey: ['buyer-orders'] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['orders-trend'] })
     },

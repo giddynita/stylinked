@@ -4,13 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs } from '@/components/ui/tabs'
 import { useBuyerOrders, useVendorOrders } from '@/utils/hooks'
 import { accountPageSuspense } from '@/utils/suspense'
-import type {
-  OrdersByBuyer,
-  OrdersWithPendingOrderNo,
-  UserRole,
-} from '@/utils/types'
+import type { UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
-import type { UseQueryResult } from '@tanstack/react-query'
 import { lazy, useState } from 'react'
 import { useSelector } from 'react-redux'
 
@@ -45,15 +40,11 @@ function Orders() {
   const subtitle = pageDesc[userRole.role].subtitle
   const searchPlaceholder = pageDesc[userRole.role].searchPlaceholder
 
-  const fetchRoleData: Record<
-    string,
-    UseQueryResult<OrdersByBuyer | OrdersWithPendingOrderNo, Error>
-  > = {
-    buyer: useBuyerOrders(user),
-    vendor: useVendorOrders(user),
-  }
-
-  const { data: orders, isLoading, isError } = fetchRoleData[userRole.role]
+  const {
+    data: orders,
+    isLoading,
+    isError,
+  } = userRole.role === 'buyer' ? useBuyerOrders(user) : useVendorOrders(user)
 
   const roleComponents: Record<
     string,

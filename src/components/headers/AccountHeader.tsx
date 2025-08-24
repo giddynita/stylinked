@@ -21,7 +21,7 @@ function AccountHeader() {
       </div>
       <div className="flex items-center gap-3 sm:gap-4">
         <Suspense fallback={null}>
-          <ModeToggle align="start" />
+          <ModeToggle align="end" />
         </Suspense>
         {avatarSuspense(<ProfileImage userData={userData} />)}
       </div>
