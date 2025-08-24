@@ -21,7 +21,7 @@ function VendorOrderCard({ order }: OrderCardProp) {
   return (
     <div>
       <Card
-        className={`hover:shadow-md transition-shadow border-l-4 border-l-${getStatusColor(
+        className={`hover:shadow-md transition-shadow border-0 border-l-4 border-${getStatusColor(
           order?.status
         )}`}
       >

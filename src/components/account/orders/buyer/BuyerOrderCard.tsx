@@ -14,7 +14,11 @@ interface BuyerOrderCardProp {
 function BuyerOrderCard({ order }: BuyerOrderCardProp) {
   return (
     <div>
-      <Card className="shadow-sm border-border/50 hover:shadow-md transition-shadow">
+      <Card
+        className={`shadow-sm border-border/50 hover:shadow-md transition-shadow border-0 border-l-4 border-${getStatusColor(
+          order.status
+        )}`}
+      >
         <CardHeader className="">
           <div className="flex flex-col sm:flex-row sm:items-start gap-2 justify-between">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
