@@ -363,9 +363,8 @@ export const updateSettings = async ({
     .select('*')
     .single()
 
-  if (error) {
-    throw new Error(error.message)
-  }
+  if (error) throw new Error(error.message)
+
   return data as UserDataType
 }
 
@@ -400,21 +399,47 @@ export const updatePassword = async ({
 
 export const updateOrderStatusAction = () => {
   const updateOrderStatus = async ({
-    uid,
+    order_id,
     newStatus,
   }: {
-    uid: string
+    order_id: string
     newStatus: 'processing' | 'shipped'
   }) => {
-    const { data, error } = await supabase
+    const { error: statusUpdateError } = await supabase
       .from('order_items')
       .update({ status: newStatus })
-      .eq('vendor_id', uid)
+      .eq('order_id', order_id)
 
-    if (error) {
-      throw new Error(error.message)
+    if (statusUpdateError) throw new Error(statusUpdateError.message)
+
+    const { data: items, error: getOrderStatusError } = await supabase
+      .from('order_items')
+      .select('status')
+      .eq('order_id', order_id)
+
+    if (getOrderStatusError) throw new Error(getOrderStatusError.message)
+
+    const allShipped = items.every((item) => item.status === 'shipped')
+    const allProcessingOrMore = items.every(
+      (item) => item.status === 'processing' || item.status === 'shipped'
+    )
+
+    let updateStatus: 'pending' | 'processing' | 'shipped' = 'pending'
+
+    if (allShipped) {
+      updateStatus = 'shipped'
+    } else if (allProcessingOrMore) {
+      updateStatus = 'processing'
     }
-    return data
+
+    const { error: updateError } = await supabase
+      .from('orders')
+      .update({ status: updateStatus })
+      .eq('order_id', order_id)
+
+    if (updateError) throw new Error(updateError.message)
+
+    return updateStatus
   }
 
   const queryClient = useQueryClient()

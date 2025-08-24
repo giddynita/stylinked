@@ -1,11 +1,12 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getStatusColor } from '@/utils/data'
-import { currencyFormatter, formatCreatedAt } from '@/utils/format'
+import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import CancelOrder from './CancelOrder'
 import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
 import { Calendar } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 interface BuyerOrderCardProp {
   order: OrderAndOrderItems
@@ -60,7 +61,13 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
                     {item.amount}x {item.name}
                   </span>
                   <p className="text-xs text-muted-foreground ">
-                    from {item.vendor}
+                    from
+                    <Link
+                      to={`/vendors/${slugify(item.vendor)}/${item.vendor_id}`}
+                      className="hover:underline hover:text-primary ml-1"
+                    >
+                      {item.vendor}
+                    </Link>
                   </p>
                 </div>
                 <span className="text-muted-foreground font-medium">

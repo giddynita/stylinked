@@ -7,9 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { updateOrderStatusAction } from '@/utils/action'
 import type { CustomerOrder } from '@/utils/types'
-import type { User } from '@supabase/supabase-js'
 import { RefreshCcw } from 'lucide-react'
-import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
 interface OrderStatusProp {
@@ -19,7 +17,6 @@ interface OrderStatusProp {
 const orderStatus = ['processing', 'shipped']
 
 function OrderStatus({ order }: OrderStatusProp) {
-  const { user }: { user: User } = useSelector((state: any) => state.userState)
   const { mutate: updateOrderStatus, isPending: updating } =
     updateOrderStatusAction()
 
@@ -28,11 +25,9 @@ function OrderStatus({ order }: OrderStatusProp) {
     newStatus: 'processing' | 'shipped'
   ) => {
     updateOrderStatus(
-      { uid: user?.id, newStatus },
+      { order_id: orderId, newStatus },
       {
         onSuccess: () => {
-          console.log(user?.id)
-
           toast.success(
             `Order Updated - Order ${orderId} status changed to ${newStatus}`
           )

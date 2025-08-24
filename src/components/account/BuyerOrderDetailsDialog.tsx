@@ -8,10 +8,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { getStatusColor } from '@/utils/data'
-import { currencyFormatter, formatCreatedAt } from '@/utils/format'
+import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import { Eye } from 'lucide-react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface BuyerOrderDetailsDialogProps {
   order: OrderAndOrderItems
@@ -41,10 +42,9 @@ function BuyerOrderDetailsDialog({ order }: BuyerOrderDetailsDialogProps) {
               <p className="text-sm text-muted-foreground">Status</p>
               <Badge
                 variant="outline"
-                className={`text-${getStatusColor(order.status)}`}
+                className={`text-${getStatusColor(order.status)} capitalize`}
               >
                 {order.status}
-                <span className="ml-1 capitalize">{order.status}</span>
               </Badge>
             </div>
             <div>
@@ -74,7 +74,15 @@ function BuyerOrderDetailsDialog({ order }: BuyerOrderDetailsDialogProps) {
                       {item.amount}x {item.name}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Vendor: {item.vendor}
+                      Vendor:{' '}
+                      <Link
+                        to={`/vendors/${slugify(item.vendor)}/${
+                          item.vendor_id
+                        }`}
+                        className="hover:underline hover:text-primary"
+                      >
+                        {item.vendor}
+                      </Link>
                     </p>
                   </div>
                   <p className="font-medium text-muted-foreground">
@@ -93,15 +101,6 @@ function BuyerOrderDetailsDialog({ order }: BuyerOrderDetailsDialogProps) {
               <p className="font-medium">{order.estimated_delivery}</p>
             </div>
           )}
-
-          {/* {order.status === 'cancelled' && (order as any).cancelReason && (
-            <div>
-              <p className="text-sm text-muted-foreground">
-                Cancellation Reason
-              </p>
-              <p className="text-destructive">{(order as any).cancelReason}</p>
-            </div>
-          )} */}
         </div>
       </DialogContent>
     </Dialog>
