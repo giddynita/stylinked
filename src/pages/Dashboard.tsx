@@ -1,20 +1,37 @@
 import { AccountPagesHeading } from '@/components/headings'
-import { BuyerDashboard, VendorDashboard } from '@/components/account'
-import { useUserData } from '@/utils/hooks'
+import { useSelector } from 'react-redux'
+import type { UserRole } from '@/utils/types'
+import type React from 'react'
+import { lazy } from 'react'
+import { accountPageSuspense } from '@/utils/suspense'
+
+const BuyerDashboard = lazy(
+  () => import('@/components/account/dashboard/buyer/BuyerDashboard')
+)
+const VendorDashboard = lazy(
+  () => import('@/components/account/dashboard/vendor/VendorDashboard')
+)
 
 const Dashboard = () => {
-  const { data: userInfo } = useUserData()
-  const pageDesc =
-    userInfo?.userRole.role == 'buyer'
-      ? "Here's what's happening with your orders"
-      : userInfo?.userRole.role == 'vendor'
-      ? 'Your business metrics at a glance'
-      : ''
+  const { userRole }: { userRole: UserRole } = useSelector(
+    (state: any) => state.userState
+  )
+  const rolePageDesc: Record<string, string> = {
+    buyer: "Here's what's happening with your orders",
+    vendor: 'Your business metrics at a glance',
+  }
+  const pageDesc = rolePageDesc[userRole.role]
+
+  const roleDashboard: Record<string, React.ComponentType> = {
+    buyer: BuyerDashboard,
+    vendor: VendorDashboard,
+  }
+
+  const DashboardComponent = roleDashboard[userRole.role]
   return (
     <>
       <AccountPagesHeading pageTitle="Dashboard" pageDesc={pageDesc} />
-      {userInfo?.userRole.role == 'vendor' && <VendorDashboard />}
-      {userInfo?.userRole.role == 'buyer' && <BuyerDashboard />}
+      {accountPageSuspense(<DashboardComponent />)}
     </>
   )
 }

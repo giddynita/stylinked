@@ -2,7 +2,7 @@ import { Skeleton } from '../ui/skeleton'
 
 function VendorOrdersSkeleton() {
   return (
-    <div className=" border rounded-lg space-y-8 mt-4">
+    <div className="p-4 border rounded-lg space-y-8 mt-4">
       <Skeleton className="w-full h-10" />
       <Skeleton className="p-6 rounded-lg space-y-4 bg-background">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
