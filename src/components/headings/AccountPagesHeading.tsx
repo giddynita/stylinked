@@ -9,7 +9,7 @@ function AccountPagesHeading({ pageTitle, pageDesc }: AccountPagesHeadingProp) {
   return (
     <>
       <Helmet>
-        <title>{pageTitle}</title>
+        <title>{`STYLINKED | ${pageTitle}`}</title>
         <meta name="description" content={pageDesc} />
         <meta name="robots" content="noindex" />
       </Helmet>

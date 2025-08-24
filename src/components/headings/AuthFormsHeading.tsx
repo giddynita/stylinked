@@ -10,7 +10,7 @@ function AuthFormsHeading({ title, desc }: AuthFormsHeadingProp) {
   return (
     <>
       <Helmet>
-        <title>{title}</title>
+        <title>{`STYLINKED | ${title}`}</title>
         <meta name="description" content={desc} />
       </Helmet>
       <CardHeader className="my-1">

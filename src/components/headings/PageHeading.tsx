@@ -7,7 +7,7 @@ interface PageHeadingProp {
 function PageHeading({ pageTitle, pageDesc }: PageHeadingProp) {
   return (
     <Helmet>
-      <title>{pageTitle}</title>
+      <title>{`STYLINKED | ${pageTitle}`}</title>
       <meta name="description" content={pageDesc} />
     </Helmet>
   )
