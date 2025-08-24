@@ -1,10 +1,10 @@
 import type { OrderAndOrderItems } from '@/utils/types'
-import { Badge } from '../../../ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { currencyFormatter } from '@/utils/format'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { getStatusColor } from '@/utils/data'
-import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
+import BuyerOrderDetailsDialog from '@/components/account/BuyerOrderDetailsDialog'
 interface Orders {
   sortedOrders: OrderAndOrderItems[] | undefined
 }

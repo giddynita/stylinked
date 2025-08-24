@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getStatusColor } from '@/utils/data'
 import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
-import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
+import BuyerOrderDetailsDialog from '@/components/account/BuyerOrderDetailsDialog'
 import { Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 

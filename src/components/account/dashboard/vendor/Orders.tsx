@@ -1,9 +1,9 @@
 import type { OrderItem } from '@/utils/types'
-import { Badge } from '../../../ui/badge'
+import { Badge } from '@/components/ui/badge'
 import { Calendar, Package } from 'lucide-react'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import { getStatusColor } from '@/utils/data'
-import VendorOrderDetailsDialog from '../../VendorOrderDetailsDialog'
+import VendorOrderDetailsDialog from '@/components/account/VendorOrderDetailsDialog'
 
 interface Orders {
   data: [string, OrderItem[]][] | null | undefined
