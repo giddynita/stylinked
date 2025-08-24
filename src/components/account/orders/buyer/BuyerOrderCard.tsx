@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getStatusColor } from '@/utils/data'
 import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
-import CancelOrder from './CancelOrder'
 import BuyerOrderDetailsDialog from '../../BuyerOrderDetailsDialog'
 import { Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -94,10 +93,7 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
               </div>
             </div>
           )}
-          <div className="flex justify-between gap-4 items-center flex-wrap">
-            <BuyerOrderDetailsDialog order={order} />
-            <CancelOrder order_id={order.order_id} />
-          </div>
+          <BuyerOrderDetailsDialog order={order} />
         </CardContent>
       </Card>
     </div>
