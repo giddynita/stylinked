@@ -1,17 +1,26 @@
 import { VendorOrdersSkeleton } from '@/components/skeletons'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs } from '@/components/ui/tabs'
 import OrdersTabsContent from '../OrdersTabsContent'
 import { formatCreatedAt } from '@/utils/format'
-import { useState } from 'react'
-import { useVendorOrders } from '@/utils/hooks'
-import SearchBar from '../../SearchBar'
 import OrderTabsList from '../OrderTabsList'
-import { FetchingError } from '@/components/global'
+import { nullSuspense } from '@/utils/suspense'
+import { lazy } from 'react'
+import type { OrdersWithPendingOrderNo } from '@/utils/types'
 
-function VendorOrders() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const { data: orders, isLoading, isError } = useVendorOrders()
+interface VendorOrdersProp {
+  searchQuery: string
+  isLoading: boolean
+  isError: boolean
+  orders: OrdersWithPendingOrderNo | undefined
+}
+
+const FetchingError = lazy(() => import('@/components/global/FetchingError'))
+
+function VendorOrders({
+  searchQuery,
+  orders,
+  isLoading,
+  isError,
+}: VendorOrdersProp) {
   const ordersDetails = orders?.sortedGroupedOrders?.map(
     ([order_id, order_items]) => {
       const amount = order_items.reduce((acc, item) => {
@@ -33,33 +42,17 @@ function VendorOrders() {
     }
   )
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="Search by order ID or customer name..."
-          />
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="all" className="w-full">
-          <OrderTabsList orders={ordersDetails} />
-          {isLoading ? (
-            <VendorOrdersSkeleton />
-          ) : (
-            <>
-              <OrdersTabsContent
-                orders={ordersDetails}
-                searchQuery={searchQuery}
-              />
-              <FetchingError isError={isError} text="your orders" />
-            </>
-          )}
-        </Tabs>
-      </CardContent>
-    </Card>
+    <>
+      <OrderTabsList orders={ordersDetails} />
+      {isLoading ? (
+        <VendorOrdersSkeleton />
+      ) : (
+        <>
+          <OrdersTabsContent orders={ordersDetails} searchQuery={searchQuery} />
+          {nullSuspense(<FetchingError isError={isError} text="your orders" />)}
+        </>
+      )}
+    </>
   )
 }
 export default VendorOrders

@@ -49,9 +49,13 @@ function Reviews() {
         {isLoading ? (
           <ReviewsSkeleton />
         ) : (
-          accountPageSuspense(<ReviewComponent reviews={reviews} />)
+          <>
+            {accountPageSuspense(<ReviewComponent reviews={reviews} />)}
+            {nullSuspense(
+              <FetchingError isError={isError} text="your reviews" />
+            )}
+          </>
         )}
-        {nullSuspense(<FetchingError isError={isError} text="your reviews" />)}
       </div>
     </>
   )

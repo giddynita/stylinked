@@ -38,7 +38,7 @@ function RecentOrdersCard({
           <>
             <Orders data={ordersData?.sortedGroupedOrders} />
             <NoResult
-              length={ordersData?.orders.length}
+              length={ordersData?.orders?.length}
               icon={ShoppingBag}
               text="No recent orders found"
             />

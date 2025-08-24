@@ -33,7 +33,7 @@ function DashboardStats({
   productsTrend,
   productsTrendLoading,
 }: DashboardStatsProp) {
-  const totalAmount = ordersData?.orders.reduce((sum, order) => {
+  const totalAmount = ordersData?.orders?.reduce((sum, order) => {
     return sum + order.amount * order.price
   }, 0)
   const revenueTrend = ordersTrend?.map((d) => {

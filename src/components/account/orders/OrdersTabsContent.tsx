@@ -42,7 +42,7 @@ function OrdersTabsContent({ orders, searchQuery }: OrdersTabsContentProp) {
           <div className="space-y-4 py-4">
             <NoResult
               length={filteredOrdersByStatus(status)?.length}
-              text={`No ${status} orders found.`}
+              text={`No ${status !== 'all' ? status : ''} orders found.`}
               icon={ShoppingBag}
             />
             {filteredOrdersByStatus(status)?.map((order, index) =>

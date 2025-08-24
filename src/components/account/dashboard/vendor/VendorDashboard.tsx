@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 import {
   useVendorOrders,
   useVendorOrdersTrend,
@@ -7,10 +8,13 @@ import {
 import DashboardStats from './DashboardStats'
 import RecentOrdersCard from './RecentOrdersCard'
 import LowStockCard from './LowStockCard'
+import type { User } from '@supabase/supabase-js'
 
 function VendorDashboard() {
+  const { user }: { user: User } = useSelector((state: any) => state.userState)
   const { data: products, isLoading: productsLoading } = useVendorProducts()
-  const { data: ordersData, isLoading: ordersDataLoading } = useVendorOrders()
+  const { data: ordersData, isLoading: ordersDataLoading } =
+    useVendorOrders(user)
   const { data: ordersTrend, isLoading: ordersTrendLoading } =
     useVendorOrdersTrend()
   const { data: productsTrend, isLoading: productsTrendLoading } =

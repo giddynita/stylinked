@@ -20,7 +20,7 @@ import type {
   VendorProfile,
 } from './types'
 import { getAuthUser } from './loader'
-import type { PostgrestError } from '@supabase/supabase-js'
+import type { PostgrestError, User } from '@supabase/supabase-js'
 
 export const useUserData = () => {
   const getAuthUserDetails = async () => {
@@ -380,16 +380,15 @@ export const useVendorProductTrend = () => {
   return queryData
 }
 
-export const useVendorOrders = () => {
+export const useVendorOrders = (user: User) => {
   const getVendorOrders = async () => {
-    const user = await getAuthUser()
-
     const {
       data,
       error: ordersError,
     }: { data: OrderItem[] | null; error: PostgrestError | null } =
       await supabase.from('order_items').select('*').eq('vendor_id', user?.id)
     const pendingOrders = data?.filter((order) => order.status === 'pending')
+    console.log(data)
 
     if (ordersError) throw new Error(ordersError.message)
     const grouped: Grouped | null =
@@ -444,10 +443,8 @@ export const useVendorOrdersTrend = () => {
   return queryData
 }
 
-export const useBuyerOrders = () => {
+export const useBuyerOrders = (user: User) => {
   const getBuyerOrders = async () => {
-    const user = await getAuthUser()
-
     const {
       data: order,
       error: ordersError,

@@ -1,9 +1,13 @@
 import { useBuyerOrders } from '@/utils/hooks'
 import DashboardStats from './DashboardStats'
 import RecentOrdersCard from './RecentOrdersCard'
+import type { User } from '@supabase/supabase-js'
+import { useSelector } from 'react-redux'
 
 function BuyerDashboard() {
-  const { data: ordersData, isLoading: ordersDataLoading } = useBuyerOrders()
+  const { user }: { user: User } = useSelector((state: any) => state.userState)
+  const { data: ordersData, isLoading: ordersDataLoading } =
+    useBuyerOrders(user)
   return (
     <div className="space-y-6 my-6">
       <DashboardStats
