@@ -2,11 +2,13 @@ import { Badge } from '@/components/ui/badge'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { getUrgencyLevel } from '@/utils/data'
 import { currencyFormatter } from '@/utils/format'
+import { nullSuspense } from '@/utils/suspense'
 import type { Product } from '@/utils/types'
-import ViewProductDialog from './ViewProductDialog'
-import { useState } from 'react'
-import EditProductDialog from './EditProductDialog'
-import DeleteProductDialog from './DeleteProductDialog'
+import { lazy, useState } from 'react'
+
+const ViewProductDialog = lazy(() => import('./ViewProductDialog'))
+const EditProductDialog = lazy(() => import('./EditProductDialog'))
+const DeleteProductDialog = lazy(() => import('./DeleteProductDialog'))
 
 interface ProductTableBodyProp {
   filteredProducts: Product[] | undefined
@@ -49,17 +51,21 @@ function ProductTableBody({ filteredProducts }: ProductTableBodyProp) {
             </TableCell>
             <TableCell className="text-right  ">
               <div className="flex justify-end gap-1">
-                <ViewProductDialog
-                  setSelectedProduct={setSelectedProduct}
-                  product={product}
-                  selectedProduct={selectedProduct}
-                />
-                <EditProductDialog
-                  setSelectedProduct={setSelectedProduct}
-                  product={product}
-                  selectedProduct={selectedProduct}
-                />
-                <DeleteProductDialog product={product} />
+                {nullSuspense(
+                  <>
+                    <ViewProductDialog
+                      setSelectedProduct={setSelectedProduct}
+                      product={product}
+                      selectedProduct={selectedProduct}
+                    />
+                    <EditProductDialog
+                      setSelectedProduct={setSelectedProduct}
+                      product={product}
+                      selectedProduct={selectedProduct}
+                    />
+                    <DeleteProductDialog product={product} />
+                  </>
+                )}
               </div>
             </TableCell>
           </TableRow>

@@ -1,17 +1,19 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody } from '@/components/ui/table'
 import { AccountPagesHeading } from '@/components/headings'
 import { ProductListSkeleton } from '@/components/skeletons'
 import { useVendorProducts } from '@/utils/hooks'
-import {
-  AddProductDialog,
-  NoProduct,
-  ProductTableBody,
-  ProductTableHeader,
-  SearchBar,
-} from '@/components/account'
-import { FetchingError } from '@/components/global'
+import { ProductTableHeader, SearchBar } from '@/components/account'
+import { accountPageSuspense, nullSuspense } from '@/utils/suspense'
+const ProductTableBody = lazy(
+  () => import('@/components/account/products/ProductTableBody')
+)
+const FetchingError = lazy(() => import('@/components/global/FetchingError'))
+const NoProduct = lazy(() => import('@/components/account/products/NoProduct'))
+const AddProductDialog = lazy(
+  () => import('@/components/account/products/AddProductDialog')
+)
 
 const Products = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -29,8 +31,9 @@ const Products = () => {
             pageDesc="Manage your products here. Add, edit, or delete items from inventory."
           />
         </div>
-
-        <AddProductDialog />
+        <Suspense fallback={<div className="w-32 h-12" />}>
+          <AddProductDialog />
+        </Suspense>
       </div>
       <Card>
         <CardHeader className="px-4">
@@ -44,22 +47,28 @@ const Products = () => {
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
-            <Table>
-              <ProductTableHeader />
+            {accountPageSuspense(
+              <Table>
+                <ProductTableHeader />
+                {isLoading ? (
+                  <ProductListSkeleton />
+                ) : (
+                  <TableBody className="text-xs font-medium">
+                    <ProductTableBody filteredProducts={filteredProducts} />
+                  </TableBody>
+                )}
+              </Table>
+            )}
 
-              {isLoading ? (
-                <ProductListSkeleton />
-              ) : (
-                <TableBody className="text-xs font-medium">
-                  <ProductTableBody filteredProducts={filteredProducts} />
-                </TableBody>
-              )}
-            </Table>
-            <NoProduct
-              searchQuery={searchQuery}
-              filteredProducts={filteredProducts}
-            />
-            <FetchingError isError={isError} text="your products" />
+            {nullSuspense(
+              <>
+                <FetchingError isError={isError} text="your products" />
+                <NoProduct
+                  searchQuery={searchQuery}
+                  filteredProducts={filteredProducts}
+                />
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
