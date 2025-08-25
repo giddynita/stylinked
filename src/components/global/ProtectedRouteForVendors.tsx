@@ -1,11 +1,14 @@
 import { Navigate } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
+import type { UserRole } from '@/utils/types'
 
 function ProtectedRouteForVendors({ children }: { children: any }) {
-  const { userRole } = useSelector((state: any) => state.userState)
+  const { userRole }: { userRole: UserRole } = useSelector(
+    (state: any) => state.userState
+  )
 
-  if (userRole == 'vendor') {
+  if (userRole.role == 'vendor') {
     return <Navigate to="/restricted_access" />
   }
   return children

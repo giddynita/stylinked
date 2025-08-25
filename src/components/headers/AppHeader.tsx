@@ -5,6 +5,8 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import { useSelector } from 'react-redux'
 import { avatarSuspense } from '@/utils/suspense'
+import type { UserDataType, UserRole } from '@/utils/types'
+import type { User } from '@supabase/supabase-js'
 const Cart = lazy(() => import('./Cart'))
 const ProfileImage = lazy(() => import('../global/ProfileImage'))
 const ModeToggle = lazy(() => import('../theme/mode-toggle'))
@@ -12,7 +14,11 @@ const ModeToggle = lazy(() => import('../theme/mode-toggle'))
 function AppHeader() {
   const [showHeader, setShowHeader] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
-  const { userRole, userData, user } = useSelector(
+  const {
+    userRole,
+    userData,
+    user,
+  }: { userRole: UserRole; userData: UserDataType; user: User } = useSelector(
     (state: any) => state.userState
   )
   useEffect(() => {
@@ -43,13 +49,13 @@ function AppHeader() {
       <div className="container flex items-center justify-between gap-10">
         <Logo icon="w-5 h-5" text="text-sm" />
         <div className="hidden md:flex md:flex-1 justify-between gap-x-4">
-          <Navbar role={userRole} />
+          <Navbar role={userRole.role} />
           <div className="flex flex-row gap-x-2 items-center">
             <Suspense fallback={null}>
               <ModeToggle align="end" />
             </Suspense>
             <Suspense fallback={null}>
-              {userRole !== 'buyer' && <Cart />}
+              {userRole.role !== 'buyer' && <Cart />}
             </Suspense>
             {avatarSuspense(user && <ProfileImage userData={userData} />)}
 
@@ -76,7 +82,7 @@ function AppHeader() {
             <ModeToggle align="end" />
           </Suspense>
           <Suspense fallback={<div className="w-[32px] h-[32px]" />}>
-            {userRole !== 'buyer' && <Cart />}
+            {userRole.role !== 'buyer' && <Cart />}
           </Suspense>
           <SidebarTrigger />
         </div>
