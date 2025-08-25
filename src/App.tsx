@@ -170,27 +170,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: pageSuspense(
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute>{pageSuspense(<Dashboard />)}</ProtectedRoute>,
       },
       {
         path: 'products',
-        element: pageSuspense(
-          <ProtectedRoute>
-            <Products />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute>{pageSuspense(<Products />)}</ProtectedRoute>,
       },
       {
         path: 'orders',
-        element: pageSuspense(
-          <ProtectedRoute>
-            <Orders />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute>{pageSuspense(<Orders />)}</ProtectedRoute>,
       },
       {
         path: 'reviews',

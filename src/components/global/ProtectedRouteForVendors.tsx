@@ -8,7 +8,7 @@ function ProtectedRouteForVendors({ children }: { children: any }) {
     (state: any) => state.userState
   )
 
-  if (userRole.role == 'vendor') {
+  if (userRole?.role == 'vendor') {
     return <Navigate to="/restricted_access" />
   }
   return children

@@ -19,7 +19,7 @@ function CallToAction() {
             <Link to="/auth/sign-up">
               <Button
                 size="lg"
-                className=" px-8 py-3 bg-background text-foreground hover:text-primary hover:bg-background cursor-pointer"
+                className=" px-8 py-3 bg-background text-foreground hover:text-secondary-foreground hover:bg-secondary  cursor-pointer"
               >
                 Create Account
               </Button>
@@ -27,7 +27,7 @@ function CallToAction() {
             <Link to="/marketplace">
               <Button
                 size="lg"
-                className=" bg-background text-foreground hover:text-primary hover:bg-background cursor-pointer px-8 py-3"
+                className=" bg-background text-foreground hover:text-secondary-foreground hover:bg-secondary  cursor-pointer px-8 py-3"
               >
                 Browse Products
               </Button>

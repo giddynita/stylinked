@@ -3,9 +3,13 @@ import Logo from './Logo'
 import { nonUserFooterLinks, userFooterLinks } from '@/utils/data'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import type { UserRole } from '@/utils/types'
+import type { User } from '@supabase/supabase-js'
 
 function AppFooter() {
-  const { userRole, user } = useSelector((state: any) => state.userState)
+  const { userRole, user }: { userRole: UserRole; user: User } = useSelector(
+    (state: any) => state.userState
+  )
   const footerLinks = useMemo(() => {
     if (!user) return nonUserFooterLinks
 
@@ -14,7 +18,7 @@ function AppFooter() {
         return {
           ...section,
           links: section.links.filter((link) =>
-            userRole === 'buyer' ? link.label !== 'Manage Listings' : true
+            userRole.role === 'buyer' ? link.label !== 'Manage Listings' : true
           ),
         }
       }
@@ -28,7 +32,7 @@ function AppFooter() {
         <div>
           <Logo icon="w-6 h-6" text="text-base" />
           <p className=" text-xs font-medium mt-2 max-w-[12rem]">
-            Connecting fashion enthusiasts with skilled artisans worldwide.
+            Connecting fashion enthusiasts with skilled artisans nationwide.
           </p>
         </div>
         {footerLinks.map((group) => {

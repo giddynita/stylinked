@@ -33,8 +33,10 @@ function Features() {
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary transition-colors">
                   <IconComponent className="w-8 h-8 text-primary group-hover:text-primary-foreground" />
                 </div>
-                <CardTitle className="text-xl">{feature.title}</CardTitle>
-                <CardDescription className=" mb-4">
+                <CardTitle className="text-xl h-15 line-clamp-2 ">
+                  {feature.title}
+                </CardTitle>
+                <CardDescription className="mb-4 h-32 line-clamp-6">
                   {feature.description}
                 </CardDescription>
               </CardHeader>
