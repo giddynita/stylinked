@@ -9,7 +9,7 @@ function VendorAvatar({ image, businessname }: VendorAvatarProp) {
   return (
     <Avatar className="w-full h-full">
       <AvatarImage src={image} alt={businessname} />
-      <AvatarFallback className="uppercase font-bold bg-accent text-5xl  text-foreground">
+      <AvatarFallback className="uppercase font-bold bg-muted-foreground text-5xl text-muted">
         {businessname?.charAt(0)}
       </AvatarFallback>
     </Avatar>
