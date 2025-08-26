@@ -1,22 +1,21 @@
-import {
-  FetchingError,
-  ProductReviews,
-  Sorting,
-  ViewModeToggle,
-} from '@/components/global'
+import { Sorting, ViewModeToggle } from '@/components/global'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
 import { PageHeading } from '@/components/headings'
-import { ProductGrid, ProductList } from '@/components/marketplace'
 import {
   ProductGridCardSkeleton,
   ProductListCardSkeleton,
 } from '@/components/skeletons'
 import VendorProfileCardSkeleton from '@/components/skeletons/VendorProfileCardSkeleton'
-import { ProfileCard } from '@/components/vendorProfile'
 import { vendorProfileProductSorting } from '@/utils/data'
 import { useVendorProfile } from '@/utils/hooks'
-import { useState } from 'react'
+import { sectionSuspense } from '@/utils/suspense'
+import { lazy, useState } from 'react'
 import { useParams } from 'react-router-dom'
+
+const ProfileCard = lazy(() => import('@/components/vendorProfile/ProfileCard'))
+const ProductReviews = lazy(() => import('@/components/global/ProductReviews'))
+const ProductGrid = lazy(() => import('@/components/marketplace/ProductGrid'))
+const ProductList = lazy(() => import('@/components/marketplace/ProductList'))
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
@@ -32,10 +31,8 @@ const VendorProfile = () => {
     setViewMode(mode)
   }
 
-  //fetch vendor data
   const { data: vendorProfile, isLoading, isError } = useVendorProfile(vendorid)
 
-  // products by this vendor
   const sortedProducts =
     vendorProfile &&
     vendorProfile.vendorProducts.flat().sort((a, b) => {
@@ -52,7 +49,6 @@ const VendorProfile = () => {
           return 0
       }
     })
-  //reviews by this vendor
 
   const reviews = vendorProfile?.vendorReviews
 
@@ -67,9 +63,9 @@ const VendorProfile = () => {
   } else {
     productView =
       viewMode === 'grid' ? (
-        <ProductGrid sortedProducts={sortedProducts} />
+        <ProductGrid sortedProducts={sortedProducts} isError={isError} />
       ) : (
-        <ProductList sortedProducts={sortedProducts} />
+        <ProductList sortedProducts={sortedProducts} isError={isError} />
       )
   }
   return (
@@ -84,16 +80,16 @@ const VendorProfile = () => {
         pageDesc={vendorProfile?.description}
       />
       <div className="space-y-8 pb-12">
-        {/* Vendor Header */}
         <section>
-          {isLoading ? (
-            <VendorProfileCardSkeleton />
-          ) : (
-            <ProfileCard vendorProfile={vendorProfile} />
+          {sectionSuspense(
+            isLoading ? (
+              <VendorProfileCardSkeleton />
+            ) : (
+              <ProfileCard vendorProfile={vendorProfile} />
+            )
           )}
         </section>
 
-        {/* Vendor Products */}
         <section>
           {!isLoading && (
             <h2 className="text-lg font-bold text-foreground mb-5">
@@ -112,15 +108,14 @@ const VendorProfile = () => {
               handleViewMode={handleViewMode}
             />
           </div>
-          <section>{productView}</section>
+          <section>{sectionSuspense(productView)}</section>
         </section>
 
-        {/* Reviews Section */}
         <section>
-          <ProductReviews reviews={reviews} displayProductName />
+          {sectionSuspense(
+            <ProductReviews reviews={reviews} displayProductName />
+          )}
         </section>
-
-        <FetchingError isError={isError} text="vendor products" />
       </div>
     </div>
   )
