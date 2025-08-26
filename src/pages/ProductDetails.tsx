@@ -4,11 +4,12 @@ import { useSingleProduct } from '@/utils/hooks'
 import { ProductInfoSkeleton } from '@/components/skeletons'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
 import { PageHeading } from '@/components/headings'
-import { GiveReview, ProductImages } from '@/components/productDetails'
+import { ProductImages } from '@/components/productDetails'
 import { lazy } from 'react'
 import { nullSuspense, sectionSuspense } from '@/utils/suspense'
 
 const ProductReviews = lazy(() => import('@/components/global/ProductReviews'))
+const GiveReview = lazy(() => import('@/components/productDetails/GiveReview'))
 const ProductInfo = lazy(
   () => import('@/components/productDetails/ProductInfo')
 )
@@ -50,7 +51,9 @@ const ProductDetails = () => {
                   <ProductReviews reviews={product?.productReviews} />
                 )}
               </section>
-              <GiveReview product={product} />
+              <section>
+                {sectionSuspense(<GiveReview product={product} />)}
+              </section>
             </div>
 
             <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
