@@ -6,6 +6,7 @@ import type { User } from '@supabase/supabase-js'
 import { useSelector } from 'react-redux'
 import { lazy } from 'react'
 import { accountPageSuspense, nullSuspense } from '@/utils/suspense'
+import { Star } from 'lucide-react'
 
 const BuyerReviews = lazy(
   () => import('@/components/account/reviews/BuyerReviews')
@@ -13,6 +14,8 @@ const BuyerReviews = lazy(
 const VendorReviews = lazy(
   () => import('@/components/account/reviews/VendorReviews')
 )
+const NoResult = lazy(() => import('@/components/global/NoResult'))
+
 const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 
 function Reviews() {
@@ -52,7 +55,14 @@ function Reviews() {
           <>
             {accountPageSuspense(<ReviewComponent reviews={reviews} />)}
             {nullSuspense(
-              <FetchingError isError={isError} text="your reviews" />
+              <>
+                <NoResult
+                  length={reviews?.length}
+                  icon={Star}
+                  text="No products found. Try adjusting your search and filter criteria."
+                />
+                <FetchingError isError={isError} text="your reviews" />
+              </>
             )}
           </>
         )}
