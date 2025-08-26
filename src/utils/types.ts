@@ -201,7 +201,7 @@ export interface Cart {
   orderTotal: number
   tax: number
 }
-export interface CheckoutType {
+export type CheckoutType = {
   shippingForm: {
     email: string
     firstname: string
