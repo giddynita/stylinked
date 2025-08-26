@@ -43,7 +43,7 @@ function CustomPagination({
   const pages = getPageRange()
 
   return (
-    <Pagination className="mt-8">
+    <Pagination className="mt-12">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

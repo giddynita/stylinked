@@ -1,21 +1,8 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Package, SlidersHorizontal } from 'lucide-react'
-import {
-  AdvancedFilters,
-  CategoriesCarousel,
-  ProductGrid,
-  ProductList,
-} from '@/components/marketplace'
+import { SlidersHorizontal } from 'lucide-react'
 import type { ProductFilter } from '@/utils/types'
-import {
-  CustomPagination,
-  FetchingError,
-  NoResult,
-  SearchBar,
-  Sorting,
-  ViewModeToggle,
-} from '@/components/global'
+import { SearchBar, Sorting, ViewModeToggle } from '@/components/global'
 import AppHeader from '@/components/headers/AppHeader'
 import {
   ProductGridCardSkeleton,
@@ -24,6 +11,21 @@ import {
 import { useAllProducts } from '@/utils/hooks'
 import { PageHeading, QueryHeading } from '@/components/headings'
 import { marketplaceSorting } from '@/utils/data'
+import { advancedFilterSuspense, sectionSuspense } from '@/utils/suspense'
+import LazyLoad from 'react-lazyload'
+
+const AdvancedFilters = lazy(
+  () => import('@/components/marketplace/AdvancedFilters')
+)
+const CategoriesCarousel = lazy(
+  () => import('@/components/marketplace/CategoriesCarousel')
+)
+const ProductGrid = lazy(() => import('@/components/marketplace/ProductGrid'))
+const ProductList = lazy(() => import('@/components/marketplace/ProductList'))
+
+const CustomPagination = lazy(
+  () => import('@/components/global/CustomPagination')
+)
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
@@ -62,7 +64,7 @@ const Marketplace = () => {
     setCurrentPage(1)
   }
 
-  const itemsPerPage = 3
+  const itemsPerPage = 12
   //fetch filtered products
   const { data, isLoading, isError } = useAllProducts({
     currentPage,
@@ -86,7 +88,7 @@ const Marketplace = () => {
   // Sort products
   const sortedProducts =
     filteredProducts &&
-    [...filteredProducts].sort((a, b) => {
+    filteredProducts.flat().sort((a, b) => {
       switch (sortBy) {
         case 'price-low':
           return a.price - b.price
@@ -110,9 +112,9 @@ const Marketplace = () => {
   } else {
     productView =
       viewMode === 'grid' ? (
-        <ProductGrid sortedProducts={sortedProducts} />
+        <ProductGrid sortedProducts={sortedProducts} isError={isError} />
       ) : (
-        <ProductList sortedProducts={sortedProducts} />
+        <ProductList sortedProducts={sortedProducts} isError={isError} />
       )
   }
 
@@ -123,12 +125,12 @@ const Marketplace = () => {
 
   return (
     <>
+      <PageHeading
+        pageTitle="Marketplace"
+        pageDesc="Discover exclusive fashion collections from verified sellers worldwide."
+      />
       <AppHeader />
       <main className="container min-h-screen container space-y-2 my-12">
-        <PageHeading
-          pageTitle="Marketplace"
-          pageDesc="Discover exclusive fashion collections from verified sellers worldwide."
-        />
         <section className="space-y-2">
           <h2 className="text-3xl font-bold text-foreground">Shop Now</h2>
           <p className="text-muted-foreground">
@@ -138,13 +140,15 @@ const Marketplace = () => {
 
         <div className=" lg:grid lg:grid-cols-8 gap-10">
           <div className="hidden lg:block col-span-3 py-8">
-            <AdvancedFilters
-              searchQuery={searchQuery}
-              setFilters={setFilters}
-              isLoading={isLoading}
-              maxPrice={maxPrice}
-              setCurrentPage={setCurrentPage}
-            />
+            {advancedFilterSuspense(
+              <AdvancedFilters
+                searchQuery={searchQuery}
+                setFilters={setFilters}
+                isLoading={isLoading}
+                maxPrice={maxPrice}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
           </div>
           <div className="py-8 col-span-5">
             {/* Enhanced Search and Filters */}
@@ -167,23 +171,28 @@ const Marketplace = () => {
                 </Button>
               </div>
               {/* Advanced Filters */}
-              {showAdvancedFilters && (
-                <div className="lg:hidden">
-                  <AdvancedFilters
-                    onClose={() => setShowAdvancedFilters(false)}
-                    searchQuery={searchQuery}
-                    setFilters={setFilters}
-                    isLoading={isLoading}
-                    maxPrice={maxPrice}
-                    setCurrentPage={setCurrentPage}
-                  />
-                </div>
+
+              {advancedFilterSuspense(
+                showAdvancedFilters && (
+                  <div className="lg:hidden">
+                    <AdvancedFilters
+                      onClose={() => setShowAdvancedFilters(false)}
+                      searchQuery={searchQuery}
+                      setFilters={setFilters}
+                      isLoading={isLoading}
+                      maxPrice={maxPrice}
+                      setCurrentPage={setCurrentPage}
+                    />
+                  </div>
+                )
               )}
               {/* Category Filters */}
-              <CategoriesCarousel
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-              />
+              <Suspense fallback={<div className="h-[34px] w-full" />}>
+                <CategoriesCarousel
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                />
+              </Suspense>
             </div>
             <section>
               {/* Results Header */}
@@ -209,26 +218,22 @@ const Marketplace = () => {
               </div>
 
               {/* Products Grid/List */}
-              {productView}
+              {sectionSuspense(productView)}
 
               {/* Pagination */}
-              {sortedProducts && sortedProducts.length >= 1 && totalPages && (
-                <CustomPagination
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  handlePageChange={handlePageChange}
-                />
-              )}
-
-              {/*fetching product failed */}
-              <FetchingError isError={isError} text="products" />
-
-              {/* No result */}
-              <NoResult
-                length={sortedProducts?.length}
-                icon={Package}
-                text="No products found. Try adjusting your search and filter criteria."
-              />
+              <LazyLoad>
+                <Suspense fallback={null}>
+                  {sortedProducts &&
+                    sortedProducts.length >= 1 &&
+                    totalPages && (
+                      <CustomPagination
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        handlePageChange={handlePageChange}
+                      />
+                    )}
+                </Suspense>
+              </LazyLoad>
             </section>
           </div>
         </div>

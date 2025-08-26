@@ -61,3 +61,15 @@ export const accountPageSuspense = (Component: JSX.Element) => (
     {Component}
   </Suspense>
 )
+
+export const advancedFilterSuspense = (Component: JSX.Element | boolean) => (
+  <Suspense
+    fallback={
+      <div className="h-[489px] w-full flex items-center justify-center">
+        <Loader2Icon className="w-4 h-4 animate-spin" />
+      </div>
+    }
+  >
+    {Component}
+  </Suspense>
+)
