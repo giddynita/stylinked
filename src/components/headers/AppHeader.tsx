@@ -49,13 +49,13 @@ function AppHeader() {
       <div className="container flex items-center justify-between gap-10">
         <Logo icon="w-5 h-5" text="text-sm" />
         <div className="hidden md:flex md:flex-1 justify-between gap-x-4">
-          <Navbar role={userRole?.role} />
+          <Navbar />
           <div className="flex flex-row gap-x-2 items-center">
             <Suspense fallback={null}>
               <ModeToggle align="end" />
             </Suspense>
             <Suspense fallback={null}>
-              {userRole?.role !== 'vendor' && <Cart />}
+              {userRole?.role == 'buyer' && <Cart />}
             </Suspense>
             {avatarSuspense(user && <ProfileImage userData={userData} />)}
 
@@ -82,7 +82,7 @@ function AppHeader() {
             <ModeToggle align="end" />
           </Suspense>
           <Suspense fallback={<div className="w-[32px] h-[32px]" />}>
-            {userRole?.role !== 'vendor' && <Cart />}
+            {userRole?.role == 'buyer' && <Cart />}
           </Suspense>
           <SidebarTrigger />
         </div>
