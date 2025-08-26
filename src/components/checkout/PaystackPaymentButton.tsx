@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '../ui/button'
-import { useUserData } from '@/utils/hooks'
 import { addOrdersAction } from '@/utils/action'
 import type {
   Cart,
@@ -8,16 +7,18 @@ import type {
   Order,
   OrderItem,
   PaystackRef,
+  UserDataType,
 } from '@/utils/types'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { usePaystackPayment } from 'react-paystack'
 import { clearCart } from '@/features/cart/cartSlice'
 import { resetCheckout } from '@/features/checkout/checkoutSlice'
+import type { User } from '@supabase/supabase-js'
 
 function PaystackPaymentButton() {
-  const { data: userInfo, isLoading } = useUserData()
-  const { user } = useSelector((state: any) => state.userState)
+  const { user, userData }: { user: User; userData: UserDataType } =
+    useSelector((state: any) => state.userState)
   const time = new Date().getTime().toString()
   const reference = `${user?.id}-${time}`
   const { paymentMethod, shippingForm }: CheckoutType = useSelector(
@@ -38,15 +39,15 @@ function PaystackPaymentButton() {
     amount: orderTotal * 100,
     email: user?.email,
     currency: 'NGN',
-    firstname: userInfo?.userData?.firstname,
-    lastname: userInfo?.userData?.lastname,
+    firstname: userData?.firstname,
+    lastname: userData?.lastname,
     channels: [paymentMethod.id],
     reference: reference,
     metadata: {
       custom_fields: [
         {
-          display_name: `${userInfo?.userData?.firstname} ${userInfo?.userData?.lastname}`,
-          variable_name: `${userInfo?.userData?.firstname} ${userInfo?.userData?.lastname}`,
+          display_name: `${userData?.firstname} ${userData?.lastname}`,
+          variable_name: `${userData?.firstname} ${userData?.lastname}`,
           value: 'Order confirmed!',
         },
       ],
@@ -129,7 +130,6 @@ function PaystackPaymentButton() {
       {paymentMethod.name && (
         <Button
           className="w-1/2"
-          disabled={isLoading}
           onClick={() => initializePayment({ onSuccess, onClose })}
         >
           Pay via {paymentMethod.name}

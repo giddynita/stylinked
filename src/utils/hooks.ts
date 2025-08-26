@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from './supabaseClient'
 import type {
-  getProductsType,
+  GetProductsType,
   Grouped,
   Order,
   OrderItem,
@@ -13,63 +13,18 @@ import type {
   ProductWithRating,
   Reviews,
   SingleProduct,
-  UserDataType,
-  UserRole,
   VendorCard,
   VendorFilter,
   VendorProfile,
 } from './types'
-import { getAuthUser } from './loader'
 import type { PostgrestError, User } from '@supabase/supabase-js'
 
-export const useUserData = () => {
-  const getAuthUserDetails = async () => {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser()
-    if (error || !user) {
-      return null
-    }
-
-    const { data: userRole, error: userError } = await supabase
-      .from('users')
-      .select<'role', UserRole>('role')
-      .eq('id', user.id)
-      .single()
-    if (userError) throw new Error(userError.message)
-
-    const userRoleTable =
-      userRole?.role == 'buyer'
-        ? 'buyers'
-        : userRole?.role == 'vendor'
-        ? 'vendors'
-        : 'logistics'
-    const { data: userData, error: dataError } = await supabase
-      .from(userRoleTable)
-      .select<'*', UserDataType>('*')
-      .eq('id', user?.id)
-      .single()
-    if (dataError) throw new Error(dataError.message)
-
-    const AuthUser = { userData, userRole, user }
-    return AuthUser
-  }
-  const queryData = useQuery({
-    queryKey: ['userData'],
-    queryFn: getAuthUserDetails,
-  })
-
-  return queryData
-}
-
-export const useVendorProducts = () => {
+export const useVendorProducts = (uid: string) => {
   const getVendorProducts = async () => {
-    const user = await getAuthUser()
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .eq('vendorid', user?.id)
+      .eq('vendorid', uid)
 
     if (error) throw new Error(error.message)
 
@@ -88,7 +43,7 @@ export const useAllProducts = ({
   currentPage,
   itemsPerPage,
   filters,
-}: getProductsType) => {
+}: GetProductsType) => {
   const getProducts = async () => {
     const fromIndex = (currentPage - 1) * itemsPerPage
     const toIndex = fromIndex + itemsPerPage - 1
@@ -359,13 +314,12 @@ export const useSingleProduct = (id: string) => {
   return queryData
 }
 
-export const useVendorProductTrend = () => {
+export const useVendorProductTrend = (uid: string) => {
   const getVendorProductTrend = async () => {
-    const user = await getAuthUser()
     const { data: trendData, error } = await supabase.rpc(
       'get_daily_product_trend_for_vendor',
       {
-        vendor_id: user?.id,
+        vendor_id: uid,
       }
     )
 
@@ -421,13 +375,12 @@ export const useVendorOrders = (user: User) => {
   return queryData
 }
 
-export const useVendorOrdersTrend = () => {
+export const useVendorOrdersTrend = (uid: string) => {
   const getOrdersTrend = async () => {
-    const user = await getAuthUser()
     const { data: trendData, error } = await supabase.rpc(
       'get_daily_orders_trend_by_vendor',
       {
-        input_vendor_id: user?.id,
+        input_vendor_id: uid,
       }
     )
 

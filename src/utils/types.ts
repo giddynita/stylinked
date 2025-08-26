@@ -125,7 +125,7 @@ export type ProductFilter = {
   selectedBrands?: string[]
   searchQuery?: string
 }
-export type getProductsType = {
+export type GetProductsType = {
   currentPage: number
   itemsPerPage: number
   filters: ProductFilter

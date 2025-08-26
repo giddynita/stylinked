@@ -7,7 +7,9 @@ import type { User } from '@supabase/supabase-js'
 
 function VendorDashboard() {
   const { user }: { user: User } = useSelector((state: any) => state.userState)
-  const { data: products, isLoading: productsLoading } = useVendorProducts()
+  const { data: products, isLoading: productsLoading } = useVendorProducts(
+    user?.id
+  )
   const { data: ordersData, isLoading: ordersDataLoading } =
     useVendorOrders(user)
   /* const { data: ordersTrend, isLoading: ordersTrendLoading } =

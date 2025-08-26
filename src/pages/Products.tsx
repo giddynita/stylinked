@@ -6,6 +6,8 @@ import { ProductListSkeleton } from '@/components/skeletons'
 import { useVendorProducts } from '@/utils/hooks'
 import { ProductTableHeader, SearchBar } from '@/components/account'
 import { accountPageSuspense, nullSuspense } from '@/utils/suspense'
+import { useSelector } from 'react-redux'
+import type { User } from '@supabase/supabase-js'
 const ProductTableBody = lazy(
   () => import('@/components/account/products/ProductTableBody')
 )
@@ -16,8 +18,9 @@ const AddProductDialog = lazy(
 )
 
 const Products = () => {
+  const { user }: { user: User } = useSelector((state: any) => state.userState)
   const [searchQuery, setSearchQuery] = useState('')
-  const { data: products, isLoading, isError } = useVendorProducts()
+  const { data: products, isLoading, isError } = useVendorProducts(user?.id)
   const filteredProducts = products?.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   )

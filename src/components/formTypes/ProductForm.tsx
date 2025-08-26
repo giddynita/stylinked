@@ -2,16 +2,16 @@ import { useState, type FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '../ui/separator'
 import { toast } from 'sonner'
-import type { ColorQuantity, Variant } from '@/utils/types'
+import type { ColorQuantity, UserDataType, Variant } from '@/utils/types'
 import { productSchema, validateWithZodSchema } from '@/utils/schema'
-import { useUserData } from '@/utils/hooks'
-import { getAuthUser } from '@/utils/loader'
 import { productCategories } from '@/utils/data'
 import { ProductImages, ProductVariants } from '../account'
 import FormInputField from '../form/FormInputField'
 import FormTextArea from '../form/FormTextArea'
 import FormSelectField from '../form/FormSelectField'
 import ImageInput from '../form/ImageInput'
+import type { User } from '@supabase/supabase-js'
+import { useSelector } from 'react-redux'
 
 interface ProductFormProps {
   product?: any
@@ -27,6 +27,8 @@ const ProductForm = ({
   onSubmitting,
   restock,
 }: ProductFormProps) => {
+  const { user, userData }: { user: User; userData: UserDataType } =
+    useSelector((state: any) => state.userState)
   const [formData, setFormData] = useState({
     name: product?.name || '',
     description: product?.description || '',
@@ -45,7 +47,6 @@ const ProductForm = ({
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-  const { data: userInfo } = useUserData()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -69,15 +70,13 @@ const ProductForm = ({
       .flat()
       .reduce((a: number, b: number) => a + b, 0)
 
-    const user = await getAuthUser()
-
     const allData = {
       ...validatedData,
       stock: stockSummation,
       variants,
       images: validImages,
       vendorid: user?.id,
-      vendor: userInfo?.userData?.businessname,
+      vendor: userData?.businessname,
     }
     onSubmit(allData)
   }
