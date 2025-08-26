@@ -3,17 +3,16 @@ import { Cart } from '@/components/marketplace'
 import { useSingleProduct } from '@/utils/hooks'
 import { ProductInfoSkeleton } from '@/components/skeletons'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
-import { FetchingError } from '@/components/global'
 import { PageHeading } from '@/components/headings'
-import {
-  GiveReview,
-  ProductImages,
-  ProductInfo,
-} from '@/components/productDetails'
+import { GiveReview, ProductImages } from '@/components/productDetails'
 import { lazy } from 'react'
-import { sectionSuspense } from '@/utils/suspense'
+import { nullSuspense, sectionSuspense } from '@/utils/suspense'
 
 const ProductReviews = lazy(() => import('@/components/global/ProductReviews'))
+const ProductInfo = lazy(
+  () => import('@/components/productDetails/ProductInfo')
+)
+const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 
 const ProductDetails = () => {
   const { productid } = useParams()
@@ -37,30 +36,29 @@ const ProductDetails = () => {
       {productLoading ? (
         <ProductInfoSkeleton />
       ) : (
-        <main>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-            {/* Product Images */}
-            <ProductImages product={product} />
+        <>
+          <main>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+              <ProductImages product={product} />
 
-            {/* Product Info */}
-            <ProductInfo product={product} />
-          </div>
+              {sectionSuspense(<ProductInfo product={product} />)}
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-            <section>
-              {sectionSuspense(
-                <ProductReviews reviews={product?.productReviews} />
-              )}
-            </section>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+              <section>
+                {sectionSuspense(
+                  <ProductReviews reviews={product?.productReviews} />
+                )}
+              </section>
+              <GiveReview product={product} />
+            </div>
 
-            <GiveReview product={product} />
-          </div>
-
-          <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
-            <Cart />
-          </div>
-          <FetchingError isError={isError} text="product" />
-        </main>
+            <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
+              <Cart />
+            </div>
+          </main>
+          {nullSuspense(<FetchingError isError={isError} text="product" />)}
+        </>
       )}
     </div>
   )

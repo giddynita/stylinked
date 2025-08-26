@@ -13,7 +13,6 @@ function ProductImages({ product }: ProductImagesProp) {
           src={product?.images[selectedImage]}
           alt={product?.name}
           className="w-full max-w-xs mx-auto  object-cover rounded-lg"
-          loading="lazy"
         />
       </div>
       <div className="flex flex-row items-center justify-center gap-2">
