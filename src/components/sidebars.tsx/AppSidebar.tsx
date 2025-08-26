@@ -33,7 +33,7 @@ function AppSidebar() {
           <SidebarMenu>
             <SidebarMenuItem className="mx-auto my-2">
               <Suspense fallback={<User className="h-4 w-4" />}>
-                {user && <ProfileImage userData={userData} />}
+                {user && <ProfileImage userData={userData} link />}
               </Suspense>
             </SidebarMenuItem>
           </SidebarMenu>

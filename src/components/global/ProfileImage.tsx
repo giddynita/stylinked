@@ -4,17 +4,26 @@ import type { UserDataType } from '@/utils/types'
 
 interface ProfileImageProp {
   userData: UserDataType | null | undefined
+  link?: boolean
 }
 
-function ProfileImage({ userData }: ProfileImageProp) {
+function ProfileImage({ userData, link }: ProfileImageProp) {
   return (
     <Avatar>
       <AvatarFallback className="uppercase font-bold bg-muted-foreground  text-muted">
-        <Link to="/account">
-          <span className="sr-only">user initials</span>
-          {userData?.firstname.charAt(0)}
-          {userData?.lastname.charAt(0)}
-        </Link>
+        {link ? (
+          <Link to="/account">
+            <span className="sr-only">user initials</span>
+            {userData?.firstname.charAt(0)}
+            {userData?.lastname.charAt(0)}
+          </Link>
+        ) : (
+          <>
+            <span className="sr-only">user initials</span>
+            {userData?.firstname.charAt(0)}
+            {userData?.lastname.charAt(0)}
+          </>
+        )}
       </AvatarFallback>
     </Avatar>
   )

@@ -57,7 +57,7 @@ function AppHeader() {
             <Suspense fallback={null}>
               {userRole?.role == 'buyer' && <Cart />}
             </Suspense>
-            {avatarSuspense(user && <ProfileImage userData={userData} />)}
+            {avatarSuspense(user && <ProfileImage userData={userData} link />)}
 
             {!user && (
               <>
