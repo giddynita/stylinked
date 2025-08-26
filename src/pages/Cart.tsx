@@ -3,6 +3,7 @@ import AppHeader from '@/components/headers/AppHeader'
 import { PageHeading } from '@/components/headings'
 import { sectionSuspense } from '@/utils/suspense'
 import { lazy } from 'react'
+import LazyLoad from 'react-lazyload'
 import { useSelector } from 'react-redux'
 
 const OrderSummary = lazy(() => import('@/components/cart/OrderSummary'))
@@ -23,7 +24,9 @@ function Cart() {
           {!numItemsInCart ? <EmptyCart /> : <CartItems />}
         </section>
         <section>
-          {!numItemsInCart || sectionSuspense(<OrderSummary />)}
+          <LazyLoad>
+            {!numItemsInCart || sectionSuspense(<OrderSummary />)}
+          </LazyLoad>
         </section>
       </main>
     </>
