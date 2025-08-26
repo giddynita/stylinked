@@ -221,20 +221,18 @@ const Marketplace = () => {
               {sectionSuspense(productView)}
 
               {/* Pagination */}
-              <LazyLoad>
-                <Suspense fallback={null}>
-                  {sortedProducts &&
-                    sortedProducts.length >= 1 &&
-                    totalPages && (
-                      <CustomPagination
-                        totalPages={totalPages}
-                        currentPage={currentPage}
-                        handlePageChange={handlePageChange}
-                      />
-                    )}
-                </Suspense>
-              </LazyLoad>
             </section>
+            <LazyLoad>
+              <Suspense fallback={null}>
+                {sortedProducts && sortedProducts.length >= 1 && totalPages && (
+                  <CustomPagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    handlePageChange={handlePageChange}
+                  />
+                )}
+              </Suspense>
+            </LazyLoad>
           </div>
         </div>
       </main>

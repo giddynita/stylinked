@@ -50,7 +50,14 @@ function AppSidebar() {
           <SidebarMenu>
             {navlinks.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={item.url === pathname}>
+                <SidebarMenuButton
+                  className={`font-medium ${
+                    item.url === pathname
+                      ? 'text-primary hover:bg-primary/10 hover:text-primary'
+                      : 'text-muted-foreground'
+                  } `}
+                  asChild
+                >
                   <Link to={item.url}>
                     <item.icon />
                     <span>{item.title}</span>

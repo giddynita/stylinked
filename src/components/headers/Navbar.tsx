@@ -23,8 +23,8 @@ function Navbar({ role }: NavbarProp) {
             key={item.title}
             className={({ isActive }) =>
               isActive
-                ? 'text-primary py-2 px-3  hover:bg-primary/10'
-                : 'text-muted-foreground py-2 px-3 hover:bg-secondary/20'
+                ? 'text-primary py-2 px-3  hover:bg-primary/10 rounded-lg'
+                : 'text-muted-foreground py-2 px-3 hover:text-foreground hover:bg-secondary hover:bg-muted rounded-lg'
             }
           >
             {item.title}

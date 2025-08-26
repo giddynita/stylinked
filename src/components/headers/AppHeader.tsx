@@ -63,7 +63,7 @@ function AppHeader() {
               <>
                 <Link
                   to="/auth"
-                  className="text-muted-foreground hover:text-primary bg-secondary py-2 px-4 text-base font-medium rounded-lg border"
+                  className="text-muted-foreground hover:text-foreground bg-secondary py-2 px-4 text-base font-medium rounded-lg border"
                 >
                   Login
                 </Link>
