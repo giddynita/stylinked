@@ -1,19 +1,7 @@
-import { defaultNavlinks, vendorNavlinks } from '@/utils/data'
+import { navlinks } from '@/utils/data'
 import { NavLink } from 'react-router-dom'
-import { useMemo } from 'react'
 
-interface NavbarProp {
-  role: string | undefined
-}
-
-function Navbar({ role }: NavbarProp) {
-  const navlinks = useMemo(() => {
-    if (role == 'vendor') {
-      return vendorNavlinks
-    }
-    return defaultNavlinks
-  }, [role])
-
+function Navbar() {
   return (
     <nav className="hidden md:flex md:flex-1 items-center justify-center font-medium text-base ">
       {navlinks.map((item) => {

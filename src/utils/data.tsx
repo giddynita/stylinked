@@ -120,7 +120,7 @@ export const testimonials = [
   },
 ]
 
-export const defaultNavlinks = [
+export const navlinks = [
   {
     title: 'Home',
     url: '/',
@@ -134,14 +134,8 @@ export const defaultNavlinks = [
     url: '/vendors',
   },
 ]
-export const vendorNavlinks = [
-  {
-    title: 'Home',
-    url: '/',
-  },
-]
 
-export const defaultSidebarNavlinks = [
+export const sidebarNavlinks = [
   {
     title: 'Home',
     url: '/',
@@ -158,13 +152,7 @@ export const defaultSidebarNavlinks = [
     icon: Users,
   },
 ]
-export const vendorSidebarNavlinks = [
-  {
-    title: 'Home',
-    url: '/',
-    icon: Home,
-  },
-]
+
 export const nonUserFooterLinks = [
   {
     heading: 'Marketplace',

@@ -11,8 +11,8 @@ import {
 import { Button } from '../ui/button'
 import { Link, useLocation } from 'react-router-dom'
 import { LogIn, User } from 'lucide-react'
-import { defaultSidebarNavlinks, vendorSidebarNavlinks } from '@/utils/data'
-import { lazy, Suspense, useMemo } from 'react'
+import { sidebarNavlinks } from '@/utils/data'
+import { lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 
 const ProfileImage = lazy(() => import('../global/ProfileImage'))
@@ -24,15 +24,7 @@ function AppSidebar() {
   }
   const location = useLocation()
   const pathname = location.pathname
-  const { userRole, userData, user } = useSelector(
-    (state: any) => state.userState
-  )
-  const navlinks = useMemo(() => {
-    if (userRole == 'vendor') {
-      return vendorSidebarNavlinks
-    }
-    return defaultSidebarNavlinks
-  }, [userRole])
+  const { userData, user } = useSelector((state: any) => state.userState)
 
   return (
     <div>
@@ -48,7 +40,7 @@ function AppSidebar() {
         </SidebarHeader>
         <SidebarContent className="px-3">
           <SidebarMenu>
-            {navlinks.map((item) => (
+            {sidebarNavlinks.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   className={`font-medium ${
