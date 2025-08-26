@@ -18,7 +18,7 @@ function AppFooter() {
         return {
           ...section,
           links: section.links.filter((link) =>
-            userRole.role === 'buyer' ? link.label !== 'Manage Listings' : true
+            userRole?.role === 'buyer' ? link.label !== 'Manage Listings' : true
           ),
         }
       }

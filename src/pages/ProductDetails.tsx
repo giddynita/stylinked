@@ -45,7 +45,7 @@ const ProductDetails = () => {
             {/* Product Info */}
             <ProductInfo product={product} />
           </div>
-          {/* Reviews Section */}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
             <section>
               {sectionSuspense(
@@ -53,7 +53,6 @@ const ProductDetails = () => {
               )}
             </section>
 
-            {/* Write a Review */}
             <GiveReview product={product} />
           </div>
 
