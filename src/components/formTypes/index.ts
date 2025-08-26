@@ -1,6 +1,3 @@
-export { default as CustomerDetailsForm } from './CustomerDetailsForm'
-export { default as VendorDetailsForm } from './VendorDetailsForm'
-export { default as LogisticsDetailsForm } from './LogisticsDetailsForm'
 export { default as ProductForm } from './ProductForm'
 export { default as ShippingInformationForm } from './ShippingInformationForm'
 export { default as ReviewForm } from './ReviewForm'

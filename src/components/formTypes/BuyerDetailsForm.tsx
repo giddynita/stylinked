@@ -1,6 +1,6 @@
 import { FormInput } from '@/components/form'
 
-function CustomerDetailsForm({ form }: { form: any }) {
+function BuyerDetailsForm({ form }: { form: any }) {
   return (
     <>
       <FormInput
@@ -27,4 +27,4 @@ function CustomerDetailsForm({ form }: { form: any }) {
     </>
   )
 }
-export default CustomerDetailsForm
+export default BuyerDetailsForm

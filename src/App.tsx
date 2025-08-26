@@ -6,7 +6,7 @@ import { lazy, useEffect } from 'react'
 import { layoutSuspense, pageSuspense } from './utils/suspense'
 import { useDispatch } from 'react-redux'
 import { setUserData, setUserRole } from './features/user/userSlice'
-import { getAuthUserDetails } from './utils/api'
+import { getAuthUserDetails } from './utils/loader'
 import { useSelector } from 'react-redux'
 
 //layouts

@@ -1,33 +1,15 @@
 import { AuthContainer, AuthLoading, InvalidToken } from '@/components/auth'
-import { FormPassword, SubmitButton } from '@/components/form'
-import { AuthFormsHeading } from '@/components/headings'
-import { Card, CardContent } from '@/components/ui/card'
-import { Form } from '@/components/ui/form'
-import { resetPasswordAction } from '@/utils/action'
-import { resetPasswordSchema, type ResetPasswordSchema } from '@/utils/schema'
 import { supabase } from '@/utils/supabaseClient'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { formSuspense } from '@/utils/suspense'
+import { lazy, useEffect, useState } from 'react'
+
+const ResetPasswordForm = lazy(
+  () => import('@/components/formTypes/ResetPasswordForm')
+)
 
 function ResetPassword() {
-  const [submitting, setSubmitting] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [tokenIsValid, setTokenIsValid] = useState<boolean>(true)
-  const navigate = useNavigate()
-
-  const form = useForm<ResetPasswordSchema>({
-    resolver: zodResolver(resetPasswordSchema),
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
-  })
-  const onSubmit = (data: ResetPasswordSchema) => {
-    const request = { ...data, setSubmitting, navigate }
-    resetPasswordAction(request)
-  }
 
   useEffect(() => {
     const resetUserPassword = async () => {
@@ -66,38 +48,6 @@ function ResetPassword() {
       />
     )
   }
-  return (
-    <AuthContainer>
-      <Card>
-        <AuthFormsHeading
-          title="Reset Password"
-          desc="Create a new password for your account."
-        />
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormPassword
-                form={form}
-                name="password"
-                label="Password"
-                placeholder="Create a new password"
-              />
-              <FormPassword
-                form={form}
-                name="confirmPassword"
-                label="Confirm Password"
-                placeholder="Confirm your password"
-              />
-              <SubmitButton
-                submitting={submitting}
-                text="Set new password"
-                texting="Resetting"
-              />
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </AuthContainer>
-  )
+  return <AuthContainer>{formSuspense(<ResetPasswordForm />)}</AuthContainer>
 }
 export default ResetPassword

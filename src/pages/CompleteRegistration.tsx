@@ -2,23 +2,27 @@ import { Form } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { emptySchema, registrationSchemaMap } from '@/utils/schema'
-
 import { FormRadio, SubmitButton } from '@/components/form'
 import { Card, CardContent } from '@/components/ui/card'
 import { AuthFormsHeading } from '@/components/headings'
-import { useEffect, useState } from 'react'
-import {
-  CustomerDetailsForm,
-  LogisticsDetailsForm,
-  VendorDetailsForm,
-} from '@/components/formTypes'
+import { lazy, useEffect, useState } from 'react'
 import { type AccountType, type registrationSchemaTypes } from '@/utils/types'
 import { supabase } from '@/utils/supabaseClient'
 import { toast } from 'sonner'
 import { AuthContainer, AuthLoading, InvalidToken } from '@/components/auth'
 import { accountTypeOptions, defaultValues } from '@/utils/data'
-import { completeRegistrationAction } from '@/utils/action'
 import { useNavigate } from 'react-router-dom'
+import { formSuspense } from '@/utils/suspense'
+
+const BuyerDetailsForm = lazy(
+  () => import('@/components/formTypes/BuyerDetailsForm')
+)
+const VendorDetailsForm = lazy(
+  () => import('@/components/formTypes/VendorDetailsForm')
+)
+const LogisticsDetailsForm = lazy(
+  () => import('@/components/formTypes/LogisticsDetailsForm')
+)
 
 function CompleteRegistration() {
   const [submitting, setSubmitting] = useState<boolean>(false)
@@ -27,6 +31,12 @@ function CompleteRegistration() {
   const [tokenIsValid, setTokenIsValid] = useState<boolean>(true)
   const navigate = useNavigate()
 
+  const roleRegistrationForm: Record<string, React.ComponentType<any>> = {
+    buyer: BuyerDetailsForm,
+    vendor: VendorDetailsForm,
+    logistics: LogisticsDetailsForm,
+  }
+  const FormComponent = roleRegistrationForm[accountType]
   const schema = accountType ? registrationSchemaMap[accountType] : emptySchema
 
   const setDefaultValues = accountType
@@ -39,13 +49,14 @@ function CompleteRegistration() {
     resolver: zodResolver(schema),
     defaultValues: setDefaultValues,
   })
-  const onSubmit = (data: registrationSchemaTypes) => {
+  const onSubmit = async (data: registrationSchemaTypes) => {
     const { role } = data
     if (!role) {
       return toast.warning('You need to select an account type.')
     }
     const request = { ...data, setSubmitting, navigate }
-    completeRegistrationAction(request)
+    const { completeRegistration } = await import('@/utils/action')
+    completeRegistration(request)
   }
 
   useEffect(() => {
@@ -111,11 +122,7 @@ function CompleteRegistration() {
                 options={accountTypeOptions}
                 setChange={setAccountType}
               />
-              {accountType == 'buyer' && <CustomerDetailsForm form={form} />}
-              {accountType == 'vendor' && <VendorDetailsForm form={form} />}
-              {accountType == 'logistics' && (
-                <LogisticsDetailsForm form={form} />
-              )}
+              {formSuspense(<FormComponent />)}
               <SubmitButton
                 submitting={submitting}
                 text="Done"

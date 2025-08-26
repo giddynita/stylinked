@@ -3,14 +3,14 @@ import { bucket, supabase } from './supabaseClient'
 
 import type {
   AccountType,
-  ForgotPasswordAction,
-  LoginAction,
+  ForgotPassword,
+  Login,
   Order,
   OrderItem,
   Product,
-  ResetPasswordAction,
+  ResetPassword,
   ReviewsForm,
-  SignUpAction,
+  SignUp,
   UpdateProduct,
   UserDataType,
 } from './types'
@@ -20,9 +20,31 @@ import {
   useQueryClient,
   type MutationFunction,
 } from '@tanstack/react-query'
-import { getAuthUser } from './loader'
 
-export const signUpAction = async (props: SignUpAction) => {
+export const login = async (props: Login) => {
+  const { email, password, setSubmitting } = props
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+  if (error) {
+    toast.error(error.message)
+    setSubmitting(false)
+    throw new Error(error.message)
+  }
+  return data.user
+}
+
+export const logout = async (setSubmitting: (value: boolean) => void) => {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    toast.error(error.message)
+    setSubmitting(false)
+    throw new Error(error.message)
+  }
+}
+
+export const signUp = async (props: SignUp) => {
   const { email, password, confirmPassword, setSubmitting, navigate } = props
   if (password !== confirmPassword) {
     toast.warning('Passwords do not match')
@@ -49,7 +71,7 @@ export const signUpAction = async (props: SignUpAction) => {
   return navigate('/auth/verification/signUp')
 }
 
-export const resetPasswordAction = async (props: ResetPasswordAction) => {
+export const resetPassword = async (props: ResetPassword) => {
   const { password, confirmPassword, setSubmitting, navigate } = props
   if (password !== confirmPassword) {
     toast.warning('Passwords do not match')
@@ -69,29 +91,7 @@ export const resetPasswordAction = async (props: ResetPasswordAction) => {
   return navigate('/auth/login')
 }
 
-export const loginAction = () => {
-  const login = async (props: LoginAction) => {
-    const { email, password } = props
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) throw new Error(error.message)
-  }
-
-  const queryClient = useQueryClient()
-
-  const loginFunction = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userData'] })
-    },
-  })
-
-  return loginFunction
-}
-
-export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
+export const forgotPassword = async (props: ForgotPassword) => {
   const { email, setSubmitting, navigate } = props
   setSubmitting(true)
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -109,7 +109,7 @@ export const forgotPasswordAction = async (props: ForgotPasswordAction) => {
   return navigate('/auth/verification/reset')
 }
 
-export const completeRegistrationAction = async (props: any) => {
+export const completeRegistration = async (props: any) => {
   const {
     role,
     firstname,
@@ -164,23 +164,6 @@ export const completeRegistrationAction = async (props: any) => {
   }
   toast.success('Account created successfully!')
   navigate('/')
-}
-
-export const logoutAction = () => {
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw new Error(error.message)
-  }
-
-  const queryClient = useQueryClient()
-  const logoutFunction = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['userData'] })
-    },
-  })
-
-  return logoutFunction
 }
 
 export const uploadImage = async (images: File[]) => {
@@ -239,12 +222,17 @@ export const deleteProductAction = () => {
 }
 
 export const addProductAction = () => {
-  const addProduct = async (product: Product) => {
-    const user = await getAuthUser()
+  const addProduct = async ({
+    product,
+    uid,
+  }: {
+    product: Product
+    uid: string
+  }) => {
     const { error } = await supabase.from('products').insert([
       {
         ...product,
-        vendorid: user?.id,
+        vendorid: uid,
       },
     ])
     if (error) throw new Error(error.message)

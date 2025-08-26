@@ -40,7 +40,7 @@ function AccountSidebar() {
       : []
   const dispatch = useDispatch()
   const handleLogout = async () => {
-    const { logout } = await import('@/utils/api')
+    const { logout } = await import('@/utils/action')
     setSubmitting(true)
     await logout(setSubmitting)
     navigate('/')

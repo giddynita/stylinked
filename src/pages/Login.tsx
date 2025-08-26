@@ -6,5 +6,4 @@ const LoginForm = lazy(() => import('../components/formTypes/LoginForm'))
 function Login() {
   return <AuthContainer>{formSuspense(<LoginForm />)}</AuthContainer>
 }
-
 export default Login

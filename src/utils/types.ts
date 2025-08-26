@@ -25,7 +25,7 @@ export type VerificationPageDetails = {
   desc: string
   link: string
 }
-export type SignUpAction = {
+export type SignUp = {
   email: string
   password: string
   confirmPassword: string
@@ -33,20 +33,20 @@ export type SignUpAction = {
   navigate: (value: string) => void
 }
 
-export type ResetPasswordAction = {
+export type ResetPassword = {
   password: string
   confirmPassword: string
   setSubmitting: (value: boolean) => void
   navigate: (value: string) => void
 }
-export type LoginAction = {
+export type Login = {
   email: string
   password: string
   setSubmitting: (value: boolean) => void
 }
-export type LogoutAction = (value: string) => void
+export type Logout = (value: string) => void
 
-export type ForgotPasswordAction = {
+export type ForgotPassword = {
   email: string
   setSubmitting: (value: boolean) => void
   navigate: (value: string) => void

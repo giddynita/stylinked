@@ -30,7 +30,7 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginFormSchema) => {
     setSubmitting(true)
-    const { login } = await import('@/utils/api')
+    const { login } = await import('@/utils/action')
     const props = { ...data, setSubmitting }
     const user = await login(props)
     dispatch(

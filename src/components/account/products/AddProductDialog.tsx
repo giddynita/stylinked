@@ -10,23 +10,29 @@ import {
 } from '@/components/ui/dialog'
 import { addProductAction } from '@/utils/action'
 import type { Product } from '@/utils/types'
+import type { User } from '@supabase/supabase-js'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
 function AddProductDialog() {
+  const { user }: { user: User } = useSelector((state: any) => state.userState)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const { mutate: addProduct, isPending: adding } = addProductAction()
   const handleAddProduct = async (product: Product) => {
-    addProduct(product, {
-      onSuccess: () => {
-        setIsAddDialogOpen(false)
-        toast.success('Product added successfully!')
-      },
-      onError: () => {
-        toast.error('Error adding product')
-      },
-    })
+    addProduct(
+      { product, uid: user?.id },
+      {
+        onSuccess: () => {
+          setIsAddDialogOpen(false)
+          toast.success('Product added successfully!')
+        },
+        onError: () => {
+          toast.error('Error adding product')
+        },
+      }
+    )
   }
   return (
     <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
