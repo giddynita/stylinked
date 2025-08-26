@@ -1,21 +1,8 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import AppHeader from '@/components/headers/AppHeader'
-import {
-  CityFilter,
-  StateFilter,
-  VendorGrid,
-  VendorList,
-} from '@/components/vendors'
 import { Separator } from '@/components/ui/separator'
-import {
-  CustomPagination,
-  FetchingError,
-  NoResult,
-  SearchBar,
-  Sorting,
-  ViewModeToggle,
-} from '@/components/global'
+import { SearchBar, Sorting, ViewModeToggle } from '@/components/global'
 import { useVendorsWithStats } from '@/utils/hooks'
 import {
   VendorGridCardSkeleton,
@@ -23,11 +10,20 @@ import {
 } from '@/components/skeletons'
 import { PageHeading, QueryHeading } from '@/components/headings'
 import { vendorSorting } from '@/utils/data'
-import { Users } from 'lucide-react'
+import { sectionSuspense } from '@/utils/suspense'
+import LazyLoad from 'react-lazyload'
 
 type ViewMode = 'grid' | 'list'
 const getViewMode =
   (localStorage.getItem('vendor-view-mode') as ViewMode) || 'grid'
+
+const CityFilter = lazy(() => import('@/components/vendors/CityFilter'))
+const StateFilter = lazy(() => import('@/components/vendors/StateFilter'))
+const CustomPagination = lazy(
+  () => import('@/components/global/CustomPagination')
+)
+const VendorGrid = lazy(() => import('@/components/vendors/VendorGrid'))
+const VendorList = lazy(() => import('@/components/vendors/VendorList'))
 
 const Vendors = () => {
   //states
@@ -79,7 +75,7 @@ const Vendors = () => {
       selectedState: selectedState === 'all' ? '' : selectedState,
     })
   }
-  const itemsPerPage = 3
+  const itemsPerPage = 12
   //fetch filtered vendors
   const { data, isLoading, isError } = useVendorsWithStats(
     currentPage,
@@ -120,24 +116,22 @@ const Vendors = () => {
   } else {
     vendorView =
       viewMode === 'grid' ? (
-        <VendorGrid sortedVendors={sortedVendors} />
+        <VendorGrid sortedVendors={sortedVendors} isError={isError} />
       ) : (
-        <VendorList sortedVendors={sortedVendors} />
+        <VendorList sortedVendors={sortedVendors} isError={isError} />
       )
   }
 
   return (
     <>
-      {/* Header */}
+      <PageHeading
+        pageDesc="Find and connect with vendors who meet your needs."
+        pageTitle="Vendors"
+      />
+
       <AppHeader />
 
       <main className="min-h-screen container space-y-10 mt-12 mb-18">
-        {/* Page Heading */}
-        <PageHeading
-          pageDesc="Find and connect with vendors who meet your needs."
-          pageTitle="Vendors"
-        />
-
         <section className="space-y-2">
           <h1 className="text-3xl font-bold text-foreground">
             Discover Vendors
@@ -147,7 +141,6 @@ const Vendors = () => {
           </p>
         </section>
 
-        {/* Search and Filters */}
         <div className="bg-card rounded-lg border p-4 grid gap-4">
           <SearchBar
             searchQuery={searchQuery}
@@ -157,15 +150,20 @@ const Vendors = () => {
           />
           <Separator />
           <div className="grid sm:grid-cols-2 md:grid-cols-4  gap-4">
-            <StateFilter
-              selectedState={selectedState}
-              handleStateChange={handleStateChange}
-            />
-            <CityFilter
-              selectedCity={selectedCity}
-              selectedState={selectedState}
-              handleCityChange={handleCityChange}
-            />
+            <Suspense fallback={<div />}>
+              <StateFilter
+                selectedState={selectedState}
+                handleStateChange={handleStateChange}
+              />
+            </Suspense>
+            <Suspense fallback={<div />}>
+              <CityFilter
+                selectedCity={selectedCity}
+                selectedState={selectedState}
+                handleCityChange={handleCityChange}
+              />
+            </Suspense>
+
             <Button variant="outline" onClick={clearFilter}>
               Clear Filter
             </Button>
@@ -175,14 +173,12 @@ const Vendors = () => {
           </div>
         </div>
         <section>
-          {/* Results Header */}
           <QueryHeading
             query={filters.searchQuery}
             queryResult={sortedVendors}
             type="vendor"
           />
 
-          {/*  Sorting &  View Toggle */}
           <div className=" flex items-start justify-between gap-4 mb-8">
             <Sorting
               sortBy={sortBy}
@@ -194,26 +190,19 @@ const Vendors = () => {
               handleViewMode={handleViewMode}
             />
           </div>
-          {/* View */}
-          <>{vendorView}</>
 
-          {/* Pagination */}
-          {sortedVendors && sortedVendors.length >= 1 && totalPages && (
-            <CustomPagination
-              totalPages={totalPages}
-              currentPage={currentPage}
-              handlePageChange={handlePageChange}
-            />
-          )}
-          {/*fetching vendors failed */}
-          <FetchingError isError={isError} text="vendors" />
-
-          {/* No result */}
-          <NoResult
-            length={sortedVendors?.length}
-            icon={Users}
-            text="No vendors found. Try adjusting your search and filter criteria."
-          />
+          <>{sectionSuspense(vendorView)}</>
+          <LazyLoad>
+            <Suspense fallback={null}>
+              {sortedVendors && sortedVendors.length >= 1 && totalPages && (
+                <CustomPagination
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  handlePageChange={handlePageChange}
+                />
+              )}
+            </Suspense>
+          </LazyLoad>
         </section>
       </main>
     </>

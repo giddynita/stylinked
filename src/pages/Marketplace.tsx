@@ -151,9 +151,7 @@ const Marketplace = () => {
             )}
           </div>
           <div className="py-8 col-span-5">
-            {/* Enhanced Search and Filters */}
             <div className="mb-8">
-              {/* search */}
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <SearchBar
                   searchQuery={searchQuery}
@@ -170,7 +168,6 @@ const Marketplace = () => {
                   Advanced Filters
                 </Button>
               </div>
-              {/* Advanced Filters */}
 
               {advancedFilterSuspense(
                 showAdvancedFilters && (
@@ -186,7 +183,7 @@ const Marketplace = () => {
                   </div>
                 )
               )}
-              {/* Category Filters */}
+
               <Suspense fallback={<div className="h-[34px] w-full" />}>
                 <CategoriesCarousel
                   selectedCategory={selectedCategory}
@@ -195,32 +192,26 @@ const Marketplace = () => {
               </Suspense>
             </div>
             <section>
-              {/* Results Header */}
               <QueryHeading
                 query={filters.searchQuery}
                 queryResult={sortedProducts}
                 type="product"
               />
-              {/*  Sorting &  View Toggle */}
+
               <div className="flex items-center justify-between gap-2 mb-8">
-                {/* Sort Dropdown */}
                 <Sorting
                   sortBy={sortBy}
                   setSortBy={setSortBy}
                   options={marketplaceSorting}
                 />
 
-                {/* View Mode Toggle */}
                 <ViewModeToggle
                   viewMode={viewMode}
                   handleViewMode={handleViewMode}
                 />
               </div>
 
-              {/* Products Grid/List */}
               {sectionSuspense(productView)}
-
-              {/* Pagination */}
             </section>
             <LazyLoad>
               <Suspense fallback={null}>
