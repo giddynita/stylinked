@@ -94,12 +94,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'marketplace',
-
-        element: pageSuspense(
-          <ProtectedRouteForVendors>
-            {layoutSuspense(<MarketplaceLayout />)}
-          </ProtectedRouteForVendors>
-        ),
+        element: layoutSuspense(<MarketplaceLayout />),
         children: [
           {
             index: true,
@@ -114,7 +109,6 @@ const router = createBrowserRouter([
       },
       {
         path: 'cart',
-
         element: (
           <ProtectedRouteForVendors>
             {layoutSuspense(<CartLayout />)}
@@ -137,11 +131,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'vendors',
-        element: (
-          <ProtectedRouteForVendors>
-            {layoutSuspense(<VendorsLayout />)}
-          </ProtectedRouteForVendors>
-        ),
+        element: layoutSuspense(<VendorsLayout />),
         children: [
           {
             index: true,
