@@ -1,4 +1,4 @@
-import type { CartItemType, ProductWithRating } from '@/utils/types'
+import type { CartItemType, ProductWithRating, UserRole } from '@/utils/types'
 import { Card, CardContent } from '../ui/card'
 import { currencyFormatter, slugify } from '@/utils/format'
 import { MoreVertical, ShoppingCart } from 'lucide-react'
@@ -24,6 +24,9 @@ interface ProductListCardProp {
 function ProductListCard({ product }: ProductListCardProp) {
   const { cartItems, numItemsInCart } = useSelector(
     (state: any) => state.cartState
+  )
+  const { userRole }: { userRole: UserRole } = useSelector(
+    (state: any) => state.userState
   )
   const [numProductInCart, setNumProductInCart] = useState<number>(0)
   const { setIsAddToCartDialogOpen } = useContext(GlobalContext)
@@ -93,21 +96,23 @@ function ProductListCard({ product }: ProductListCardProp) {
                   View Details
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-[10px] relative"
-                disabled={!product.stock}
-                onClick={() => setIsAddToCartDialogOpen(true)}
-              >
-                Add to Cart
-                <ShoppingCart className="w-6 h-6" />
-                {numProductInCart >= 1 && (
-                  <p className="absolute -top-2 -right-2 text-xs font-bold bg-primary text-primary-foreground w-5 h-5 rounded-full flex items-center justify-center">
-                    {numProductInCart}
-                  </p>
-                )}
-              </Button>
+              {userRole?.role == 'buyer' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-[10px] relative"
+                  disabled={!product.stock}
+                  onClick={() => setIsAddToCartDialogOpen(true)}
+                >
+                  Add to Cart
+                  <ShoppingCart className="w-6 h-6" />
+                  {numProductInCart >= 1 && (
+                    <p className="absolute -top-2 -right-2 text-xs font-bold bg-primary text-primary-foreground w-5 h-5 rounded-full flex items-center justify-center">
+                      {numProductInCart}
+                    </p>
+                  )}
+                </Button>
+              )}
             </div>
             <div className="sm:hidden pt-2 pr-2">
               <DropdownMenu>
@@ -127,23 +132,25 @@ function ProductListCard({ product }: ProductListCardProp) {
                       </Link>
                     </Button>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-[10px] relative"
-                      disabled={!product.stock}
-                      onClick={() => setIsAddToCartDialogOpen(true)}
-                    >
-                      Add to Cart
-                      <ShoppingCart className="w-6 h-6" />
-                      {numProductInCart >= 1 && (
-                        <p className="absolute -top-2 -right-2 text-xs font-bold bg-primary text-primary-foreground w-5 h-5 rounded-full flex items-center justify-center">
-                          {numProductInCart}
-                        </p>
-                      )}
-                    </Button>
-                  </DropdownMenuItem>
+                  {userRole?.role == 'buyer' && (
+                    <DropdownMenuItem>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-[10px] relative"
+                        disabled={!product.stock}
+                        onClick={() => setIsAddToCartDialogOpen(true)}
+                      >
+                        Add to Cart
+                        <ShoppingCart className="w-6 h-6" />
+                        {numProductInCart >= 1 && (
+                          <p className="absolute -top-2 -right-2 text-xs font-bold bg-primary text-primary-foreground w-5 h-5 rounded-full flex items-center justify-center">
+                            {numProductInCart}
+                          </p>
+                        )}
+                      </Button>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

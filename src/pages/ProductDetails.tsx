@@ -7,6 +7,8 @@ import { PageHeading } from '@/components/headings'
 import { ProductImages } from '@/components/productDetails'
 import { lazy } from 'react'
 import { nullSuspense, sectionSuspense } from '@/utils/suspense'
+import { useSelector } from 'react-redux'
+import type { UserRole } from '@/utils/types'
 
 const ProductReviews = lazy(() => import('@/components/global/ProductReviews'))
 const GiveReview = lazy(() => import('@/components/productDetails/GiveReview'))
@@ -17,6 +19,9 @@ const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 
 const ProductDetails = () => {
   const { productid } = useParams()
+  const { userRole }: { userRole: UserRole } = useSelector(
+    (state: any) => state.userState
+  )
   //fech single product
   const id = productid == undefined ? '' : productid
   const {
@@ -51,14 +56,17 @@ const ProductDetails = () => {
                   <ProductReviews reviews={product?.productReviews} />
                 )}
               </section>
-              <section>
-                {sectionSuspense(<GiveReview product={product} />)}
-              </section>
+              {userRole?.role == 'buyer' && (
+                <section>
+                  {sectionSuspense(<GiveReview product={product} />)}
+                </section>
+              )}
             </div>
-
-            <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
-              <Cart />
-            </div>
+            {userRole?.role == 'buyer' && (
+              <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
+                <Cart />
+              </div>
+            )}
           </main>
           {nullSuspense(<FetchingError isError={isError} text="product" />)}
         </>
