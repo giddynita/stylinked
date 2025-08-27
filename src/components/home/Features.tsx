@@ -22,37 +22,39 @@ function Features() {
         </p>
       </div>
       <div className=" grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {features.map((feature, index) => {
-          const IconComponent = feature.icon
-          return (
-            <Card
-              key={index}
-              className="group shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 bg-background/20 backdrop-blur-sm"
-            >
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary transition-colors">
-                  <IconComponent className="w-8 h-8 text-primary group-hover:text-primary-foreground" />
-                </div>
-                <CardTitle className="text-xl h-15 line-clamp-2 ">
-                  {feature.title}
-                </CardTitle>
-                <CardDescription className="mb-4 h-32 line-clamp-6">
-                  {feature.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                <Link to={feature.link}>
-                  <Button
-                    variant="outline"
-                    className="group-hover:border-primary hover:bg-primary hover:text-primary-foreground cursor-pointer  group-hover:text-primary"
-                  >
-                    {feature.link_text}
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          )
-        })}
+        {features.map(
+          ({ icon, title, description, link, link_text }, index) => {
+            const IconComponent = icon
+            return (
+              <Card
+                key={index}
+                className="group shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 bg-background/20 backdrop-blur-sm"
+              >
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary transition-colors">
+                    <IconComponent className="w-8 h-8 text-primary group-hover:text-primary-foreground" />
+                  </div>
+                  <CardTitle className="text-xl h-15 line-clamp-2 ">
+                    {title}
+                  </CardTitle>
+                  <CardDescription className="mb-4 h-32 line-clamp-6">
+                    {description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <Link to={link}>
+                    <Button
+                      variant="outline"
+                      className="group-hover:border-primary hover:bg-primary hover:text-primary-foreground cursor-pointer  group-hover:text-primary w-[70%] max-w-52"
+                    >
+                      {link_text}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )
+          }
+        )}
       </div>
     </section>
   )
