@@ -42,14 +42,13 @@ function Features() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <Link to={link}>
-                    <Button
-                      variant="outline"
-                      className="group-hover:border-primary hover:bg-primary hover:text-primary-foreground cursor-pointer  group-hover:text-primary w-[70%] max-w-52"
-                    >
-                      {link_text}
-                    </Button>
-                  </Link>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="group-hover:border-primary hover:bg-primary hover:text-primary-foreground cursor-pointer  group-hover:text-primary"
+                  >
+                    <Link to={link}>{link_text}</Link>
+                  </Button>
                 </CardContent>
               </Card>
             )
