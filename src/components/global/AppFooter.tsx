@@ -39,7 +39,7 @@ function AppFooter() {
         {footerLinks.map((group) => {
           return (
             <div key={group.heading}>
-              <h2 className="font-semibold text-sm mb-4 px-3">
+              <h2 className="font-semibold text-base mb-4 px-3">
                 {group.heading}
               </h2>
               <ul>
