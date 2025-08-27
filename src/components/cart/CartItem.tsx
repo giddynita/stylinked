@@ -2,32 +2,18 @@ import type { CartItemType } from '@/utils/types'
 import { Card, CardContent } from '../ui/card'
 import { Link } from 'react-router-dom'
 import { currencyFormatter, slugify } from '@/utils/format'
-import { Edit3, Minus, Plus, Trash2 } from 'lucide-react'
+import { Minus, Plus, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
-import { useContext } from 'react'
-import { GlobalContext } from '@/utils/globalContext'
 import { useDispatch } from 'react-redux'
 import { editItem, removeItem } from '@/features/cart/cartSlice'
+import VariantSelection from './VariantSelection'
+import { Label } from '../ui/label'
 
 interface CartItemProp {
   cartItem: CartItemType
 }
 
 function CartItem({ cartItem }: CartItemProp) {
-  const {
-    setVariantDialogOpen,
-    setSelectedItem,
-    setEditSize,
-    setEditColor,
-    setEditQuantity,
-  } = useContext(GlobalContext)
-  const openVariantDialog = (cartItem: CartItemType) => {
-    setSelectedItem(cartItem)
-    setEditQuantity(cartItem.amount)
-    setEditSize(cartItem.size)
-    setEditColor(cartItem.color)
-    setVariantDialogOpen(true)
-  }
   const dispatch = useDispatch()
   const removeFromCart = () => {
     dispatch(
@@ -58,7 +44,6 @@ function CartItem({ cartItem }: CartItemProp) {
       <Card className="overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-200 p-0">
         <CardContent className="p-0">
           <div className="flex flex-col sm:flex-row">
-            {/* Product Image */}
             <div className="sm:w-48 h-52 sm:h-auto relative bg-gray-50">
               <img
                 src={cartItem.images[0]}
@@ -67,8 +52,6 @@ function CartItem({ cartItem }: CartItemProp) {
                 loading="lazy"
               />
             </div>
-
-            {/* Product Details */}
             <div className="flex-1 p-6">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
@@ -80,39 +63,25 @@ function CartItem({ cartItem }: CartItemProp) {
                       {cartItem.name}
                     </h2>
                   </Link>
-                  {/* Clickable Variant Badges */}
+
                   <div className="flex items-center gap-2 mt-3">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="
-                     font-medium text-xs"
-                      onClick={() => openVariantDialog(cartItem)}
+                    <div
+                      className=" flex items-center gap-1
+                     font-medium text-sm"
                     >
-                      Size: {cartItem.size}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="
-                     font-medium text-xs"
-                      onClick={() => openVariantDialog(cartItem)}
+                      <Label>Size:</Label>
+                      <p>{cartItem.size} </p>
+                    </div>
+                    <div
+                      className=" flex items-center gap-1
+                     font-medium text-sm"
                     >
-                      Color: {cartItem.color}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => openVariantDialog(cartItem)}
-                      className="h-6 px-2 text-xs text-muted-foreground hover:text-primary"
-                    >
-                      <Edit3 className="w-3 h-3 mr-1" />
-                      Edit
-                    </Button>
+                      <Label>Color:</Label>
+                      <p> {cartItem.color}</p>
+                    </div>
+                    <VariantSelection cartItem={cartItem} />
                   </div>
                 </div>
-
-                {/* Delete Button */}
                 <Button
                   variant="ghost"
                   size="sm"
@@ -122,11 +91,8 @@ function CartItem({ cartItem }: CartItemProp) {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-
-              {/* Quantity Controls and Price */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  {/* Quantity Controls */}
                   <div className="flex items-center border rounded-lg">
                     <Button
                       variant="ghost"
@@ -163,7 +129,6 @@ function CartItem({ cartItem }: CartItemProp) {
                 </Button> */}
                 </div>
 
-                {/* Price */}
                 <div className="text-right">
                   <p className="font-bold text-lg">
                     {currencyFormatter(cartItem.price * cartItem.amount)}

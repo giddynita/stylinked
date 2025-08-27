@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import CartItem from './CartItem'
 import type { CartItemType } from '@/utils/types'
-import VariantSelection from './VariantSelection'
 import { Button } from '../ui/button'
 import { X } from 'lucide-react'
 import { clearCart } from '@/features/cart/cartSlice'
@@ -33,7 +32,6 @@ function CartItems() {
         {cartItems.map((cartItem: CartItemType, index: number) => {
           return <CartItem key={index} cartItem={cartItem} />
         })}
-        <VariantSelection />
       </div>
     </>
   )
