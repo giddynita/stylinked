@@ -65,13 +65,13 @@ function AppHeader() {
               <>
                 <Link
                   to="/auth"
-                  className="text-muted-foreground hover:text-foreground bg-secondary py-2 px-4 text-base font-medium rounded-lg border"
+                  className="text-xs text-muted-foreground hover:text-foreground bg-secondary py-2 px-4 text-base font-medium rounded-lg border"
                 >
                   Login
                 </Link>
                 <Link
                   to="/auth/sign-up"
-                  className="bg-primary py-2 px-4 text-base font-medium rounded-lg hover:bg-primary/80"
+                  className="text-xs bg-primary py-2 px-4 text-base font-medium rounded-lg hover:bg-primary/80"
                 >
                   Sign Up
                 </Link>

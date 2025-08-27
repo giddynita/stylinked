@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import type { UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
+import { Button } from '../ui/button'
 
 function AppFooter() {
   const { userRole, user }: { userRole: UserRole; user: User } = useSelector(
@@ -38,17 +39,25 @@ function AppFooter() {
         {footerLinks.map((group) => {
           return (
             <div key={group.heading}>
-              <h2 className="font-semibold text-sm mb-4">{group.heading}</h2>
+              <h2 className="font-semibold text-sm mb-4 px-3">
+                {group.heading}
+              </h2>
               <ul>
                 {group.links.map((link) => {
                   return (
                     <li key={link.label}>
-                      <Link
-                        to={link.url}
-                        className="hover:text-primary text-sm  "
+                      <Button
+                        asChild
+                        variant="link"
+                        className="text-foreground"
                       >
-                        {link.label}
-                      </Link>
+                        <Link
+                          to={link.url}
+                          className="hover:text-primary text-sm  "
+                        >
+                          {link.label}
+                        </Link>
+                      </Button>
                     </li>
                   )
                 })}
