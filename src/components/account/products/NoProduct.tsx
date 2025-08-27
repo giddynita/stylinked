@@ -1,4 +1,4 @@
-import { NoResult } from '@/components/global'
+import NoResult from '@/components/global/NoResult'
 import { nullSuspense } from '@/utils/suspense'
 import type { Product } from '@/utils/types'
 import { Package } from 'lucide-react'
