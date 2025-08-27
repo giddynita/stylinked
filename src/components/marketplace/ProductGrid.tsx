@@ -9,7 +9,6 @@ interface ProductGridProp {
   isError: boolean
 }
 
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 const NoResult = lazy(() => import('@/components/global/NoResult'))
 function ProductGrid({ sortedProducts, isError }: ProductGridProp) {
   return (
@@ -19,13 +18,14 @@ function ProductGrid({ sortedProducts, isError }: ProductGridProp) {
       ))}
       {nullSuspense(
         <>
-          <FetchingError isError={isError} text="products" />
-
-          <NoResult
-            length={sortedProducts?.length}
-            icon={Package}
-            text="No products found. Try adjusting your search and filter criteria."
-          />
+          {sortedProducts?.length == 0 && (
+            <NoResult
+              isError={isError}
+              errorText="products"
+              icon={Package}
+              text="No products found. Try adjusting your search and filter criteria."
+            />
+          )}
         </>
       )}
     </div>

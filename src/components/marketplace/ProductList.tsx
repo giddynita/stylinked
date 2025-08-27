@@ -8,8 +8,6 @@ interface ProductListProp {
   sortedProducts: ProductWithRating[] | undefined
   isError: boolean
 }
-
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 const NoResult = lazy(() => import('@/components/global/NoResult'))
 
 function ProductList({ sortedProducts, isError }: ProductListProp) {
@@ -20,13 +18,14 @@ function ProductList({ sortedProducts, isError }: ProductListProp) {
       ))}
       {nullSuspense(
         <>
-          <FetchingError isError={isError} text="products" />
-
-          <NoResult
-            length={sortedProducts?.length}
-            icon={Package}
-            text="No products found. Try adjusting your search and filter criteria."
-          />
+          {sortedProducts?.length == 0 && (
+            <NoResult
+              isError={isError}
+              errorText="products"
+              icon={Package}
+              text="No products found. Try adjusting your search and filter criteria."
+            />
+          )}
         </>
       )}
     </div>

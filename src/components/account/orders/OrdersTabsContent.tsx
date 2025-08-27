@@ -1,17 +1,25 @@
-import { NoResult } from '@/components/global'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CustomerOrder, OrderAndOrderItems } from '@/utils/types'
 import { ShoppingBag } from 'lucide-react'
 import VendorOrderCard from './vendor/VendorOrderCard'
 import BuyerOrderCard from './buyer/BuyerOrderCard'
 import { ordersTabsList } from '@/utils/data'
+import { lazy } from 'react'
+import { nullSuspense } from '@/utils/suspense'
 
 interface OrdersTabsContentProp {
   orders: CustomerOrder[] | OrderAndOrderItems[] | undefined
   searchQuery: string
+  isError: boolean
 }
 
-function OrdersTabsContent({ orders, searchQuery }: OrdersTabsContentProp) {
+const NoResult = lazy(() => import('@/components/global/NoResult'))
+
+function OrdersTabsContent({
+  orders,
+  searchQuery,
+  isError,
+}: OrdersTabsContentProp) {
   const filteredOrders = orders?.filter((order) => {
     if ('customer_name' in order) {
       return (
@@ -40,17 +48,25 @@ function OrdersTabsContent({ orders, searchQuery }: OrdersTabsContentProp) {
       {ordersTabsList.map((status) => (
         <TabsContent key={status} value={status}>
           <div className="space-y-4 py-4">
-            <NoResult
-              length={filteredOrdersByStatus(status)?.length}
-              text={`No ${status !== 'all' ? status : ''} orders found.`}
-              icon={ShoppingBag}
-            />
             {filteredOrdersByStatus(status)?.map((order, index) =>
               'customer_name' in order ? (
                 <VendorOrderCard key={index} order={order} />
               ) : (
                 <BuyerOrderCard key={index} order={order} />
               )
+            )}
+
+            {nullSuspense(
+              <>
+                {filteredOrdersByStatus(status)?.length == 0 && (
+                  <NoResult
+                    isError={isError}
+                    errorText="your orders"
+                    text={`No ${status !== 'all' ? status : ''} orders found.`}
+                    icon={ShoppingBag}
+                  />
+                )}
+              </>
             )}
           </div>
         </TabsContent>

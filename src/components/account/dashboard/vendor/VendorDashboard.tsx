@@ -7,11 +7,16 @@ import type { User } from '@supabase/supabase-js'
 
 function VendorDashboard() {
   const { user }: { user: User } = useSelector((state: any) => state.userState)
-  const { data: products, isLoading: productsLoading } = useVendorProducts(
-    user?.id
-  )
-  const { data: ordersData, isLoading: ordersDataLoading } =
-    useVendorOrders(user)
+  const {
+    data: products,
+    isLoading: productsLoading,
+    isError: productsError,
+  } = useVendorProducts(user?.id)
+  const {
+    data: ordersData,
+    isLoading: ordersDataLoading,
+    isError: ordersDataError,
+  } = useVendorOrders(user)
   /* const { data: ordersTrend, isLoading: ordersTrendLoading } =
     useVendorOrdersTrend()
   const { data: productsTrend, isLoading: productsTrendLoading } = useVendorProductTrend() */
@@ -30,9 +35,16 @@ function VendorDashboard() {
         <RecentOrdersCard
           ordersData={ordersData}
           ordersDataLoading={ordersDataLoading}
+          isError={ordersDataError}
         />
         {/* Low Stock Alert */}
-        {<LowStockCard products={products} productsLoading={productsLoading} />}
+        {
+          <LowStockCard
+            products={products}
+            productsLoading={productsLoading}
+            isError={productsError}
+          />
+        }
       </div>
     </div>
   )

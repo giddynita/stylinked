@@ -1,4 +1,4 @@
-import { GlobalContext } from '@/utils/globalContext'
+import { RedirectPathContext } from '@/components/redirectPath/redirectPathProvider'
 import { loginFormSchema, type LoginFormSchema } from '@/utils/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext, useState } from 'react'
@@ -19,7 +19,7 @@ function LoginForm() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [submitting, setSubmitting] = useState(false)
-  const { pathname, setPathname } = useContext(GlobalContext)
+  const { pathname, setPathname } = useContext(RedirectPathContext)
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {

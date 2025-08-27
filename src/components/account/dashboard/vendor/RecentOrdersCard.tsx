@@ -4,17 +4,21 @@ import { ShoppingBag } from 'lucide-react'
 import Orders from './Orders'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { NoResult } from '@/components/global'
 import type { OrdersWithPendingOrderNo } from '@/utils/types'
+import { nullSuspense } from '@/utils/suspense'
+import { lazy } from 'react'
 
 interface RecentOrdersCardProp {
   ordersData: OrdersWithPendingOrderNo | undefined
   ordersDataLoading: boolean
+  isError: boolean
 }
+const NoResult = lazy(() => import('@/components/global/NoResult'))
 
 function RecentOrdersCard({
   ordersData,
   ordersDataLoading,
+  isError,
 }: RecentOrdersCardProp) {
   return (
     <Card>
@@ -37,11 +41,18 @@ function RecentOrdersCard({
         ) : (
           <>
             <Orders data={ordersData?.sortedGroupedOrders} />
-            <NoResult
-              length={ordersData?.orders?.length}
-              icon={ShoppingBag}
-              text="No recent orders found"
-            />
+            {nullSuspense(
+              <>
+                {ordersData?.orders?.length == 0 && (
+                  <NoResult
+                    isError={isError}
+                    errorText="your recent orders"
+                    icon={ShoppingBag}
+                    text="No recent orders found"
+                  />
+                )}
+              </>
+            )}
           </>
         )}
       </CardContent>

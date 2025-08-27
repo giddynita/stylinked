@@ -6,8 +6,11 @@ import { useSelector } from 'react-redux'
 
 function BuyerDashboard() {
   const { user }: { user: User } = useSelector((state: any) => state.userState)
-  const { data: ordersData, isLoading: ordersDataLoading } =
-    useBuyerOrders(user)
+  const {
+    data: ordersData,
+    isLoading: ordersDataLoading,
+    isError: orderDataError,
+  } = useBuyerOrders(user)
   return (
     <div className="space-y-6 my-6">
       <DashboardStats
@@ -18,6 +21,7 @@ function BuyerDashboard() {
         <RecentOrdersCard
           ordersData={ordersData}
           ordersDataLoading={ordersDataLoading}
+          isError={orderDataError}
         />
       </div>
     </div>

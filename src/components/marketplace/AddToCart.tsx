@@ -5,8 +5,9 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '../ui/dialog'
-import { GlobalContext } from '@/utils/globalContext'
+import { GlobalContext } from '@/components/redirectPath/redirectPathProvider'
 import type { CartItemType, Product } from '@/utils/types'
 import { ImageCarousel } from '../global'
 import { currencyFormatter } from '@/utils/format'
@@ -16,13 +17,15 @@ import { Separator } from '../ui/separator'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
 import { addItem } from '@/features/cart/cartSlice'
-import { Ban, Minus, Plus } from 'lucide-react'
+import { Ban, Minus, Plus, ShoppingCart } from 'lucide-react'
+import { MdOutlineAddShoppingCart } from 'react-icons/md'
 
 interface AddToCartProp {
   product: Product
+  numProductInCart: number
 }
 
-function AddToCart({ product }: AddToCartProp) {
+function AddToCart({ product, numProductInCart }: AddToCartProp) {
   const { isAddToCartDialogOpen, setIsAddToCartDialogOpen } =
     useContext(GlobalContext)
   const [selectedSize, setSelectedSize] = useState('')
@@ -66,6 +69,26 @@ function AddToCart({ product }: AddToCartProp) {
       open={isAddToCartDialogOpen}
       onOpenChange={setIsAddToCartDialogOpen}
     >
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="relative"
+          disabled={!product.stock}
+        >
+          <span className="sr-only">add to cart</span>
+          {numProductInCart >= 1 ? (
+            <>
+              <ShoppingCart className="w-6 h-6" />
+              <p className="absolute -top-2 -right-2 text-xs font-bold bg-primary text-primary-foreground w-5 h-5 rounded-full flex items-center justify-center">
+                {numProductInCart}
+              </p>
+            </>
+          ) : (
+            <MdOutlineAddShoppingCart className="w-6 h-6" />
+          )}
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="sr-only">Add Product to Cart</DialogTitle>

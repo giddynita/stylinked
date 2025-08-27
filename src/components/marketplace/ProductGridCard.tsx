@@ -1,16 +1,12 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { CartItemType, ProductWithRating, UserRole } from '@/utils/types'
 import { currencyFormatter, slugify } from '@/utils/format'
 import AddToCart from './AddToCart'
-import { GlobalContext } from '@/utils/globalContext'
 import Reviews from './Reviews'
 import { useSelector } from 'react-redux'
-import { useContext, useEffect, useState } from 'react'
-import { MdOutlineAddShoppingCart } from 'react-icons/md'
+import { useEffect, useState } from 'react'
 
 interface ProductGridCardProp {
   product: ProductWithRating
@@ -24,7 +20,6 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
     (state: any) => state.userState
   )
   const [numProductInCart, setNumProductInCart] = useState<number>(0)
-  const { setIsAddToCartDialogOpen } = useContext(GlobalContext)
   useEffect(() => {
     const numProductInCart: CartItemType[] = cartItems.filter(
       (item: CartItemType) => item.id === product.id
@@ -71,8 +66,7 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
               {product.name}
             </Link>
           </p>
-
-          <p className="text-sm text-muted-foreground hover:text-accent-foreground text-ellipsis overflow-hidden line-clamp-1 w-full">
+          <p className="text-sm text-muted-foreground hover:text-primary hover:underline text-ellipsis overflow-hidden line-clamp-1">
             <Link
               to={`/vendors/${slugify(product.vendor)}/${product.vendorid}`}
             >
@@ -91,29 +85,14 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
               {currencyFormatter(product.price)}
             </span>
             {(userRole?.role == 'buyer' || userRole?.role == null) && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-[10px] relative"
-                disabled={!product.stock}
-                onClick={() => setIsAddToCartDialogOpen(true)}
-              >
-                {numProductInCart >= 1 ? (
-                  <>
-                    <ShoppingCart className="w-6 h-6" />
-                    <p className="absolute -top-2 -right-2 text-xs font-bold bg-primary text-primary-foreground w-5 h-5 rounded-full flex items-center justify-center">
-                      {numProductInCart}
-                    </p>
-                  </>
-                ) : (
-                  <MdOutlineAddShoppingCart className="w-6 h-6" />
-                )}
-              </Button>
+              <AddToCart
+                product={product}
+                numProductInCart={numProductInCart}
+              />
             )}
           </div>
         </CardContent>
       </Card>
-      <AddToCart product={product} />
     </>
   )
 }

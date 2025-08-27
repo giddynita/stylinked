@@ -16,8 +16,6 @@ const VendorReviews = lazy(
 )
 const NoResult = lazy(() => import('@/components/global/NoResult'))
 
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
-
 function Reviews() {
   const { user, userRole }: { user: User; userRole: UserRole } = useSelector(
     (state: any) => state.userState
@@ -56,12 +54,14 @@ function Reviews() {
             {accountPageSuspense(<ReviewComponent reviews={reviews} />)}
             {nullSuspense(
               <>
-                <NoResult
-                  length={reviews?.length}
-                  icon={Star}
-                  text="No products found. Try adjusting your search and filter criteria."
-                />
-                <FetchingError isError={isError} text="your reviews" />
+                {reviews?.length == 0 && (
+                  <NoResult
+                    isError={isError}
+                    errorText="your reviews"
+                    icon={Star}
+                    text="No reviews found."
+                  />
+                )}
               </>
             )}
           </>

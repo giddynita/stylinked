@@ -15,7 +15,9 @@ const GiveReview = lazy(() => import('@/components/productDetails/GiveReview'))
 const ProductInfo = lazy(
   () => import('@/components/productDetails/ProductInfo')
 )
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
+const FetchingError = lazy(
+  () => import('@/components/productDetails/FetchingError')
+)
 
 const ProductDetails = () => {
   const { productid } = useParams()
@@ -68,7 +70,12 @@ const ProductDetails = () => {
               </div>
             )}
           </main>
-          {nullSuspense(<FetchingError isError={isError} text="product" />)}
+
+          {nullSuspense(
+            <>
+              {!product && <FetchingError isError={isError} text="product" />}
+            </>
+          )}
         </>
       )}
     </div>

@@ -9,7 +9,6 @@ interface VendorListProp {
   isError: boolean
 }
 
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 const NoResult = lazy(() => import('@/components/global/NoResult'))
 
 function VendorList({ sortedVendors, isError }: VendorListProp) {
@@ -20,12 +19,14 @@ function VendorList({ sortedVendors, isError }: VendorListProp) {
       ))}
       {nullSuspense(
         <>
-          <FetchingError isError={isError} text="vendors" />
-          <NoResult
-            length={sortedVendors?.length}
-            icon={Users}
-            text="No vendors found. Try adjusting your search and filter criteria."
-          />
+          {sortedVendors?.length == 0 && (
+            <NoResult
+              isError={isError}
+              errorText="vendors"
+              icon={Users}
+              text="No vendors found. Try adjusting your search and filter criteria."
+            />
+          )}
         </>
       )}
     </div>

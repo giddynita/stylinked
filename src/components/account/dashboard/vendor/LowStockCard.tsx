@@ -3,15 +3,18 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertTriangle } from 'lucide-react'
 import LowStock from './LowStock'
-import { NoResult } from '@/components/global'
 import type { Product } from '@/utils/types'
+import { lazy } from 'react'
+import { nullSuspense } from '@/utils/suspense'
 
 interface LowStockProp {
   products: Product[] | undefined
   productsLoading: boolean
+  isError: boolean
 }
+const NoResult = lazy(() => import('@/components/global/NoResult'))
 
-function LowStockCard({ products, productsLoading }: LowStockProp) {
+function LowStockCard({ products, productsLoading, isError }: LowStockProp) {
   const lowStockProducts = products?.filter((p) => p.stock <= 10)
   const criticalProducts = products?.filter((p) => p.stock <= 3)
 
@@ -39,15 +42,23 @@ function LowStockCard({ products, productsLoading }: LowStockProp) {
           <>
             <>
               <LowStock lowStockProducts={lowStockProducts} />
-              <NoResult
-                length={lowStockProducts?.length}
-                text={`${
-                  products && products.length > 0
-                    ? 'All products are well stocked'
-                    : 'You have no product'
-                }`}
-                icon={AlertTriangle}
-              />
+              {nullSuspense(
+                <>
+                  {' '}
+                  {lowStockProducts?.length == 0 && (
+                    <NoResult
+                      isError={isError}
+                      errorText="low stock products"
+                      text={`${
+                        products && products.length > 0
+                          ? 'All products are well stocked'
+                          : 'You have no product'
+                      }`}
+                      icon={AlertTriangle}
+                    />
+                  )}
+                </>
+              )}
             </>
           </>
         )}

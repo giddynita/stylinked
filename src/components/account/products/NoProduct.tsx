@@ -6,17 +6,21 @@ import AddProductDialog from './AddProductDialog'
 interface NoProductProp {
   searchQuery: string
   filteredProducts: Product[] | undefined
+  isError: boolean
 }
 
-function NoProduct({ searchQuery, filteredProducts }: NoProductProp) {
+function NoProduct({ searchQuery, filteredProducts, isError }: NoProductProp) {
   return (
     <div className="font-bold text-2xl w-max mx-auto">
       {searchQuery ? (
-        <NoResult
-          length={filteredProducts?.length}
-          text="No results"
-          icon={Package}
-        />
+        filteredProducts?.length == 0 && (
+          <NoResult
+            isError={isError}
+            errorText="your products"
+            text="No results"
+            icon={Package}
+          />
+        )
       ) : (
         <>
           {filteredProducts?.length == 0 && (

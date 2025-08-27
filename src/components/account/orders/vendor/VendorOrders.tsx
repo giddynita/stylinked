@@ -2,8 +2,6 @@ import { VendorOrdersSkeleton } from '@/components/skeletons'
 import OrdersTabsContent from '../OrdersTabsContent'
 import { formatCreatedAt } from '@/utils/format'
 import OrderTabsList from '../OrderTabsList'
-import { nullSuspense } from '@/utils/suspense'
-import { lazy } from 'react'
 import type { OrdersWithPendingOrderNo } from '@/utils/types'
 
 interface VendorOrdersProp {
@@ -12,8 +10,6 @@ interface VendorOrdersProp {
   isError: boolean
   orders: OrdersWithPendingOrderNo | undefined
 }
-
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 
 function VendorOrders({
   searchQuery,
@@ -49,8 +45,11 @@ function VendorOrders({
         <VendorOrdersSkeleton />
       ) : (
         <>
-          <OrdersTabsContent orders={ordersDetails} searchQuery={searchQuery} />
-          {nullSuspense(<FetchingError isError={isError} text="your orders" />)}
+          <OrdersTabsContent
+            orders={ordersDetails}
+            searchQuery={searchQuery}
+            isError={isError}
+          />
         </>
       )}
     </>

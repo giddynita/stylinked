@@ -1,8 +1,6 @@
 import OrderTabsList from '../OrderTabsList'
 import OrdersTabsContent from '../OrdersTabsContent'
 import { BuyerOrdersSkeleton } from '@/components/skeletons'
-import { lazy } from 'react'
-import { nullSuspense } from '@/utils/suspense'
 import type { OrdersByBuyer } from '@/utils/types'
 
 interface BuyerOrdersProp {
@@ -11,8 +9,6 @@ interface BuyerOrdersProp {
   isError: boolean
   orders: OrdersByBuyer | undefined
 }
-
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 
 function BuyerOrders({
   searchQuery,
@@ -40,8 +36,8 @@ function BuyerOrders({
           <OrdersTabsContent
             orders={buyerOrdersDetails}
             searchQuery={searchQuery}
+            isError={isError}
           />
-          {nullSuspense(<FetchingError isError={isError} text="your orders" />)}
         </>
       )}
     </>

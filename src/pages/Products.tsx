@@ -11,7 +11,6 @@ import type { User } from '@supabase/supabase-js'
 const ProductTableBody = lazy(
   () => import('@/components/account/products/ProductTableBody')
 )
-const FetchingError = lazy(() => import('@/components/global/FetchingError'))
 const NoProduct = lazy(() => import('@/components/account/products/NoProduct'))
 const AddProductDialog = lazy(
   () => import('@/components/account/products/AddProductDialog')
@@ -64,13 +63,11 @@ const Products = () => {
             )}
 
             {nullSuspense(
-              <>
-                <FetchingError isError={isError} text="your products" />
-                <NoProduct
-                  searchQuery={searchQuery}
-                  filteredProducts={filteredProducts}
-                />
-              </>
+              <NoProduct
+                searchQuery={searchQuery}
+                filteredProducts={filteredProducts}
+                isError={isError}
+              />
             )}
           </div>
         </CardContent>
