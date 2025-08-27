@@ -109,7 +109,7 @@ function ProductInfo({ product }: ProductInfoProp) {
           </ul>
         </div>
       )}
-      {userRole?.role == 'buyer' && (
+      {(userRole?.role == 'buyer' || userRole?.role == null) && (
         <>
           <div className="mb-6">
             <Label className=" mb-2">Choose a Size</Label>

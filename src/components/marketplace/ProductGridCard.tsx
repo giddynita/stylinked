@@ -90,7 +90,7 @@ const ProductGridCard = ({ product }: ProductGridCardProp) => {
             <span className="text-base font-bold text-primary">
               {currencyFormatter(product.price)}
             </span>
-            {userRole?.role == 'buyer' && (
+            {(userRole?.role == 'buyer' || userRole?.role == null) && (
               <Button
                 variant="outline"
                 size="sm"

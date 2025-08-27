@@ -62,7 +62,7 @@ const ProductDetails = () => {
                 </section>
               )}
             </div>
-            {userRole?.role == 'buyer' && (
+            {(userRole?.role == 'buyer' || userRole?.role == null) && (
               <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
                 <Cart />
               </div>

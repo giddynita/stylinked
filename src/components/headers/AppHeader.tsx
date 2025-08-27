@@ -55,7 +55,9 @@ function AppHeader() {
               <ModeToggle align="end" />
             </Suspense>
             <Suspense fallback={null}>
-              {userRole?.role == 'buyer' && <Cart />}
+              {(userRole?.role == 'buyer' || userRole?.role == null) && (
+                <Cart />
+              )}
             </Suspense>
             {avatarSuspense(user && <ProfileImage userData={userData} link />)}
 
@@ -82,7 +84,7 @@ function AppHeader() {
             <ModeToggle align="end" />
           </Suspense>
           <Suspense fallback={<div className="w-[32px] h-[32px]" />}>
-            {userRole?.role == 'buyer' && <Cart />}
+            {(userRole?.role == 'buyer' || userRole?.role == null) && <Cart />}
           </Suspense>
           <SidebarTrigger />
         </div>

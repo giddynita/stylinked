@@ -96,7 +96,7 @@ function ProductListCard({ product }: ProductListCardProp) {
                   View Details
                 </Link>
               </Button>
-              {userRole?.role == 'buyer' && (
+              {(userRole?.role == 'buyer' || userRole?.role == null) && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -132,7 +132,7 @@ function ProductListCard({ product }: ProductListCardProp) {
                       </Link>
                     </Button>
                   </DropdownMenuItem>
-                  {userRole?.role == 'buyer' && (
+                  {(userRole?.role == 'buyer' || userRole?.role == null) && (
                     <DropdownMenuItem>
                       <Button
                         variant="outline"
