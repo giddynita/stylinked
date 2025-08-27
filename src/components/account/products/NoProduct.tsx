@@ -1,13 +1,18 @@
 import { NoResult } from '@/components/global'
+import { nullSuspense } from '@/utils/suspense'
 import type { Product } from '@/utils/types'
 import { Package } from 'lucide-react'
-import AddProductDialog from './AddProductDialog'
+import { lazy } from 'react'
 
 interface NoProductProp {
   searchQuery: string
   filteredProducts: Product[] | undefined
   isError: boolean
 }
+
+const AddProductDialog = lazy(
+  () => import('@/components/account/products/AddProductDialog')
+)
 
 function NoProduct({ searchQuery, filteredProducts, isError }: NoProductProp) {
   return (
@@ -26,7 +31,7 @@ function NoProduct({ searchQuery, filteredProducts, isError }: NoProductProp) {
           {filteredProducts?.length == 0 && (
             <div className="space-y-6 py-8">
               <p>You have not added any product.</p>
-              <AddProductDialog />
+              {nullSuspense(<AddProductDialog />)}
             </div>
           )}
         </>
