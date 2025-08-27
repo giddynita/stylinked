@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
-import { GlobalContext } from '@/components/redirectPath/redirectPathProvider'
 import type { CartItemType, Product } from '@/utils/types'
 import { ImageCarousel } from '../global'
 import { currencyFormatter } from '@/utils/format'
@@ -26,8 +25,7 @@ interface AddToCartProp {
 }
 
 function AddToCart({ product, numProductInCart }: AddToCartProp) {
-  const { isAddToCartDialogOpen, setIsAddToCartDialogOpen } =
-    useContext(GlobalContext)
+  const [isAddToCartDialogOpen, setIsAddToCartDialogOpen] = useState(false)
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedColor, setSelectedColor] = useState('')
   const [quantity, setQuantity] = useState(1)
