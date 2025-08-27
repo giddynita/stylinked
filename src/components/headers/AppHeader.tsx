@@ -71,7 +71,7 @@ function AppHeader() {
                 </Link>
                 <Link
                   to="/auth/sign-up"
-                  className="text-xs bg-primary py-2 px-4 text-base font-medium rounded-lg hover:bg-primary/80"
+                  className="text-xs bg-primary py-2 px-4  font-medium rounded-lg hover:bg-primary/80"
                 >
                   Sign Up
                 </Link>
