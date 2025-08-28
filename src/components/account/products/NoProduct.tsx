@@ -29,7 +29,7 @@ function NoProduct({ searchQuery, filteredProducts, isError }: NoProductProp) {
       ) : (
         <>
           {filteredProducts?.length == 0 && (
-            <div className="space-y-6 py-8">
+            <div className="space-y-4 py-12 text-center">
               <p>You have not added any product.</p>
               {nullSuspense(<AddProductDialog />)}
             </div>

@@ -12,7 +12,7 @@ function NoResult({ text, icon, isError, errorText }: NoResultProp) {
   const Icon = icon
   return (
     <>
-      <div className="text-center text-muted-foreground my-8">
+      <div className="text-center text-muted-foreground my-8 mx-auto py-12">
         <Icon className="h-12 w-12 mx-auto mb-3 opacity-50" />
         <p className="text-sm">{text}</p>
       </div>

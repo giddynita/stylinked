@@ -149,7 +149,7 @@ function AddToCart({ product, numProductInCart }: AddToCartProp) {
                               setSelectedColor(color)
                               setQuantity(1)
                             }}
-                            className="relative"
+                            className="relative capitalize"
                           >
                             {color}
 

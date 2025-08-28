@@ -12,10 +12,7 @@ const NoResult = lazy(() => import('@/components/global/NoResult'))
 
 function VendorGrid({ sortedVendors, isError }: VendorGridProp) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {sortedVendors?.map((vendor) => (
-        <VendorGridCard key={vendor.id} {...vendor} />
-      ))}
+    <>
       {nullSuspense(
         <>
           {sortedVendors?.length == 0 && (
@@ -28,7 +25,12 @@ function VendorGrid({ sortedVendors, isError }: VendorGridProp) {
           )}
         </>
       )}
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {sortedVendors?.map((vendor) => (
+          <VendorGridCard key={vendor.id} {...vendor} />
+        ))}
+      </div>
+    </>
   )
 }
 export default VendorGrid
