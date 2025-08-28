@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import SubPagesHeader from '@/components/headers/SubPagesHeader'
 import { sectionSuspense } from '@/utils/suspense'
 import { lazy } from 'react'
+import { PageHeading } from '@/components/headings'
 
 const ShippingInformation = lazy(
   () => import('@/components/checkout/ShippingInformation')
@@ -26,6 +27,7 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen container">
+      <PageHeading pageTitle="Checkout" pageDesc="Place your order" />
       <SubPagesHeader currentPage="Checkout" previousPage="cart" />
 
       <div className="pt-2 pb-12 space-y-8">
