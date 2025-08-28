@@ -4,7 +4,6 @@ import { Calendar, MapPin, Star, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '../ui/button'
 import VendorAvatar from './VendorAvatar'
-import { slugify } from '@/utils/format'
 
 function VendorGridCard({
   id,
@@ -63,7 +62,7 @@ function VendorGridCard({
         )}
 
         <Button asChild className="w-full">
-          <Link to={`${slugify(businessname)}/${id}`}>View Profile</Link>
+          <Link to={`${id}`}>View Profile</Link>
         </Button>
       </CardContent>
     </Card>

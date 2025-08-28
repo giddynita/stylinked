@@ -4,7 +4,6 @@ import { Button } from '../ui/button'
 import { Link } from 'react-router-dom'
 import { Calendar, MapPin, Star, Users } from 'lucide-react'
 import VendorAvatar from './VendorAvatar'
-import { slugify } from '@/utils/format'
 
 function VendorListCard({
   id,
@@ -63,7 +62,7 @@ function VendorListCard({
               </p>
             )}
             <Button asChild className="w-full">
-              <Link to={`${slugify(businessname)}/${id}`}>View Profile</Link>
+              <Link to={`${id}`}>View Profile</Link>
             </Button>
           </div>
         </div>
