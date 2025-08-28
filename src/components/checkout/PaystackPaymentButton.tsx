@@ -43,6 +43,7 @@ function PaystackPaymentButton() {
     lastname: userData?.lastname,
     channels: [paymentMethod.id],
     reference: reference,
+    embed: true,
     metadata: {
       custom_fields: [
         {
