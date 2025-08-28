@@ -289,7 +289,7 @@ export type Order = {
   shipping_fee: number
   order_total: number
   payment_method: string
-  status?: string
+  status: string
   user_id: string | undefined
   order_id: string
   shipping_info: {
