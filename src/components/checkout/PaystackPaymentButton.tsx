@@ -65,6 +65,7 @@ function PaystackPaymentButton() {
       order_id: reference.transaction,
       shipping_info: shippingForm,
       reference: reference.reference,
+      status: 'pending',
     }
     const orderItems = cartItems.map((item) => {
       const { images, name, price, color, size, amount, vendor, vendorid } =
