@@ -2,7 +2,7 @@ import type { OrdersWithPendingOrderNo, Product } from '@/utils/types'
 import { GiMoneyStack } from 'react-icons/gi'
 import { Package } from 'lucide-react'
 import { currencyFormatter, padNumber } from '@/utils/format'
-import { MdOutlinePendingActions } from 'react-icons/md'
+import { MdAccessTime, MdOutlinePendingActions } from 'react-icons/md'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 /* import Trend from '../Trend' */
@@ -20,9 +20,16 @@ function DashboardStats({
   productsLoading,
   products,
 }: DashboardStatsProp) {
-  const totalAmount = ordersData?.orders?.reduce((sum, order) => {
-    return sum + order.amount * order.price
-  }, 0)
+  const availableAmount = ordersData?.orders
+    ?.filter((order) => order.status == 'delivered')
+    .reduce((sum, order) => {
+      return sum + order.amount * order.price
+    }, 0)
+  const pendingAmount = ordersData?.orders
+    ?.filter((order) => order.status !== 'delivered')
+    .reduce((sum, order) => {
+      return sum + order.amount * order.price
+    }, 0)
   /* const revenueTrend = ordersTrend?.map((d) => {
     return { value: d.order_amount_added }
   }) */
@@ -35,10 +42,18 @@ function DashboardStats({
   })  */
   const stat = [
     {
-      title: 'Total Revenue',
+      title: 'Available Balance',
       icon: <GiMoneyStack className="h-4 w-4" />,
       loading: ordersDataLoading,
-      value: currencyFormatter(totalAmount ?? 0),
+      value: currencyFormatter(availableAmount ?? 0),
+      /* trend: revenueTrend,
+      trendLoading: ordersTrendLoading, */
+    },
+    {
+      title: 'Pending Balance',
+      icon: <MdAccessTime className="h-4 w-4" />,
+      loading: ordersDataLoading,
+      value: currencyFormatter(pendingAmount ?? 0),
       /* trend: revenueTrend,
       trendLoading: ordersTrendLoading, */
     },
@@ -60,7 +75,7 @@ function DashboardStats({
     },
   ]
   return (
-    <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {stat.map(({ title, icon, loading, value }, index) => {
         return (
           <Card key={index} className="space-y-0">
