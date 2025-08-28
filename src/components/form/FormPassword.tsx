@@ -8,7 +8,7 @@ import type { InputProps } from '@/utils/types'
 import { Label } from '../ui/label'
 
 function FormPassword({ form, name, label, placeholder }: InputProps) {
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(true)
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
@@ -22,7 +22,7 @@ function FormPassword({ form, name, label, placeholder }: InputProps) {
                 <Input
                   placeholder={placeholder}
                   {...field}
-                  type={`${showPassword ? 'text' : 'password'}`}
+                  type={`${showPassword ? 'password' : 'text'}`}
                 />
               </FormControl>
               <FormMessage />

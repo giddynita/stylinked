@@ -22,7 +22,7 @@ function FormPasswordField({
   placeholder,
   required,
 }: FormPasswordFieldProp) {
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(true)
 
   return (
     <div className="space-y-2">
@@ -33,7 +33,7 @@ function FormPasswordField({
           value={value}
           onChange={(e) => handleInputChange(name, e.target.value)}
           placeholder={placeholder}
-          type={`${showPassword ? 'text' : 'password'}`}
+          type={`${showPassword ? 'password' : 'text'}`}
           required={required}
         />
         <Button
