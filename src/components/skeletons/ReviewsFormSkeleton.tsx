@@ -1,6 +1,6 @@
 import { Skeleton } from '../ui/skeleton'
 
-function ExistingReviewsSkeleton() {
+function ReviewsFormSkeleton() {
   return (
     <div>
       <Skeleton className="w-full  bg-background p-4">
@@ -10,4 +10,4 @@ function ExistingReviewsSkeleton() {
     </div>
   )
 }
-export default ExistingReviewsSkeleton
+export default ReviewsFormSkeleton

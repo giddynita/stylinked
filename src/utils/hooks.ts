@@ -4,6 +4,7 @@ import type {
   GetProductsType,
   Grouped,
   Order,
+  OrderExists,
   OrderItem,
   OrdersByBuyer,
   OrdersTrendData,
@@ -476,6 +477,34 @@ export const useReviews = ({
   const queryData = useQuery({
     queryKey: ['reviews'],
     queryFn: getReviews,
+  })
+
+  return queryData
+}
+export const useOrderExists = ({
+  userEmail,
+  productId,
+}: {
+  userEmail: string | null
+  productId: string | undefined
+}) => {
+  const orderExists = async () => {
+    const { data: orderedItems, error: orderItemsError } = await supabase
+      .from('order_items')
+      .select('product_id, status')
+      .eq('email', userEmail)
+
+    if (orderItemsError) throw new Error(orderItemsError.message)
+
+    const orderExists = orderedItems?.find(
+      (p) => p.product_id === productId && p.status === 'delivered'
+    )
+
+    return orderExists as OrderExists
+  }
+  const queryData = useQuery({
+    queryKey: ['order-exists'],
+    queryFn: orderExists,
   })
 
   return queryData

@@ -43,40 +43,33 @@ const ProductDetails = () => {
 
       {productLoading ? (
         <ProductInfoSkeleton />
+      ) : isError ? (
+        nullSuspense(<FetchingError isError={isError} text="product" />)
       ) : (
-        <>
-          <main>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-              <ProductImages product={product} />
+        <main>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            <ProductImages product={product} />
 
-              {sectionSuspense(<ProductInfo product={product} />)}
-            </div>
+            {sectionSuspense(<ProductInfo product={product} />)}
+          </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-              <section>
-                {sectionSuspense(
-                  <ProductReviews reviews={product?.productReviews} />
-                )}
-              </section>
-              {userRole?.role == 'buyer' && (
-                <section>
-                  {sectionSuspense(<GiveReview product={product} />)}
-                </section>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            <section>
+              {sectionSuspense(
+                <ProductReviews reviews={product?.productReviews} />
               )}
-            </div>
-            {(userRole?.role == 'buyer' || userRole?.role == null) && (
-              <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
-                <Cart />
-              </div>
-            )}
-          </main>
+            </section>
 
-          {nullSuspense(
-            <>
-              {!product && <FetchingError isError={isError} text="product" />}
-            </>
+            <section>
+              {sectionSuspense(<GiveReview product={product} />)}
+            </section>
+          </div>
+          {(userRole?.role == 'buyer' || userRole?.role == null) && (
+            <div className="border bg-background shadow-xs hover:bg-accent group hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 cursor-pointer fixed w-14 h-14 sm:h-18 sm:w-18 rounded-full flex items-center justify-center top-1/3 -translate-y-1/3 right-4">
+              <Cart />
+            </div>
           )}
-        </>
+        </main>
       )}
     </div>
   )

@@ -328,6 +328,7 @@ export const addOrdersAction = () => {
       queryClient.invalidateQueries({ queryKey: ['buyer-orders'] })
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['orders-trend'] })
+      queryClient.invalidateQueries({ queryKey: ['order-exists'] })
     },
   })
 
@@ -437,6 +438,7 @@ export const updateOrderStatusAction = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['buyer-orders'] })
       queryClient.invalidateQueries({ queryKey: ['vendor-orders'] })
+      queryClient.invalidateQueries({ queryKey: ['order-exists'] })
     },
   })
   return updateOrderStatusFunction

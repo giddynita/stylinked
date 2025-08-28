@@ -422,3 +422,10 @@ export type settingsSchemaTypes =
   | BuyerFormSchema
   | VendorFormSchema
   | LogisticsFormSchema
+
+export type OrderExists =
+  | {
+      product_id: string
+      status: string
+    }
+  | undefined
