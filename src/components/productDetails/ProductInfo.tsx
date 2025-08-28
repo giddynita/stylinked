@@ -2,7 +2,7 @@ import type { CartItemType, SingleProduct, UserRole } from '@/utils/types'
 import { Badge } from '../ui/badge'
 import { Link } from 'react-router-dom'
 import { Ratings } from '../global'
-import { currencyFormatter, slugify } from '@/utils/format'
+import { currencyFormatter } from '@/utils/format'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 import { useState } from 'react'
@@ -60,10 +60,7 @@ function ProductInfo({ product }: ProductInfoProp) {
       <div className="mb-4">
         <Badge className="mb-2 capitalize">{product?.category}</Badge>
         <h1 className="text-xl font-bold  mb-2">{product?.name}</h1>
-        <Link
-          to={`/vendors/${slugify(product?.vendor)}/${product?.vendorid}`}
-          className="font-medium"
-        >
+        <Link to={`/vendors/${product?.vendorid}`} className="font-medium">
           Sold by{' '}
           <span className="text-primary hover:underline">
             {product?.vendor}

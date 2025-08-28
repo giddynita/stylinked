@@ -137,7 +137,7 @@ const router = createBrowserRouter([
             element: pageSuspense(<Vendors />),
           },
           {
-            path: ':vendorname/:vendorid',
+            path: ':vendorid',
             element: pageSuspense(<VendorProfile />),
           },
         ],

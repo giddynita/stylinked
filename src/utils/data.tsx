@@ -647,6 +647,11 @@ export const ordersTabsList = [
   'delivered',
   'cancelled',
 ]
-export const vendorSettingsTabsList = ['profile', 'business', 'security']
+export const vendorSettingsTabsList = [
+  'profile',
+  'business',
+  'share',
+  'security',
+]
 
 export const buyerSettingsTabsList = ['profile', 'security']

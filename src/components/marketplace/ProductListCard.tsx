@@ -56,7 +56,7 @@ function ProductListCard({ product }: ProductListCardProp) {
                   {product.name}
                 </p>
                 <Link
-                  to={`/vendors/${slugify(product.vendor)}/${product.vendorid}`}
+                  to={`/vendors/${product.vendorid}`}
                   className="text-muted-foreground text-sm line-clamp-1 hover:text-primary hover:underline"
                 >
                   Sold by {product.vendor}

@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { getStatusColor } from '@/utils/format'
-import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
+import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import { Eye } from 'lucide-react'
 import { useState } from 'react'
@@ -76,9 +76,7 @@ function BuyerOrderDetailsDialog({ order }: BuyerOrderDetailsDialogProps) {
                     <p className="text-sm text-muted-foreground">
                       Vendor:{' '}
                       <Link
-                        to={`/vendors/${slugify(item.vendor)}/${
-                          item.vendor_id
-                        }`}
+                        to={`/vendors/${item.vendor_id}`}
                         className="hover:underline hover:text-primary"
                       >
                         {item.vendor}

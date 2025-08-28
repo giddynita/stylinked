@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getStatusColor } from '@/utils/format'
-import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
+import { currencyFormatter, formatCreatedAt } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import BuyerOrderDetailsDialog from '@/components/account/BuyerOrderDetailsDialog'
 import { Calendar } from 'lucide-react'
@@ -66,7 +66,7 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
                   <p className="text-xs text-muted-foreground ">
                     from
                     <Link
-                      to={`/vendors/${slugify(item.vendor)}/${item.vendor_id}`}
+                      to={`/vendors/${item.vendor_id}`}
                       className="hover:underline hover:text-primary ml-1"
                     >
                       {item.vendor}

@@ -342,7 +342,6 @@ export const useVendorOrders = (user: User) => {
     }: { data: OrderItem[] | null; error: PostgrestError | null } =
       await supabase.from('order_items').select('*').eq('vendor_id', user?.id)
     const pendingOrders = data?.filter((order) => order.status === 'pending')
-    console.log(data)
 
     if (ordersError) throw new Error(ordersError.message)
     const grouped: Grouped | null =
