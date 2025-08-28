@@ -39,7 +39,7 @@ function SettingsTabsContent({ tabsList }: { tabsList: string[] }) {
     },
     security: {
       component: SecuritySettingsForm,
-      title: 'Business Information',
+      title: 'Security Settings',
       icon: Shield,
       description: 'Manage your account security',
     },
@@ -60,7 +60,7 @@ function SettingsTabsContent({ tabsList }: { tabsList: string[] }) {
         const Icon = settingsFormComponents[status].icon
 
         return (
-          <TabsContent key={status} value={status} className="max-w-lg">
+          <TabsContent key={status} value={status} className="max-w-lg mt-2">
             <div className="space-y-2 py-2">
               <h2 className="flex items-center gap-2 text-xl font-bold">
                 <Icon className="h-5 w-5 text-muted-foreground" />
