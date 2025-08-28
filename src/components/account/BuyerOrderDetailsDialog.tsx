@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getStatusColor } from '@/utils/data'
+import { getStatusColor } from '@/utils/format'
 import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import { Eye } from 'lucide-react'

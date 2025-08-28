@@ -65,3 +65,41 @@ export const addSpace = (str: string) => {
   const result = str.replace(/([A-Z])/g, ' $1').trim()
   return result
 }
+export const getStatusColor = (status: string | undefined) => {
+  switch (status) {
+    case 'delivered':
+      return 'success'
+    case 'shipped':
+      return 'primary'
+    case 'processing':
+      return 'warning'
+    default:
+      return 'secondary'
+  }
+}
+
+export const getUrgencyLevel = (current: number) => {
+  if (current == 0)
+    return {
+      level: 'out of stock',
+      className: 'bg-destructive text-white',
+      label: 'Out of Stock',
+    }
+  if (current <= 3)
+    return {
+      level: 'critical',
+      className: 'bg-destructive text-white',
+      label: 'Critical',
+    }
+  if (current <= 10)
+    return {
+      level: 'low',
+      className: 'bg-warning text-white ',
+      label: 'Low',
+    }
+  return {
+    level: 'active',
+    className: 'bg-success text-white',
+    label: 'Active',
+  }
+}

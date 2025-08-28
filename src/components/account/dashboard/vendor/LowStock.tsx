@@ -3,7 +3,7 @@ import { TrendingDown } from 'lucide-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type { Product } from '@/utils/types'
-import { getUrgencyLevel } from '@/utils/data'
+import { getUrgencyLevel } from '@/utils/format'
 import { useState } from 'react'
 import RestockDialog from './RestockDialog'
 

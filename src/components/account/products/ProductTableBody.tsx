@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { getUrgencyLevel } from '@/utils/data'
+import { getUrgencyLevel } from '@/utils/format'
 import { currencyFormatter } from '@/utils/format'
 import { nullSuspense } from '@/utils/suspense'
 import type { Product } from '@/utils/types'

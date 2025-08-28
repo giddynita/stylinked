@@ -15,7 +15,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { getUrgencyLevel } from '@/utils/data'
+import { getUrgencyLevel } from '@/utils/format'
 import { currencyFormatter } from '@/utils/format'
 import type { Product } from '@/utils/types'
 import { Eye } from 'lucide-react'

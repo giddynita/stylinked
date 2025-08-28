@@ -68,6 +68,11 @@ export type Testimonials = {
   rating: number
 }
 
+export type FooterLinkGroup = {
+  heading: string
+  links: { label: string; url: string }[]
+}
+
 export type ColorQuantity = { color: string; quantity: number }
 export type Variant = { size: string; colors: ColorQuantity[] }
 

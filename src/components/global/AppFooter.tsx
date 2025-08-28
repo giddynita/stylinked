@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
 import { nonUserFooterLinks, userFooterLinks } from '@/utils/data'
-import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import type { UserRole } from '@/utils/types'
+import type { FooterLinkGroup, UserRole } from '@/utils/types'
 import type { User } from '@supabase/supabase-js'
 import { Button } from '../ui/button'
 
@@ -11,21 +10,21 @@ function AppFooter() {
   const { userRole, user }: { userRole: UserRole; user: User } = useSelector(
     (state: any) => state.userState
   )
-  const footerLinks = useMemo(() => {
-    if (!user) return nonUserFooterLinks
-
-    return userFooterLinks.map((section) => {
-      if (section.heading === 'Your Account') {
-        return {
-          ...section,
-          links: section.links.filter((link) =>
-            userRole?.role === 'buyer' ? link.label !== 'Manage Listings' : true
-          ),
+  const footerLinks: FooterLinkGroup[] = !user
+    ? nonUserFooterLinks
+    : userFooterLinks.map((section) => {
+        if (section.heading === 'Your Account') {
+          return {
+            ...section,
+            links: section.links.filter((link) =>
+              userRole?.role === 'buyer'
+                ? link.label !== 'Manage Listings'
+                : true
+            ),
+          }
         }
-      }
-      return section
-    })
-  }, [user, userRole])
+        return section
+      })
 
   return (
     <footer className="bg-navbarbg/70 pt-12 pb-6">

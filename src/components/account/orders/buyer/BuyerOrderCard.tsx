@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getStatusColor } from '@/utils/data'
+import { getStatusColor } from '@/utils/format'
 import { currencyFormatter, formatCreatedAt, slugify } from '@/utils/format'
 import type { OrderAndOrderItems } from '@/utils/types'
 import BuyerOrderDetailsDialog from '@/components/account/BuyerOrderDetailsDialog'

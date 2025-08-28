@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getStatusColor } from '@/utils/data'
+import { getStatusColor } from '@/utils/format'
 import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
 import { Calendar, Eye, MapPin, Package, Truck } from 'lucide-react'

@@ -5,7 +5,7 @@ import { currencyFormatter } from '@/utils/format'
 import type { CustomerOrder } from '@/utils/types'
 import VendorOrderDetailsDialog from '@/components/account/VendorOrderDetailsDialog'
 import OrderStatus from './OrderStatus'
-import { getStatusColor } from '@/utils/data'
+import { getStatusColor } from '@/utils/format'
 import { Calendar, Package } from 'lucide-react'
 
 interface OrderCardProp {

@@ -2,7 +2,7 @@ import type { OrderItem } from '@/utils/types'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Package } from 'lucide-react'
 import { currencyFormatter, formatCreatedAt } from '@/utils/format'
-import { getStatusColor } from '@/utils/data'
+import { getStatusColor } from '@/utils/format'
 import VendorOrderDetailsDialog from '@/components/account/VendorOrderDetailsDialog'
 
 interface Orders {

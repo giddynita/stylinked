@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge'
 import { currencyFormatter } from '@/utils/format'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { getStatusColor } from '@/utils/data'
+import { getStatusColor } from '@/utils/format'
 import BuyerOrderDetailsDialog from '@/components/account/BuyerOrderDetailsDialog'
 interface Orders {
   sortedOrders: OrderAndOrderItems[] | undefined
