@@ -64,7 +64,7 @@ function Orders({ data }: Orders) {
                 <div className="flex flex-col gap-1 ">
                   <Badge
                     variant="outline"
-                    className={`text-${getStatusColor(
+                    className={` text-${getStatusColor(
                       status
                     )} capitalize sm:ml-auto`}
                   >

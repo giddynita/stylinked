@@ -68,13 +68,13 @@ export const addSpace = (str: string) => {
 export const getStatusColor = (status: string | undefined) => {
   switch (status) {
     case 'delivered':
-      return 'success'
+      return 'green-500'
     case 'shipped':
       return 'primary'
     case 'processing':
-      return 'warning'
+      return 'yellow-500'
     default:
-      return 'secondary'
+      return 'foreground'
   }
 }
 
