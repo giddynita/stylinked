@@ -35,7 +35,7 @@ function PaystackPaymentButton() {
     dispatch(clearCart())
   }
   const config = {
-    publicKey: `${import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}`,
+    publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     amount: orderTotal * 100,
     email: user?.email,
     currency: 'NGN',
@@ -117,9 +117,6 @@ function PaystackPaymentButton() {
     )
   }
 
-  /* const onError = (error:any) => {
-    toast.error(error.message)
-  } */
   const onClose = () => {
     toast.warning('Payment cancelled')
   }
