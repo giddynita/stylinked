@@ -91,6 +91,7 @@ function PaystackPaymentButton() {
         size,
         amount,
         vendor,
+        status: 'pending',
         user_name: `${firstname} ${lastname}`,
         email: email,
         reference: reference.reference,

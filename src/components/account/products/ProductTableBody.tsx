@@ -43,10 +43,10 @@ function ProductTableBody({ filteredProducts }: ProductTableBodyProp) {
             <TableCell className=" hidden lg:table-cell ">
               <Badge className={urgency.className}>{urgency.label}</Badge>
             </TableCell>
-            <TableCell className="text-muted-foreground hidden lg:table-cell">
+            <TableCell className="text-muted-foreground hidden lg:table-cell capitalize">
               {product.category}
             </TableCell>
-            <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24   ">
+            <TableCell className="text-muted-foreground hidden lg:table-cell max-w-24  capitalize ">
               {product.brand}
             </TableCell>
             <TableCell className="text-right  ">

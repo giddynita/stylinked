@@ -65,17 +65,12 @@ export const addSpace = (str: string) => {
   const result = str.replace(/([A-Z])/g, ' $1').trim()
   return result
 }
-export const getStatusColor = (status: string | undefined) => {
-  switch (status) {
-    case 'delivered':
-      return 'green-500'
-    case 'shipped':
-      return 'primary'
-    case 'processing':
-      return 'yellow-500'
-    default:
-      return 'foreground'
-  }
+
+export const getStatusColor: Record<string, string | undefined> = {
+  pending: 'secondary',
+  processing: 'warning',
+  shipped: 'primary',
+  delivered: 'green-600',
 }
 
 export const getUrgencyLevel = (current: number) => {

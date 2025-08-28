@@ -34,7 +34,7 @@ function VendorOrderDetailsDialog({ order }: VendorOrderDetailsDialogProps) {
             Order ID - {order.order_id}
             <Badge
               variant="outline"
-              className={`text-${getStatusColor(order?.status)} capitalize`}
+              className={`text-${getStatusColor[order.status]} capitalize`}
             >
               {order?.status}
             </Badge>

@@ -319,7 +319,7 @@ export type OrderItem = {
   amount: number
   vendor: string
   vendor_id: string
-  status?: string
+  status: string
   created_at: string
   user_name: string
   email: string
@@ -360,7 +360,7 @@ export type CustomerOrder = {
   customer_name: string
   date: string | undefined
   order_amount: number
-  status: string | undefined
+  status: string
   /* shipping_method: string */
   shipping_address: string
   tracking_number: string
@@ -386,7 +386,7 @@ export type OrderAndOrderItems = {
   shipping_fee: number
   order_total: number
   payment_method: string
-  status?: string
+  status: string
   user_id: string | undefined
   order_id: string
   shipping_info: {
