@@ -15,8 +15,8 @@ function BuyerOrderCard({ order }: BuyerOrderCardProp) {
   return (
     <div>
       <Card
-        className={`shadow-sm border-border/50 hover:shadow-md transition-shadow border-0 border-l-4 border-${getStatusColor(
-          order.status
+        className={`shadow-sm hover:shadow-md transition-shadow border-0 border-l-4 border-${getStatusColor(
+          order?.status
         )}`}
       >
         <CardHeader className="">

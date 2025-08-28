@@ -435,7 +435,8 @@ export const updateOrderStatusAction = () => {
   const updateOrderStatusFunction = useMutation({
     mutationFn: updateOrderStatus,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['buyer-orders'] })
+      queryClient.invalidateQueries({ queryKey: ['vendor-orders'] })
     },
   })
   return updateOrderStatusFunction

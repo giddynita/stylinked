@@ -29,7 +29,7 @@ function AddProductDialog() {
           toast.success('Product added successfully!')
         },
         onError: () => {
-          toast.error('Error adding product')
+          toast.error('Error adding product. Try again.')
         },
       }
     )

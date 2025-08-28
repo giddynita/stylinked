@@ -5,47 +5,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { updateOrderStatusAction } from '@/utils/action'
 import type { CustomerOrder } from '@/utils/types'
 import { RefreshCcw } from 'lucide-react'
-import { toast } from 'sonner'
+import UpdateOrderDialog from './UpdateOrderDialog'
 
 interface OrderStatusProp {
   order: CustomerOrder
 }
-
-const orderStatus = ['processing', 'shipped']
+type OrderStatus = ['processing', 'shipped']
+const orderStatus: OrderStatus = ['processing', 'shipped']
 
 function OrderStatus({ order }: OrderStatusProp) {
-  const { mutate: updateOrderStatus, isPending: updating } =
-    updateOrderStatusAction()
-
-  const handleStatusUpdate = (
-    orderId: string,
-    newStatus: 'processing' | 'shipped'
-  ) => {
-    updateOrderStatus(
-      { order_id: orderId, newStatus },
-      {
-        onSuccess: () => {
-          toast.success(
-            `Order Updated - Order ${orderId} status changed to ${newStatus}`
-          )
-        },
-        onError: () => {
-          toast.error('Error updating order status')
-        },
-      }
-    )
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="sm" variant="outline" className="h-8">
-          <RefreshCcw
-            className={`h-4 w-4 mr-1 ${updating && 'animate-spin'}`}
-          />
+          <RefreshCcw className={`h-4 w-4 mr-1`} />
           Update Status
         </Button>
       </DropdownMenuTrigger>
@@ -53,20 +28,12 @@ function OrderStatus({ order }: OrderStatusProp) {
         {orderStatus.map((status, index) => {
           return (
             <DropdownMenuItem asChild key={index}>
-              <Button
-                size="sm"
-                variant="outline"
-                className="text-xs w-full capitalize cursor-pointer"
-                disabled={status == order.status}
-                onClick={() =>
-                  handleStatusUpdate(
-                    order.order_id,
-                    order.status === 'pending' ? 'processing' : 'shipped'
-                  )
-                }
-              >
-                {status}{' '}
-              </Button>
+              <UpdateOrderDialog
+                newStatus={status}
+                trigger={status}
+                orderID={order.order_id}
+                oldStatus={order?.status}
+              />
             </DropdownMenuItem>
           )
         })}

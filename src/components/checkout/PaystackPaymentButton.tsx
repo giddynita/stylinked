@@ -29,7 +29,7 @@ function PaystackPaymentButton() {
   )
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { mutate: addOrders, isPending: addingOrders } = addOrdersAction()
+  const { mutate: addOrders } = addOrdersAction()
   const clearCartItemsAndCheckoutHistory = () => {
     dispatch(resetCheckout())
     dispatch(clearCart())
@@ -56,9 +56,6 @@ function PaystackPaymentButton() {
   }
 
   const onSuccess = (reference: PaystackRef) => {
-    if (addingOrders) {
-      toast.loading('Please wait...')
-    }
     const orderData: Omit<Order, 'created_at'> = {
       shipping_method: '',
       shipping_fee: shipping,

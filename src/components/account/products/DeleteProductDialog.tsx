@@ -1,6 +1,5 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -18,6 +17,7 @@ import {
 import { deleteImage, deleteProductAction } from '@/utils/action'
 import type { Product } from '@/utils/types'
 import { Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 interface DeleteProductProp {
@@ -25,31 +25,30 @@ interface DeleteProductProp {
 }
 
 function DeleteProductDialog({ product }: DeleteProductProp) {
-  const {
-    mutate: deleteProduct,
-    isError: deleteError,
-    isPending: deleting,
-  } = deleteProductAction()
+  const [isDeleteProductDialogOpen, setIsDeleteProductDialogOpen] =
+    useState(false)
+  const { mutate: deleteProduct, isPending: deleting } = deleteProductAction()
 
   const handleDeleteProduct = (productId: string, images: string[]) => {
-    if (deleteError) {
-      return
-    }
     deleteProduct(productId, {
       onSuccess: async () => {
         for (let i = 0; i < images?.length; i++) {
           const file = images[i]
           await deleteImage(file)
         }
+        setIsDeleteProductDialogOpen(false)
         toast.success('Product deleted successfully!')
       },
       onError: () => {
-        toast.error('Error deleting product')
+        toast.error('Error deleting product. Try again.')
       },
     })
   }
   return (
-    <AlertDialog>
+    <AlertDialog
+      open={isDeleteProductDialogOpen}
+      onOpenChange={setIsDeleteProductDialogOpen}
+    >
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
@@ -73,11 +72,11 @@ function DeleteProductDialog({ product }: DeleteProductProp) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+          <Button
             onClick={() => handleDeleteProduct(product.id, product.images)}
           >
             {deleting ? 'Deleting...' : 'Delete'}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

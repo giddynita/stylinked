@@ -41,7 +41,7 @@ function RestockDialog({
           toast.success('Product updated successfully!')
         },
         onError: () => {
-          toast.error('Error updating product')
+          toast.error('Error updating product. Try again.')
         },
       }
     )
