@@ -65,7 +65,7 @@ function Orders({ data }: Orders) {
                   <Badge
                     variant="outline"
                     className={` text-${
-                      getStatusColor[order.status]
+                      getStatusColor[order.status].text
                     } capitalize sm:ml-auto`}
                   >
                     {status}

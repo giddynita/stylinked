@@ -59,7 +59,6 @@ const ProductDetails = () => {
                 <ProductReviews reviews={product?.productReviews} />
               )}
             </section>
-
             <section>
               {sectionSuspense(<GiveReview product={product} />)}
             </section>

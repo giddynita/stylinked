@@ -42,7 +42,7 @@ function BuyerOrderDetailsDialog({ order }: BuyerOrderDetailsDialogProps) {
               <p className="text-sm text-muted-foreground">Status</p>
               <Badge
                 variant="outline"
-                className={`text-${getStatusColor[order.status]} capitalize`}
+                className={`${getStatusColor[order.status].text} capitalize`}
               >
                 {order.status}
               </Badge>

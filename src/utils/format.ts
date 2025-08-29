@@ -66,12 +66,16 @@ export const addSpace = (str: string) => {
   return result
 }
 
-export const getStatusColor: Record<string, string | undefined> = {
-  pending: 'secondary',
-  processing: 'warning',
-  shipped: 'primary',
-  delivered: 'green-600',
-}
+export const getStatusColor: Record<string, { text: string; border: string }> =
+  {
+    pending: {
+      text: 'text-muted-foreground',
+      border: 'border-muted-foreground',
+    },
+    processing: { text: 'text-warning', border: 'border-warning' },
+    shipped: { text: 'text-primary', border: 'border-primary' },
+    delivered: { text: 'text-green-600', border: 'border-green-600' },
+  }
 
 export const getUrgencyLevel = (current: number) => {
   if (current == 0)

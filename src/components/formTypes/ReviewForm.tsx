@@ -2,7 +2,7 @@ import { MessageCircle, Star } from 'lucide-react'
 import { Label } from '../ui/label'
 import { useState, type FormEvent } from 'react'
 import { reviewSchema, validateWithZodSchema } from '@/utils/schema'
-import type { SingleProduct, UserDataType } from '@/utils/types'
+import type { OrderExists, SingleProduct, UserDataType } from '@/utils/types'
 import FormTextArea from '../form/FormTextArea'
 import { Button } from '../ui/button'
 import { useSelector } from 'react-redux'
@@ -12,9 +12,10 @@ import { toast } from 'sonner'
 
 interface ReviewFormProp {
   product: SingleProduct | undefined
+  orderExists: OrderExists
 }
 
-function ReviewForm({ product }: ReviewFormProp) {
+function ReviewForm({ product, orderExists }: ReviewFormProp) {
   const [formData, setFormData] = useState({
     rating: 5,
     text: '',
@@ -28,41 +29,47 @@ function ReviewForm({ product }: ReviewFormProp) {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const name = `${userData?.firstname} ${userData?.lastname}`
-    const reviewData = {
-      productid: product?.id,
-      rating: formData.rating,
-      comment: formData.text,
-      name,
-      productname: product?.name,
-      vendorname: product?.vendor,
-      vendorid: product?.vendorid,
-      userid: user?.id,
+    if (orderExists?.product_id == product?.id) {
+      const name = `${userData?.firstname} ${userData?.lastname}`
+      const reviewData = {
+        productid: product?.id,
+        rating: formData.rating,
+        comment: formData.text,
+        name,
+        productname: product?.name,
+        vendorname: product?.vendor,
+        vendorid: product?.vendorid,
+        userid: user?.id,
+      }
+      const validatedData = validateWithZodSchema(reviewSchema, reviewData)
+      if (!validatedData) {
+        return
+      }
+      addReview(reviewData, {
+        onSuccess: () => {
+          setFormData({
+            rating: 5,
+            text: '',
+          })
+          toast.success(
+            'Review submitted successfully! Thank you for your feedback.'
+          )
+        },
+        onError: () => {
+          toast.error('Uploading Review failed. Please try again.')
+        },
+      })
+    } else {
+      toast.warning(
+        'You can only leave a review after purchasing and receiving this product.'
+      )
     }
-    const validatedData = validateWithZodSchema(reviewSchema, reviewData)
-    if (!validatedData) {
-      return
-    }
-    addReview(reviewData, {
-      onSuccess: () => {
-        setFormData({
-          rating: 5,
-          text: '',
-        })
-        toast.success(
-          'Review submitted successfully! Thank you for your feedback.'
-        )
-      },
-      onError: () => {
-        toast.error('Uploading Review failed. Please try again.')
-      },
-    })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div>
-        <Label className="block mb-2">Rating</Label>
+        <Label className="block mb-3 text-base">Rating</Label>
         <div className="flex items-center space-x-1">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star

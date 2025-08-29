@@ -20,31 +20,31 @@ function OrderTabsList({ orders }: OrderTabsListProp) {
     <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 gap-2 h-full ">
       <TabsTrigger
         value="all"
-        className="text-[10px] sm:text-xs cursor-pointer"
+        className="text-[10px] py-3 sm:text-xs cursor-pointer"
       >
         All ({counts.all})
       </TabsTrigger>
       <TabsTrigger
         value="pending"
-        className="text-[10px] sm:text-xs cursor-pointer "
+        className="text-[10px] py-3 sm:text-xs cursor-pointer "
       >
         Pending ({counts.pending})
       </TabsTrigger>
       <TabsTrigger
         value="processing"
-        className="text-[10px] sm:text-xs cursor-pointer"
+        className="text-[10px] py-3 sm:text-xs cursor-pointer"
       >
         Processing ({counts.processing})
       </TabsTrigger>
       <TabsTrigger
         value="shipped"
-        className="text-[10px] sm:text-xs cursor-pointer"
+        className="text-[10px] py-3 sm:text-xs cursor-pointer"
       >
         Shipped ({counts.shipped})
       </TabsTrigger>
       <TabsTrigger
         value="delivered"
-        className="text-[10px] sm:text-xs cursor-pointer"
+        className="text-[10px] py-3 sm:text-xs cursor-pointer"
       >
         Delivered ({counts.delivered})
       </TabsTrigger>

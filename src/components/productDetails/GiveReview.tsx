@@ -19,16 +19,14 @@ function GiveReview({ product }: GiveReviewProp) {
       {orderExistsLoading ? (
         <ReviewsFormSkeleton />
       ) : (
-        orderExists && (
-          <>
-            <h2 className="text-xl font-bold mb-4">Write a Review</h2>
-            <Card>
-              <CardContent>
-                <ReviewForm product={product} />
-              </CardContent>
-            </Card>
-          </>
-        )
+        <>
+          <h2 className="text-xl font-bold mb-4">Write a Review</h2>
+          <Card>
+            <CardContent>
+              <ReviewForm product={product} orderExists={orderExists} />
+            </CardContent>
+          </Card>
+        </>
       )}
     </>
   )

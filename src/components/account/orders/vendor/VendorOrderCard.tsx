@@ -21,8 +21,8 @@ function VendorOrderCard({ order }: OrderCardProp) {
   return (
     <div>
       <Card
-        className={`shadow-sm hover:shadow-md transition-shadow border-0 border-l-4 border-${
-          getStatusColor[order.status]
+        className={`shadow-sm hover:shadow-md transition-shadow border-0 border-l-4 ${
+          getStatusColor[order.status].border
         }`}
       >
         <CardContent className="p-6 space-y-4">
@@ -52,7 +52,7 @@ function VendorOrderCard({ order }: OrderCardProp) {
               <div className="flex items-center space-x-4 capitalize">
                 <Badge
                   variant="outline"
-                  className={`text-${getStatusColor[order?.status]} capitalize`}
+                  className={`${getStatusColor[order.status].text} capitalize`}
                 >
                   {order?.status}
                 </Badge>

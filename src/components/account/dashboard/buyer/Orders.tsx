@@ -30,7 +30,7 @@ function Orders({ sortedOrders }: Orders) {
                 </p>
                 <Badge
                   variant="outline"
-                  className={`text-${getStatusColor[status]} capitalize`}
+                  className={`${getStatusColor[status].text} capitalize`}
                 >
                   {status}
                 </Badge>

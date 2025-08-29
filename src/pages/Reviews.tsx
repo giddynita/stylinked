@@ -59,7 +59,7 @@ function Reviews() {
                     isError={isError}
                     errorText="your reviews"
                     icon={Star}
-                    text="No reviews found."
+                    text="No reviews yet."
                   />
                 )}
               </>

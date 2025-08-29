@@ -2,13 +2,13 @@ import { TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function SettingsTabsList({ tabsList }: { tabsList: string[] }) {
   return (
-    <TabsList className="">
+    <TabsList className="w-full h-full">
       {tabsList.map((tabs) => {
         return (
           <TabsTrigger
             key={tabs}
             value={tabs}
-            className="text-[10px] sm:text-xs px-2.5 sm:px-6  cursor-pointer capitalize"
+            className="text-[10px] py-3 sm:text-xs px-2.5 sm:px-6  cursor-pointer capitalize"
           >
             {tabs}
           </TabsTrigger>
